@@ -11,10 +11,10 @@
     <h2>WebSocket Game Client</h2>
     <div id="status">Connecting...</div>
     <div id="controls" style="margin: 10px 0;">
-        <button onclick="sendMove('Top')">↑</button><br>
-        <button onclick="sendMove('Left')">←</button>
-        <button onclick="sendMove('Bottom')">↓</button>
-        <button onclick="sendMove('Right')">→</button>
+        <button onclick="sendMove('t')">↑</button><br>
+        <button onclick="sendMove('l')">←</button>
+        <button onclick="sendMove('b')">↓</button>
+        <button onclick="sendMove('r')">→</button>
     </div>
     <div id="boardContainer"></div>
 
@@ -28,15 +28,18 @@
         socket.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
-                console.log(data);
                 switch (data.type) {
                     case "join":
                         renderBoard(data.board);
                         const board = document.getElementById('boardContainer');
-                        const player = document.createElement('div')
-                        player.className = 'player';
-                        player.id = data.id;
-                        board.appendChild(player);
+                        data.players.forEach(playerData => {
+                            const player = document.createElement('div')
+                            player.className = 'player';
+                            player.id = playerData.id;
+                            player.style.top = playerData.pos.y;
+                            player.style.left = playerData.pos.x;
+                            board.appendChild(player);
+                        });
                         break;
                     case "move":
                         console.log(data);
@@ -91,29 +94,27 @@
                 pos: {x:0, y:0},
             }
             */
-            const target = document.getElementById(`${data.id}`);
-            target.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
+            const target = document.getElementById(data.id);
+            target.style.transform = `translate(${data.pos.x - 40}px, ${data.pos.y - 40}px)`;
         }
         document.addEventListener("keydown", (e) => {
-            document.addEventListener("keydown", (e) => {
-                switch (e.key) {
-                    case "ArrowDown":
-                        sendMove("b")
-                        break;
-                    case "ArrowUp":
-                        sendMove("t")
-                        break;
-                    case "ArrowLeft":
-                        sendMove("l")
-                        break;
-                    case "ArrowRight":
-                        sendMove("r")
-                        break;
-                    default:
-                        break;
-                }
+            switch (e.key) {
+                case "ArrowDown":
+                    sendMove("b")
+                    break;
+                case "ArrowUp":
+                    sendMove("t")
+                    break;
+                case "ArrowLeft":
+                    sendMove("l")
+                    break;
+                case "ArrowRight":
+                    sendMove("r")
+                    break;
+                default:
+                    break;
+            }
 
-            });
         });
     </script>
 </body>

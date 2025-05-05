@@ -41,18 +41,16 @@ export class Player {
         this.name = `Player_${this.id.slice(0, 5)}`;
         this.room = room;
         this.pos = this.assignStartPosition();
-        this.pos.x *= 40
-        this.pos.y *= 40
-        this.color = ""
+        this.color = "red"
     }
 
     assignStartPosition() {
-        const numPlayers = this.room.Players.size;
+        const numPlayers = this.room.Players.length;
         switch (numPlayers) {
-            case 0: return { x: 1 * 40, y: 1 * 40 };
-            case 1: return { x: 11 * 39, y: 1 * 40 };
-            case 2: return { x: 1 * 40, y: 9 * 39 };
-            case 3: return { x: 11 * 39, y: 9 * 39 };
+            case 0: return { x: 40, y: 40 };
+            case 1: return { x: 11 * 40, y: 1 * 40 };
+            case 2: return { x: 1 * 40, y: 9 * 40 };
+            case 3: return { x: 11 * 40, y: 9 * 40 };
             default: return { x: 0, y: 0 };
         }
     }
@@ -62,10 +60,17 @@ export class Player {
         const newY = this.pos.y + dy;
 
         const board = this.room.Board;
+        console.log("pos X : ", newX);
+        console.log("pos Y : ", newY);
+        console.log("-------  conditions");
+        console.log(Math.floor(newY / 40));
+        console.log(board[Math.floor(newY / 40)][Math.floor(newX / 40)] === 0);
+
+
         if (
-            newY >= 40 && newY < board.length - 1 * 40 &&
-            newX >= 40 && newX < board[0].length - 1 * 40 &&
-            board[Math.floor((newY / 40) / 40)][Math.floor((newX / 40) / 40)] === 0
+            newY >= 40 && newY < (board.length - 1) * 40 &&
+            newX >= 40 && newX < (board[0].length - 1) * 40 &&
+            board[Math.floor(newY / 40)][Math.floor(newX / 40)] === 0
         ) {
             this.pos.x = newX;
             this.pos.y = newY;

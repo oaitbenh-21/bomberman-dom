@@ -63,7 +63,7 @@ wsServer.on('connection', (ws) => {
                             break;
                     }
                     console.log(move);
-                    
+
                     if (move) currentRoom.broadcast(JSON.stringify({
                         type: "move",
                         player: {
