@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Multiplayer Game Client</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        td {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        .wall {
+            background-color: #333;
+        }
+
+        .empty {
+            background-color: #fff;
+        }
+
+        #boardContainer {
+            position: relative;
+        }
+
+        .player {
+            position: absolute;
+            background-color: #4caf50;
+            width: 30px;
+            height: 30px;
+            z-index: 1;
+            top: 43px;
+            left: 43px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>WebSocket Game Client</h2>
+    <div id="status">Connecting...</div>
+    <div id="controls" style="margin: 10px 0;">
+        <button onclick="sendMove('Top')">↑</button><br>
+        <button onclick="sendMove('Left')">←</button>
+        <button onclick="sendMove('Bottom')">↓</button>
+        <button onclick="sendMove('Right')">→</button>
+    </div>
+    <div id="boardContainer">
+        <div class="player">p1</div>
+    </div>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:8080');
+
+        socket.onopen = () => {
+            document.getElementById('status').innerText = "✅ Connected to WebSocket server";
+        };
+
+        socket.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                renderBoard(data.board);
+                const board = document.getElementById('boardContainer');
+                const player = document.createElement('div')
+                player.className = 'player';
+                player.id = event.data.playerId;
+                board.appendChild(player);
+
+            } catch (err) {
+                console.error('Invalid message:', err);
+            }
+        };
+
+        socket.onerror = (err) => {
+            document.getElementById('status').innerText = "❌ WebSocket error";
+            console.error('WebSocket error:', err);
+        };
+
+        function sendMove(direction) {
+            socket.send(JSON.stringify({ type: 'move', direction }));
+        }
+
+        function renderBoard(board) {
+            const container = document.getElementById('boardContainer');
+            container.innerHTML = ''; // Clear old board
+
+            const table = document.createElement('table');
+            for (let y = 0; y < board.length; y++) {
+                const row = document.createElement('tr');
+                for (let x = 0; x < board[y].length; x++) {
+                    const cell = document.createElement('td');
+                    const val = board[y][x];
+                    if (val === 2) {
+                        cell.className = 'wall';
+                    } else if (val === 1) {
+                        cell.className = 'player';
+                    } else {
+                        cell.className = 'empty';
+                    }
+                    row.appendChild(cell);
+                }
+                table.appendChild(row);
+            }
+
+            container.appendChild(table);
+        }
+    </script>
+</body>
+
+</html>
