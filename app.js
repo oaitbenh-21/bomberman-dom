@@ -13,33 +13,36 @@ const { Player, Room } = require('./frontend/game.js');
 const Rooms = [];
 const Connections = [];
 
-
 const wsServer = new WebSocket.Server({ port: 8080 });
-
+const colors = ["red", "blue", "yellow", "green"];
 
 
 wsServer.on('connection', (ws) => {
     // handle new client
     Connections.push(ws)
     let currentRoom;
+    let nowPlayer;
     const lastRoom = Rooms[Rooms.length - 1];
-    if (lastRoom && lastRoom.Players.length < 4) {
-        currentRoom = lastRoom;
-    } else {
-        currentRoom = new Room();
-        Rooms.push(currentRoom);
-    }
+    // if (lastRoom && lastRoom.Players.length < 4) {
+    //     currentRoom = lastRoom;
+    //     nowPlayer++;
+    // } else {
+    currentRoom = new Room();
+    Rooms.push(currentRoom);
+    nowPlayer = 0;
+    // }
 
     const player = new Player(currentRoom);
-    currentRoom.addPlayer(player);
+    player.color = colors[nowPlayer]
+    currentRoom.addPlayer(player, ws);
 
     // handle recieve message
     ws.on('message', (message) => {
         try {
             const data = JSON.parse(message);
+            console.log(data);
             switch (data.type) {
                 case "bomb":
-                    // Add Bomb to now player position
                     break;
                 case "move":
                     let move;
@@ -59,10 +62,14 @@ wsServer.on('connection', (ws) => {
                         default:
                             break;
                     }
-                    ws.send(JSON.stringify({
-                        moved: move,
-                        board: currentRoom.Board,
-                        pos: player.pos,
+                    console.log(move);
+                    
+                    if (move) currentRoom.broadcast(JSON.stringify({
+                        type: "move",
+                        player: {
+                            id: player.id,
+                            pos: player.pos,
+                        },
                     }));
                     break;
                 default:
@@ -74,9 +81,16 @@ wsServer.on('connection', (ws) => {
     });
 
     ws.send(JSON.stringify({
+        type: "join",
         board: currentRoom.Board,
-        id: player.id,
-        pos: player.pos,
+        players: currentRoom.Players.map((p) => {
+            return {
+                name: p.name,
+                id: p.id,
+                pos: p.pos,
+                color: p.color,
+            }
+        }),
     }));
 });
 

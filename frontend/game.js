@@ -3,7 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 export class Room {
     constructor() {
         this.Board = this.createBoard();
-        this.Players = new Map();
+        this.Players = [];
+        this.Connections = []
     }
 
     createBoard() {
@@ -22,8 +23,15 @@ export class Room {
         ];
     }
 
-    addPlayer(player) {
-        this.Players.set(player.id, player);
+    addPlayer(player, ws) {
+        this.Players.push(player);
+        this.Connections.push(ws);
+    }
+
+    broadcast(message) {
+        this.Connections.forEach((ws) => {
+            ws.send(message)
+        })
     }
 }
 
@@ -35,15 +43,16 @@ export class Player {
         this.pos = this.assignStartPosition();
         this.pos.x *= 40
         this.pos.y *= 40
+        this.color = ""
     }
 
     assignStartPosition() {
         const numPlayers = this.room.Players.size;
         switch (numPlayers) {
-            case 0: return { x: 1, y: 1 };
-            case 1: return { x: 11, y: 1 };
-            case 2: return { x: 1, y: 9 };
-            case 3: return { x: 11, y: 9 };
+            case 0: return { x: 1 * 40, y: 1 * 40 };
+            case 1: return { x: 11 * 39, y: 1 * 40 };
+            case 2: return { x: 1 * 40, y: 9 * 39 };
+            case 3: return { x: 11 * 39, y: 9 * 39 };
             default: return { x: 0, y: 0 };
         }
     }
@@ -54,9 +63,9 @@ export class Player {
 
         const board = this.room.Board;
         if (
-            newY >= 40 && newY < board.length * 39 &&
-            newX >= 40 && newX < board[0].length * 39 &&
-            board[newY][newX] === 0
+            newY >= 40 && newY < board.length - 1 * 40 &&
+            newX >= 40 && newX < board[0].length - 1 * 40 &&
+            board[Math.floor((newY / 40) / 40)][Math.floor((newX / 40) / 40)] === 0
         ) {
             this.pos.x = newX;
             this.pos.y = newY;

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Multiplayer Game Client</title>
-    <link rel="stylesheet" href="player.css">
+    <link rel="stylesheet" href="../css/play.css">
 </head>
 
 <body>
@@ -16,9 +16,7 @@
         <button onclick="sendMove('Bottom')">↓</button>
         <button onclick="sendMove('Right')">→</button>
     </div>
-    <div id="boardContainer">
-        <div class="player">p1</div>
-    </div>
+    <div id="boardContainer"></div>
 
     <script>
         const socket = new WebSocket('ws://localhost:8080');
@@ -30,12 +28,22 @@
         socket.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
-                renderBoard(data.board);
-                const board = document.getElementById('boardContainer');
-                const player = document.createElement('div')
-                player.className = 'player';
-                player.id = event.data.playerId;
-                board.appendChild(player);
+                console.log(data);
+                switch (data.type) {
+                    case "join":
+                        renderBoard(data.board);
+                        const board = document.getElementById('boardContainer');
+                        const player = document.createElement('div')
+                        player.className = 'player';
+                        player.id = data.id;
+                        board.appendChild(player);
+                        break;
+                    case "move":
+                        console.log(data);
+                        MovePlayer(data.player)
+                    default:
+                        break;
+                }
 
             } catch (err) {
                 console.error('Invalid message:', err);
@@ -54,7 +62,7 @@
         function renderBoard(board) {
             const container = document.getElementById('boardContainer');
             container.innerHTML = ''; // Clear old board
-
+            console.log(container);
             const table = document.createElement('table');
             for (let y = 0; y < board.length; y++) {
                 const row = document.createElement('tr');
@@ -74,7 +82,39 @@
             }
 
             container.appendChild(table);
+            console.log(container);
         }
+        function MovePlayer(data) {
+            /*
+            {
+                id: "j4f8-g374-gf4i-fd89-3s4g",
+                pos: {x:0, y:0},
+            }
+            */
+            const target = document.getElementById(`${data.id}`);
+            target.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
+        }
+        document.addEventListener("keydown", (e) => {
+            document.addEventListener("keydown", (e) => {
+                switch (e.key) {
+                    case "ArrowDown":
+                        sendMove("b")
+                        break;
+                    case "ArrowUp":
+                        sendMove("t")
+                        break;
+                    case "ArrowLeft":
+                        sendMove("l")
+                        break;
+                    case "ArrowRight":
+                        sendMove("r")
+                        break;
+                    default:
+                        break;
+                }
+
+            });
+        });
     </script>
 </body>
 
