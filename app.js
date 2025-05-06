@@ -31,16 +31,6 @@ wsServer.on('connection', (ws) => {
         Rooms.push(currentRoom);
         nowPlayer = 0;
     }
-    currentRoom.Players.forEach((p) => {
-        ws.send(JSON.stringify({
-            data: "added by me",
-            type: "join",
-            name: p.name,
-            id: p.id,
-            pos: p.pos,
-        }))
-        ws.send(JSON.stringify({ d: 'data d l9lawi' }))
-    })
     const player = new Player(currentRoom);
     player.color = colors[nowPlayer]
     currentRoom.addPlayer(player, ws);
@@ -90,6 +80,17 @@ wsServer.on('connection', (ws) => {
         type: "board",
         board: currentRoom.Board,
     }));
+    currentRoom.Players.forEach((p) => {
+        if (p.id == player.id) return
+        ws.send(JSON.stringify({
+            data: "added by me",
+            type: "join",
+            name: p.name,
+            id: p.id,
+            pos: p.pos,
+        }))
+        ws.send(JSON.stringify({ d: 'data d l9lawi' }))
+    })
     currentRoom.broadcast(JSON.stringify({
         type: "join",
         name: player.name,

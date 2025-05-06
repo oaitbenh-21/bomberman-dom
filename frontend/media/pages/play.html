@@ -10,12 +10,6 @@
 <body>
     <h2>WebSocket Game Client</h2>
     <div id="status">Connecting...</div>
-    <div id="controls" style="margin: 10px 0;">
-        <button onclick="sendMove('t')">↑</button><br>
-        <button onclick="sendMove('l')">←</button>
-        <button onclick="sendMove('b')">↓</button>
-        <button onclick="sendMove('r')">→</button>
-    </div>
     <div id="boardContainer"></div>
 
     <script>
@@ -34,11 +28,13 @@
                         break
                     case "join":
                         const board = document.getElementById('boardContainer');
-                        const player = document.createElement('div')
+                        const player = document.createElement('img')
                         player.className = 'player';
+                        player.src = "../img/down-1.png";
                         player.id = data.id;
                         player.style.top = data.pos.y;
                         player.style.left = data.pos.x;
+                        // target.style.transform = `translate(${data.pos.x - 40}px, ${data.pos.y - 40}px)`;
                         player.style.backgroundColor = data.color;
                         board.appendChild(player);
                         break;
@@ -73,8 +69,8 @@
                     const val = board[y][x];
                     if (val === 2) {
                         cell.className = 'wall';
-                    } else if (val === 1) {
-                        cell.className = 'player';
+                    } else if (val === 3) {
+                        cell.className = 'box';
                     } else {
                         cell.className = 'empty';
                     }
@@ -87,7 +83,7 @@
         }
         function MovePlayer(data) {
             const target = document.getElementById(data.id);
-            target.style.transform = `translate(${data.pos.x - 40}px, ${data.pos.y - 40}px)`;
+            target.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
         }
         document.addEventListener("keydown", (e) => {
             switch (e.key) {
