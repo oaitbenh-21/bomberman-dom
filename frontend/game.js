@@ -46,9 +46,9 @@ export class Player {
         const numPlayers = this.room.Players.length;
         switch (numPlayers) {
             case 0: return { x: 40, y: 40 };
-            case 1: return { x: (this.room.Board[0].length-2) * 40, y: 40 };
-            case 2: return { x: 40, y: (this.room.Board.length-2) * 40 };
-            case 3: return { x: (this.room.Board[0].length-2) * 40, y: (this.room.Board.length-2) * 40 };
+            case 1: return { x: (this.room.Board[0].length - 2) * 40, y: 40 };
+            case 2: return { x: 40, y: (this.room.Board.length - 2) * 40 };
+            case 3: return { x: (this.room.Board[0].length - 2) * 40, y: (this.room.Board.length - 2) * 40 };
             default: return { x: 0, y: 0 };
         }
     }
@@ -57,14 +57,6 @@ export class Player {
         const newX = this.pos.x + dx;
         const newY = this.pos.y + dy;
         const board = this.room.Board;
-        console.log("ceil y : ", Math.ceil((newY) / 40));
-        console.log("floor y : ", Math.floor((newY) / 40));
-        console.log("ceil x : ", Math.ceil((newX) / 40));
-        console.log("floor x : ", Math.floor((newX) / 40));
-        console.log(board[Math.floor(newY / 40)][Math.ceil(newX / 40)]);
-        console.log(board[Math.ceil(newY / 40)][Math.floor(newX / 40)]);
-
-        console.log();
         if (newX >= 0 && newY >= 0 &&
             newX + 29 < board[0].length * 40 &&
             newY + 29 < board.length * 40) {

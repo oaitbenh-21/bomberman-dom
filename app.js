@@ -41,6 +41,12 @@ wsServer.on('connection', (ws) => {
             const data = JSON.parse(message);
             switch (data.type) {
                 case "bomb":
+                    currentRoom.broadcast(JSON.stringify({
+                        type: "bomb",
+                        pos: player.pos,
+                    }))
+                    console.log(player.pos);
+                    
                     break;
                 case "move":
                     let move;
@@ -81,7 +87,7 @@ wsServer.on('connection', (ws) => {
         board: currentRoom.Board,
     }));
     currentRoom.Players.forEach((p) => {
-        if (p.id == player.id) return
+        if (p.id == player.id) return;
         ws.send(JSON.stringify({
             data: "added by me",
             type: "join",

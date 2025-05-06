@@ -22,12 +22,11 @@
         socket.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
+                const board = document.getElementById('boardContainer');
                 switch (data.type) {
                     case "board":
                         renderBoard(data.board);
-                        break
                     case "join":
-                        const board = document.getElementById('boardContainer');
                         const player = document.createElement('img')
                         player.className = 'player';
                         player.src = "../img/down-1.png";
@@ -37,9 +36,21 @@
                         // target.style.transform = `translate(${data.pos.x - 40}px, ${data.pos.y - 40}px)`;
                         player.style.backgroundColor = data.color;
                         board.appendChild(player);
-                        break;
                     case "move":
                         MovePlayer(data.player)
+                    case "bomb":
+                        const bomb = document.createElement('img')
+                        bomb.className = 'player';
+                        bomb.src = "../img/bomb.gif";
+                        bomb.style.top = data.pos.y;
+                        bomb.style.left = data.pos.x;
+                        board.appendChild(bomb);
+                        bomb.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
+                        setTimeout(() => {
+                            bomb.remove()
+                        }, 2000)
+                        console.log(data.pos);
+
                     default:
                         console.log(data);
                         break;
@@ -99,6 +110,10 @@
                 case "ArrowRight":
                     sendMove("r")
                     break;
+                case " ":
+                    socket.send(JSON.stringify({
+                        type: "bomb",
+                    }));
                 default:
                     break;
             }
