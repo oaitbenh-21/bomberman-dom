@@ -40,6 +40,7 @@ export class Player {
         this.name = `Player_${this.id.slice(0, 5)}`;
         this.room = room;
         this.pos = this.assignStartPosition();
+        this.Bombs = 1;
     }
 
     assignStartPosition() {

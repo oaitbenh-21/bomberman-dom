@@ -41,12 +41,41 @@ wsServer.on('connection', (ws) => {
             const data = JSON.parse(message);
             switch (data.type) {
                 case "bomb":
+                    if (player.Bombs == 0) return
+                    player.Bombs--;
+                    const BombPos = { x: player.pos.x, y: player.pos.y };
                     currentRoom.broadcast(JSON.stringify({
                         type: "bomb",
-                        pos: player.pos,
+                        pos: BombPos,
                     }))
-                    console.log(player.pos);
-                    
+                    setTimeout(() => {
+                        for (let i = 1; i <= 1; i++) {
+                            for (let n of [-1, 1]) {
+                                currentRoom.broadcast(JSON.stringify({
+                                    type: "bomb",
+                                    pos: {
+                                        x: BombPos.x,
+                                        y: BombPos.y + (n * i * 40),
+                                    },
+                                }))
+                                currentRoom.broadcast(JSON.stringify({
+                                    type: "bomb",
+                                    pos: {
+                                        x: BombPos.x + (n * i * 40),
+                                        y: BombPos.y,
+                                    },
+                                }))
+                                if (currentRoom.Board[Math.floor(BombPos.y / 40) + (n * i)][Math.floor(BombPos.y / 40)] == 3) {
+                                    currentRoom.Board[Math.floor(BombPos.y / 40) + (n * i)][Math.floor(BombPos.y / 40)] = 0
+                                }
+                                if (currentRoom.Board[Math.floor(BombPos.y / 40)][Math.floor(BombPos.y / 40) + (n * i)] == 3) {
+                                    currentRoom.Board[Math.floor(BombPos.y / 40)][Math.floor(BombPos.y / 40) + (n * i)] = 0
+                                }
+                            }
+                        }
+                        player.Bombs++;
+                    }, 2000);
+
                     break;
                 case "move":
                     let move;
