@@ -29,25 +29,25 @@
             try {
                 const data = JSON.parse(event.data);
                 switch (data.type) {
-                    case "join":
+                    case "board":
                         renderBoard(data.board);
+                        break
+                    case "join":
                         const board = document.getElementById('boardContainer');
-                        data.players.forEach(playerData => {
-                            const player = document.createElement('div')
-                            player.className = 'player';
-                            player.id = playerData.id;
-                            player.style.top = playerData.pos.y;
-                            player.style.left = playerData.pos.x;
-                            board.appendChild(player);
-                        });
+                        const player = document.createElement('div')
+                        player.className = 'player';
+                        player.id = data.id;
+                        player.style.top = data.pos.y;
+                        player.style.left = data.pos.x;
+                        player.style.backgroundColor = data.color;
+                        board.appendChild(player);
                         break;
                     case "move":
-                        console.log(data);
                         MovePlayer(data.player)
                     default:
+                        console.log(data);
                         break;
                 }
-
             } catch (err) {
                 console.error('Invalid message:', err);
             }
@@ -65,7 +65,6 @@
         function renderBoard(board) {
             const container = document.getElementById('boardContainer');
             container.innerHTML = ''; // Clear old board
-            console.log(container);
             const table = document.createElement('table');
             for (let y = 0; y < board.length; y++) {
                 const row = document.createElement('tr');
@@ -85,15 +84,8 @@
             }
 
             container.appendChild(table);
-            console.log(container);
         }
         function MovePlayer(data) {
-            /*
-            {
-                id: "j4f8-g374-gf4i-fd89-3s4g",
-                pos: {x:0, y:0},
-            }
-            */
             const target = document.getElementById(data.id);
             target.style.transform = `translate(${data.pos.x - 40}px, ${data.pos.y - 40}px)`;
         }

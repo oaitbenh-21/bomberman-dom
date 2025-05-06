@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-
 export class Room {
     constructor() {
         this.Board = this.createBoard();
@@ -23,9 +22,19 @@ export class Room {
         ];
     }
 
-    addPlayer(player, ws) {
+    addPlayer(player, conn) {
+        this.Players.forEach((p) => {
+            console.log(p);
+            conn.send(JSON.stringify({
+                data: "added by me",
+                type: "join",
+                name: p.name,
+                id: p.id,
+                pos: p.pos,
+            }))
+        })
         this.Players.push(player);
-        this.Connections.push(ws);
+        this.Connections.push(conn);
     }
 
     broadcast(message) {
@@ -58,15 +67,7 @@ export class Player {
     move(dx, dy) {
         const newX = this.pos.x + dx;
         const newY = this.pos.y + dy;
-
         const board = this.room.Board;
-        console.log("pos X : ", newX);
-        console.log("pos Y : ", newY);
-        console.log("-------  conditions");
-        console.log(Math.floor(newY / 40));
-        console.log(board[Math.floor(newY / 40)][Math.floor(newX / 40)] === 0);
-
-
         if (
             newY >= 40 && newY < (board.length - 1) * 40 &&
             newX >= 40 && newX < (board[0].length - 1) * 40 &&

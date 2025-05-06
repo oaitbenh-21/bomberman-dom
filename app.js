@@ -23,15 +23,24 @@ wsServer.on('connection', (ws) => {
     let currentRoom;
     let nowPlayer;
     const lastRoom = Rooms[Rooms.length - 1];
-    // if (lastRoom && lastRoom.Players.length < 4) {
-    //     currentRoom = lastRoom;
-    //     nowPlayer++;
-    // } else {
-    currentRoom = new Room();
-    Rooms.push(currentRoom);
-    nowPlayer = 0;
-    // }
-
+    if (lastRoom && lastRoom.Players.length < 4) {
+        currentRoom = lastRoom;
+        nowPlayer++;
+    } else {
+        currentRoom = new Room();
+        Rooms.push(currentRoom);
+        nowPlayer = 0;
+    }
+    currentRoom.Players.forEach((p) => {
+        ws.send(JSON.stringify({
+            data: "added by me",
+            type: "join",
+            name: p.name,
+            id: p.id,
+            pos: p.pos,
+        }))
+        ws.send(JSON.stringify({ d: 'data d l9lawi' }))
+    })
     const player = new Player(currentRoom);
     player.color = colors[nowPlayer]
     currentRoom.addPlayer(player, ws);
@@ -40,7 +49,6 @@ wsServer.on('connection', (ws) => {
     ws.on('message', (message) => {
         try {
             const data = JSON.parse(message);
-            console.log(data);
             switch (data.type) {
                 case "bomb":
                     break;
@@ -62,7 +70,6 @@ wsServer.on('connection', (ws) => {
                         default:
                             break;
                     }
-                    console.log(move);
 
                     if (move) currentRoom.broadcast(JSON.stringify({
                         type: "move",
@@ -79,18 +86,15 @@ wsServer.on('connection', (ws) => {
             console.error('Invalid JSON:', err);
         }
     });
-
     ws.send(JSON.stringify({
-        type: "join",
+        type: "board",
         board: currentRoom.Board,
-        players: currentRoom.Players.map((p) => {
-            return {
-                name: p.name,
-                id: p.id,
-                pos: p.pos,
-                color: p.color,
-            }
-        }),
+    }));
+    currentRoom.broadcast(JSON.stringify({
+        type: "join",
+        name: player.name,
+        id: player.id,
+        pos: player.pos,
     }));
 });
 

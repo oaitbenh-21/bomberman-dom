@@ -33,4 +33,5 @@ td {
     z-index: 1;
     top: 43px;
     left: 43px;
+    border-radius: 100%;
 }
