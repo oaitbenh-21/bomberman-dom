@@ -52,25 +52,26 @@ wsServer.on('connection', (ws) => {
                         for (let i = 1; i <= 1; i++) {
                             for (let n of [-1, 1]) {
                                 currentRoom.broadcast(JSON.stringify({
-                                    type: "bomb",
-                                    pos: {
-                                        x: BombPos.x,
-                                        y: BombPos.y + (n * i * 40),
-                                    },
+                                    type: "remove",
+                                    x: Math.floor(BombPos.x / 40) + (n * i),
+                                    y: Math.floor(BombPos.y / 40),
                                 }))
+                                currentRoom.Board[Math.floor(BombPos.y / 40) + (n * i)][Math.floor(BombPos.y / 40)] = 0
                                 currentRoom.broadcast(JSON.stringify({
-                                    type: "bomb",
-                                    pos: {
-                                        x: BombPos.x + (n * i * 40),
-                                        y: BombPos.y,
-                                    },
+                                    type: "remove",
+                                    x: Math.floor(BombPos.x / 40),
+                                    y: Math.floor(BombPos.y / 40) + (n * i),
                                 }))
-                                if (currentRoom.Board[Math.floor(BombPos.y / 40) + (n * i)][Math.floor(BombPos.y / 40)] == 3) {
-                                    currentRoom.Board[Math.floor(BombPos.y / 40) + (n * i)][Math.floor(BombPos.y / 40)] = 0
-                                }
-                                if (currentRoom.Board[Math.floor(BombPos.y / 40)][Math.floor(BombPos.y / 40) + (n * i)] == 3) {
-                                    currentRoom.Board[Math.floor(BombPos.y / 40)][Math.floor(BombPos.y / 40) + (n * i)] = 0
-                                }
+                                currentRoom.Board[Math.floor(BombPos.y / 40)][Math.floor(BombPos.y / 40) + (n * i)] = 0
+                                // if (currentRoom.Board[Math.floor(BombPos.y / 40) + (n * i)][Math.floor(BombPos.y / 40)] == 3) {
+                                    
+                                //     console.log("bombed");
+
+                                // }
+                                // if (currentRoom.Board[Math.floor(BombPos.y / 40)][Math.floor(BombPos.y / 40) + (n * i)] == 3) {
+                                    
+                                //     console.log("bombed");
+                                // }
                             }
                         }
                         player.Bombs++;

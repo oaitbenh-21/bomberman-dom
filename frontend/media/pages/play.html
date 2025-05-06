@@ -38,6 +38,8 @@
                         board.appendChild(player);
                     case "move":
                         MovePlayer(data.player)
+                    case "remove":
+                        RemoveElement(data.y, data.x)
                     case "bomb":
                         const bomb = document.createElement('img')
                         bomb.className = 'player';
@@ -119,6 +121,12 @@
             }
 
         });
+        function RemoveElement(y, x) {
+            document.getElementById("boardContainer")
+                .getElementsByTagName("tr")[y]
+                .getElementsByTagName("td")[x]
+                .className = "empty"
+        }
     </script>
 </body>
 
