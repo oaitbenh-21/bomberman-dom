@@ -8,7 +8,8 @@
 //     });
 // }).listen(8080, '0.0.0.0');
 const WebSocket = require('ws');
-const { Player, Room } = require('./frontend/game.js');
+const { Player, Room } = require('./frontend/config/game.js');
+const { BombPositions } = require('./frontend/utils/utils.js');
 
 const Rooms = [];
 const Connections = [];
@@ -41,37 +42,14 @@ wsServer.on('connection', (ws) => {
             const data = JSON.parse(message);
             switch (data.type) {
                 case "bomb":
-                    if (player.Bombs == 0) return
-                    // player.Bombs--;
+                    if (player.Bombs == 0) return;
+                    player.Bombs--;
                     const BombPos = { x: player.pos.x, y: player.pos.y };
                     currentRoom.broadcast(JSON.stringify({
                         type: "bomb",
                         pos: BombPos,
-                    }))
-                    setTimeout(() => {
-                        for (let i = 1; i <= 1; i++) {
-                            for (let n of [-1, 1]) {
-                                if (currentRoom.Board[Math.floor(BombPos.y / 40) + (n * i)][Math.floor(BombPos.x / 40)] == 3) {
-                                    currentRoom.broadcast(JSON.stringify({
-                                        type: "remove",
-                                        x: Math.floor(BombPos.x / 40),
-                                        y: Math.floor(BombPos.y / 40) + (n * i),
-                                    }))
-                                    currentRoom.Board[Math.floor(BombPos.y / 40) + (n * i)][Math.floor(BombPos.x / 40)] = 0
-                                }
-                                if (currentRoom.Board[Math.floor(BombPos.y / 40)][Math.floor(BombPos.x / 40) + (n * i)] == 3) {
-                                    currentRoom.broadcast(JSON.stringify({
-                                        type: "remove",
-                                        x: Math.floor(BombPos.x / 40) + (n * i),
-                                        y: Math.floor(BombPos.y / 40),
-                                    }))
-                                    currentRoom.Board[Math.floor(BombPos.y / 40)][Math.floor(BombPos.x / 40) + (n * i)] = 0
-                                }
-                            }
-                        }
-                        player.Bombs++;
-                    }, 2000);
-
+                    }));
+                    BombPositions(BombPos, currentRoom, delay = 2000);
                     break;
                 case "move":
                     let move;

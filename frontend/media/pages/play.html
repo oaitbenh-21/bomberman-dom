@@ -14,7 +14,15 @@
 
     <script>
         const socket = new WebSocket('ws://localhost:8080');
-
+        function ShowBombed(pos, board) {
+            let Bombed = document.createElement("img");
+            Bombed.src = "../img/bombed.gif";
+            Bombed.className = "player";
+            Bombed.style.top = pos.top;
+            Bombed.style.left = pos.left;
+            Bombed.style.backgroundColor = "black";
+            board.appendChild(player);
+        }
         socket.onopen = () => {
             document.getElementById('status').innerText = "✅ Connected to WebSocket server";
         };
@@ -22,6 +30,7 @@
         socket.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
+                console.log(data);
                 const board = document.getElementById('boardContainer');
                 switch (data.type) {
                     case "board":
@@ -29,17 +38,17 @@
                     case "join":
                         const player = document.createElement('img')
                         player.className = 'player';
-                        player.src = "../img/down-1.png";
+                        player.src = "../img/down-1.png"; case "bomb":
                         player.id = data.id;
                         player.style.top = data.pos.y;
                         player.style.left = data.pos.x;
-                        // target.style.transform = `translate(${data.pos.x - 40}px, ${data.pos.y - 40}px)`;
-                        player.style.backgroundColor = data.color;
+                        player.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
                         board.appendChild(player);
                     case "move":
                         MovePlayer(data.player)
                     case "remove":
-                        RemoveElement(data.y, data.x)
+                        RemoveElement(data.y, data.x);
+                        ShowBombed(data.pos, board);
                     case "bomb":
                         const bomb = document.createElement('img')
                         bomb.className = 'player';
