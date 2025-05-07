@@ -42,7 +42,7 @@ wsServer.on('connection', (ws) => {
             switch (data.type) {
                 case "bomb":
                     if (player.Bombs == 0) return
-                    player.Bombs--;
+                    // player.Bombs--;
                     const BombPos = { x: player.pos.x, y: player.pos.y };
                     currentRoom.broadcast(JSON.stringify({
                         type: "bomb",
@@ -51,27 +51,22 @@ wsServer.on('connection', (ws) => {
                     setTimeout(() => {
                         for (let i = 1; i <= 1; i++) {
                             for (let n of [-1, 1]) {
-                                currentRoom.broadcast(JSON.stringify({
-                                    type: "remove",
-                                    x: Math.floor(BombPos.x / 40) + (n * i),
-                                    y: Math.floor(BombPos.y / 40),
-                                }))
-                                currentRoom.Board[Math.floor(BombPos.y / 40) + (n * i)][Math.floor(BombPos.y / 40)] = 0
-                                currentRoom.broadcast(JSON.stringify({
-                                    type: "remove",
-                                    x: Math.floor(BombPos.x / 40),
-                                    y: Math.floor(BombPos.y / 40) + (n * i),
-                                }))
-                                currentRoom.Board[Math.floor(BombPos.y / 40)][Math.floor(BombPos.y / 40) + (n * i)] = 0
-                                // if (currentRoom.Board[Math.floor(BombPos.y / 40) + (n * i)][Math.floor(BombPos.y / 40)] == 3) {
-                                    
-                                //     console.log("bombed");
-
-                                // }
-                                // if (currentRoom.Board[Math.floor(BombPos.y / 40)][Math.floor(BombPos.y / 40) + (n * i)] == 3) {
-                                    
-                                //     console.log("bombed");
-                                // }
+                                if (currentRoom.Board[Math.floor(BombPos.y / 40) + (n * i)][Math.floor(BombPos.x / 40)] == 3) {
+                                    currentRoom.broadcast(JSON.stringify({
+                                        type: "remove",
+                                        x: Math.floor(BombPos.x / 40),
+                                        y: Math.floor(BombPos.y / 40) + (n * i),
+                                    }))
+                                    currentRoom.Board[Math.floor(BombPos.y / 40) + (n * i)][Math.floor(BombPos.x / 40)] = 0
+                                }
+                                if (currentRoom.Board[Math.floor(BombPos.y / 40)][Math.floor(BombPos.x / 40) + (n * i)] == 3) {
+                                    currentRoom.broadcast(JSON.stringify({
+                                        type: "remove",
+                                        x: Math.floor(BombPos.x / 40) + (n * i),
+                                        y: Math.floor(BombPos.y / 40),
+                                    }))
+                                    currentRoom.Board[Math.floor(BombPos.y / 40)][Math.floor(BombPos.x / 40) + (n * i)] = 0
+                                }
                             }
                         }
                         player.Bombs++;
