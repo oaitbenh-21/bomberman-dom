@@ -23,8 +23,8 @@ wsServer.on('connection', (ws) => {
         player.color = colors[nowPlayer]
         currentRoom.addPlayer(player, ws);
         ws.on('message', (message) => {
+            if (currentRoom.Waiting || player.lifes < 1) return
             const data = JSON.parse(message);
-            if (currentRoom.Waiting) return
             switch (data.type) {
                 case "bomb":
                     // if (player.Bombs == 0) return;

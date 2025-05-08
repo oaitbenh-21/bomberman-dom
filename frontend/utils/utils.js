@@ -12,6 +12,15 @@ export function BombPositions(BombPos, currentRoom) {
             for (let n of [-1, 1]) {
                 [{ y: yPos + (n * i), x: xPos },
                 { y: yPos, x: xPos + (n * i) }].forEach(coord => {
+                    currentRoom.Players.forEach((player) => {
+                        if (Math.floor(player.pos.x / 40) == coord.x && Math.floor(player.pos.y / 40) == coord.y) {
+                            player.lifes--;
+                            currentRoom.broadcast(JSON.stringify({
+                                type: "kill",
+                                id: player.id,
+                            }));
+                        }
+                    })
                     if (currentRoom.Board[coord.y][coord.x] != 2) {
                         currentRoom.broadcast(JSON.stringify({
                             type: "remove",

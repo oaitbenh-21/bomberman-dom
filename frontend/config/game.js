@@ -4,6 +4,22 @@ export class Room {
         this.Board = this.createBoard();
         this.Players = [];
         this.Connections = [];
+        this.Waiting = true;
+        this.Timer;
+    }
+
+    checkWinner() {
+        let livePlayers = 0
+        this.Players.forEach((pl) => {
+            if (pl.lifes < 0) livePlayers++
+        })
+        if (livePlayers == 1) {
+            this.Waiting = true;
+            return 1
+        } else if (livePlayers == 0) {
+            return 2
+        }
+        return 0
     }
 
     createBoard() {
@@ -25,6 +41,14 @@ export class Room {
     addPlayer(player, conn) {
         this.Players.push(player);
         this.Connections.push(conn);
+        if (this.Timer) clearTimeout(this.Timer);
+        if (this.Players.length >= 2) this.Timer = setTimeout(() => {
+            this.Waiting = false;
+        }, 5000)
+        this.broadcast(JSON.stringify({
+            type: "count",
+            count: this.Players.length,
+        }))
     }
 
     broadcast(message) {
@@ -41,6 +65,7 @@ export class Player {
         this.room = room;
         this.pos = this.assignStartPosition();
         this.Bombs = 100;
+        this.lifes = 1;
     }
 
     assignStartPosition() {

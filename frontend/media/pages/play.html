@@ -8,6 +8,7 @@
 </head>
 
 <body>
+    <h1 id="count">1/4</h1>
     <div id="boardContainer"></div>
     <div id="status"></div>
 </body>
@@ -27,12 +28,20 @@
         }, 400)
     }
 
+    function renderPlayersCount(count) {
+        document.getElementById("count").innerHTML = `${count}/4`;
+    }
+
     socket.onmessage = (event) => {
         try {
             const data = JSON.parse(event.data);
             const board = document.getElementById('boardContainer');
 
             switch (data.type) {
+                case "count":
+                    console.log(data);
+                    renderPlayersCount(data.count);
+                    break;
                 case "board":
                     renderBoard(data.board);
                     break;
@@ -58,7 +67,8 @@
                         ShowBombed(data.pos, board);
                     }
                     break;
-
+                case "kill":
+                    document.getElementById(data.id).remove()
                 case "bomb":
                     const bomb = document.createElement('img');
                     bomb.className = 'player';
@@ -71,7 +81,6 @@
                         bomb.remove();
                     }, 2000);
                     break;
-
                 default:
                     break;
             }
