@@ -8,10 +8,20 @@
 </head>
 
 <body>
+    <div class="popup" id="timer">Please Wait More Players</div>
     <div class="header">
-        <h1 id="timer">waiting</h1>
-        <h1 id="count">1/4</h1>
-        <div>lifes</div>
+        <div class="contain">
+            <div id="count">0/4</div>
+            <img class="icon" src="../img/player.png">
+        </div>
+        <div class="contain">
+            <div id="time">00:00</div>
+            <img class="icon" src="../img/timer.png">
+        </div>
+        <div class="contain">
+            <div id="lifes">3</div>
+            <img class="icon" src="../img/lifes.png">
+        </div>
     </div>
     <div id="boardContainer"></div>
     <div id="status"></div>
@@ -21,6 +31,7 @@
     const socket = new WebSocket('ws://localhost:8080');
     let Counter = 5;
     let TimerID;
+    let PlayersCount;
     function ShowBombed(pos, board) {
         const bombed = document.createElement("img");
         bombed.src = "../img/bombed.gif";
@@ -45,6 +56,7 @@
             switch (data.type) {
                 case "count":
                     renderPlayersCount(data.count);
+                    PlayersCount = data.count;
                     break;
                 case "board":
                     renderBoard(data.board);
@@ -121,7 +133,10 @@
         container.appendChild(table);
     }
     function Timer() {
-        if (Counter == 0) return;
+        if (PlayersCount <= 1 || Counter == 0) {
+            if (Counter == 0) document.getElementById("timer").remove();
+            return;
+        }
         document.getElementById("timer").innerHTML = `Waiting ${Counter}...`;
         TimerID = setTimeout(() => {
             Counter--;

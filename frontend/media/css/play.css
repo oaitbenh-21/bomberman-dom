@@ -13,6 +13,19 @@ body {
     justify-content: center;
 }
 
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100vw;
+    height: 45px;
+    background-color: rgb(219, 217, 217);
+}
+
+.header .contain {
+    display: flex;
+}
+
 table {
     border-collapse: collapse;
 }
@@ -30,6 +43,8 @@ table {
 
 #boardContainer {
     position: relative;
+    top: calc(50vh - 300px);
+    left: calc(50vw - 480px);
 }
 
 td {
@@ -52,4 +67,24 @@ td {
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+}
+
+.popup {
+    position: absolute;
+    top: calc(50vh - 100px);
+    left: calc(50vw - 200px);
+    width: 400px;
+    height: 200px;
+    background-color: rgb(219, 217, 217);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    color: green;
+    z-index: 100;
+}
+
+.icon {
+    width: 20px;
 }
