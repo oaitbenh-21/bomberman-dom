@@ -8,14 +8,19 @@
 </head>
 
 <body>
-    <h1 id="count">1/4</h1>
+    <div class="header">
+        <h1 id="timer">waiting</h1>
+        <h1 id="count">1/4</h1>
+        <div>lifes</div>
+    </div>
     <div id="boardContainer"></div>
     <div id="status"></div>
 </body>
 
 <script>
     const socket = new WebSocket('ws://localhost:8080');
-
+    let Counter = 5;
+    let TimerID;
     function ShowBombed(pos, board) {
         const bombed = document.createElement("img");
         bombed.src = "../img/bombed.gif";
@@ -39,14 +44,15 @@
 
             switch (data.type) {
                 case "count":
-                    console.log(data);
                     renderPlayersCount(data.count);
                     break;
                 case "board":
                     renderBoard(data.board);
                     break;
-
                 case "join":
+                    if (TimerID) clearTimeout(TimerID)
+                    Counter = 5;
+                    Timer();
                     const player = document.createElement('img');
                     player.className = 'player';
                     player.src = "../img/down-1.png";
@@ -114,7 +120,14 @@
 
         container.appendChild(table);
     }
-
+    function Timer() {
+        if (Counter == 0) return;
+        document.getElementById("timer").innerHTML = `Waiting ${Counter}...`;
+        TimerID = setTimeout(() => {
+            Counter--;
+            Timer()
+        }, 1000);
+    }
     function MovePlayer(data) {
         const target = document.getElementById(data.id);
         if (target) {
