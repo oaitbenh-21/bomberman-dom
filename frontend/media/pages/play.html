@@ -8,135 +8,144 @@
 </head>
 
 <body>
-    <h2>WebSocket Game Client</h2>
-    <div id="status">Connecting...</div>
     <div id="boardContainer"></div>
+    <div id="status"></div>
+</body>
 
-    <script>
-        const socket = new WebSocket('ws://localhost:8080');
-        function ShowBombed(pos, board) {
-            let Bombed = document.createElement("img");
-            Bombed.src = "../img/bombed.gif";
-            Bombed.className = "player";
-            Bombed.style.top = pos.top;
-            Bombed.style.left = pos.left;
-            Bombed.style.backgroundColor = "black";
-            board.appendChild(player);
-        }
-        socket.onopen = () => {
-            document.getElementById('status').innerText = "✅ Connected to WebSocket server";
-        };
+<script>
+    const socket = new WebSocket('ws://localhost:8080');
 
-        socket.onmessage = (event) => {
-            try {
-                const data = JSON.parse(event.data);
-                console.log(data);
-                const board = document.getElementById('boardContainer');
-                switch (data.type) {
-                    case "board":
-                        renderBoard(data.board);
-                    case "join":
-                        const player = document.createElement('img')
-                        player.className = 'player';
-                        player.src = "../img/down-1.png"; case "bomb":
-                        player.id = data.id;
-                        player.style.top = data.pos.y;
-                        player.style.left = data.pos.x;
-                        player.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
-                        board.appendChild(player);
-                    case "move":
-                        MovePlayer(data.player)
-                    case "remove":
-                        RemoveElement(data.y, data.x);
+    function ShowBombed(pos, board) {
+        const bombed = document.createElement("img");
+        bombed.src = "../img/bombed.gif";
+        bombed.className = "player";
+        bombed.style.top = pos.top + "px";
+        bombed.style.left = pos.left + "px";
+        board.appendChild(bombed);
+        setTimeout(() => {
+            bombed.remove()
+        }, 400)
+    }
+
+    socket.onmessage = (event) => {
+        try {
+            const data = JSON.parse(event.data);
+            const board = document.getElementById('boardContainer');
+
+            switch (data.type) {
+                case "board":
+                    renderBoard(data.board);
+                    break;
+
+                case "join":
+                    const player = document.createElement('img');
+                    player.className = 'player';
+                    player.src = "../img/down-1.png";
+                    // player.style.top = data.pos.y + "px";
+                    // player.style.left = data.pos.x + "px";
+                    player.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
+                    player.id = data.id;
+                    board.appendChild(player);
+                    break;
+
+                case "move":
+                    MovePlayer(data.player);
+                    break;
+
+                case "remove":
+                    RemoveElement(data.y, data.x);
+                    if (data.pos) {
                         ShowBombed(data.pos, board);
-                    case "bomb":
-                        const bomb = document.createElement('img')
-                        bomb.className = 'player';
-                        bomb.src = "../img/bomb.gif";
-                        bomb.style.top = data.pos.y;
-                        bomb.style.left = data.pos.x;
-                        board.appendChild(bomb);
-                        bomb.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
-                        setTimeout(() => {
-                            bomb.remove()
-                        }, 2000)
-                        console.log(data.pos);
-
-                    default:
-                        console.log(data);
-                        break;
-                }
-            } catch (err) {
-                console.error('Invalid message:', err);
-            }
-        };
-
-        socket.onerror = (err) => {
-            document.getElementById('status').innerText = "❌ WebSocket error";
-            console.error('WebSocket error:', err);
-        };
-
-        function sendMove(direction) {
-            socket.send(JSON.stringify({ type: 'move', direction }));
-        }
-
-        function renderBoard(board) {
-            const container = document.getElementById('boardContainer');
-            container.innerHTML = ''; // Clear old board
-            const table = document.createElement('table');
-            for (let y = 0; y < board.length; y++) {
-                const row = document.createElement('tr');
-                for (let x = 0; x < board[y].length; x++) {
-                    const cell = document.createElement('td');
-                    const val = board[y][x];
-                    if (val === 2) {
-                        cell.className = 'wall';
-                    } else if (val === 3) {
-                        cell.className = 'box';
-                    } else {
-                        cell.className = 'empty';
                     }
-                    row.appendChild(cell);
-                }
-                table.appendChild(row);
-            }
+                    break;
 
-            container.appendChild(table);
-        }
-        function MovePlayer(data) {
-            const target = document.getElementById(data.id);
-            target.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
-        }
-        document.addEventListener("keydown", (e) => {
-            switch (e.key) {
-                case "ArrowDown":
-                    sendMove("b")
+                case "bomb":
+                    const bomb = document.createElement('img');
+                    bomb.className = 'player';
+                    bomb.src = "../img/bomb.gif";
+                    bomb.style.top = "0px";
+                    bomb.style.left = "0px";
+                    board.appendChild(bomb);
+                    bomb.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
+                    setTimeout(() => {
+                        bomb.remove();
+                    }, 2000);
                     break;
-                case "ArrowUp":
-                    sendMove("t")
-                    break;
-                case "ArrowLeft":
-                    sendMove("l")
-                    break;
-                case "ArrowRight":
-                    sendMove("r")
-                    break;
-                case " ":
-                    socket.send(JSON.stringify({
-                        type: "bomb",
-                    }));
+
                 default:
                     break;
             }
+        } catch (err) { }
+    };
 
-        });
-        function RemoveElement(y, x) {
-            document.getElementById("boardContainer")
-                .getElementsByTagName("tr")[y]
-                .getElementsByTagName("td")[x]
-                .className = "empty"
+    function sendMove(direction) {
+        socket.send(JSON.stringify({ type: 'move', direction }));
+    }
+
+    function renderBoard(board) {
+        const container = document.getElementById('boardContainer');
+        container.innerHTML = ''; // Clear old board
+        const table = document.createElement('table');
+        for (let y = 0; y < board.length; y++) {
+            const row = document.createElement('tr');
+            for (let x = 0; x < board[y].length; x++) {
+                const cell = document.createElement('td');
+                const val = board[y][x];
+                if (val === 2) {
+                    cell.className = 'wall';
+                } else if (val === 3) {
+                    cell.className = 'box';
+                } else {
+                    cell.className = 'empty';
+                }
+                row.appendChild(cell);
+            }
+            table.appendChild(row);
         }
-    </script>
-</body>
+
+        container.appendChild(table);
+    }
+
+    function MovePlayer(data) {
+        const target = document.getElementById(data.id);
+        if (target) {
+            target.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
+        }
+    }
+
+    document.addEventListener("keydown", (e) => {
+        switch (e.key) {
+            case "ArrowDown":
+                sendMove("b");
+                break;
+            case "ArrowUp":
+                sendMove("t");
+                break;
+            case "ArrowLeft":
+                sendMove("l");
+                break;
+            case "ArrowRight":
+                sendMove("r");
+                break;
+            case " ":
+                socket.send(JSON.stringify({
+                    type: "bomb",
+                }));
+                break;
+            default:
+                break;
+        }
+    });
+
+    function RemoveElement(y, x) {
+        const boardContainer = document.getElementById("boardContainer");
+        if (!boardContainer) return;
+        const rows = boardContainer.getElementsByTagName("tr");
+        if (!rows || rows.length === 0 || y >= rows.length || y < 0) return;
+        const colls = rows[y].getElementsByTagName("td");
+        if (!colls || colls.length === 0 || x >= colls.length || x < 0) return;
+        colls[x].className = "empty";
+    }
+</script>
 
 </html>

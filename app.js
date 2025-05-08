@@ -1,55 +1,40 @@
-// var http = require('http');
-// var fs = require('fs');
-// http.createServer(function (req, res) {
-//     console.log("." + req.url)
-//     fs.readFile("." + req.url, function (err, data) {
-//         if (err) console.log(err)
-//         res.end(data)
-//     });
-// }).listen(8080, '0.0.0.0');
 const WebSocket = require('ws');
 const { Player, Room } = require('./frontend/config/game.js');
 const { BombPositions } = require('./frontend/utils/utils.js');
-
 const Rooms = [];
 const Connections = [];
-
 const wsServer = new WebSocket.Server({ port: 8080 });
 const colors = ["red", "blue", "yellow", "green"];
-
-
 wsServer.on('connection', (ws) => {
-    // handle new client
-    Connections.push(ws)
-    let currentRoom;
-    let nowPlayer;
-    const lastRoom = Rooms[Rooms.length - 1];
-    if (lastRoom && lastRoom.Players.length < 4) {
-        currentRoom = lastRoom;
-        nowPlayer++;
-    } else {
-        currentRoom = new Room();
-        Rooms.push(currentRoom);
-        nowPlayer = 0;
-    }
-    const player = new Player(currentRoom);
-    player.color = colors[nowPlayer]
-    currentRoom.addPlayer(player, ws);
-
-    // handle recieve message
-    ws.on('message', (message) => {
-        try {
+    try {
+        Connections.push(ws)
+        let currentRoom;
+        let nowPlayer;
+        const lastRoom = Rooms[Rooms.length - 1];
+        if (lastRoom && lastRoom.Players.length < 4) {
+            currentRoom = lastRoom;
+            nowPlayer++;
+        } else {
+            currentRoom = new Room();
+            Rooms.push(currentRoom);
+            nowPlayer = 0;
+        }
+        const player = new Player(currentRoom);
+        player.color = colors[nowPlayer]
+        currentRoom.addPlayer(player, ws);
+        ws.on('message', (message) => {
             const data = JSON.parse(message);
+            if (currentRoom.Waiting) return
             switch (data.type) {
                 case "bomb":
-                    if (player.Bombs == 0) return;
-                    player.Bombs--;
+                    // if (player.Bombs == 0) return;
+                    // player.Bombs--;
                     const BombPos = { x: player.pos.x, y: player.pos.y };
                     currentRoom.broadcast(JSON.stringify({
-                        type: "bomb",
+                        ...data,
                         pos: BombPos,
                     }));
-                    BombPositions(BombPos, currentRoom, delay = 2000);
+                    BombPositions(BombPos, currentRoom);
                     break;
                 case "move":
                     let move;
@@ -81,31 +66,29 @@ wsServer.on('connection', (ws) => {
                 default:
                     break;
             }
-        } catch (err) {
-            console.error('Invalid JSON:', err);
-        }
-    });
-    ws.send(JSON.stringify({
-        type: "board",
-        board: currentRoom.Board,
-    }));
-    currentRoom.Players.forEach((p) => {
-        if (p.id == player.id) return;
+        });
         ws.send(JSON.stringify({
-            data: "added by me",
+            type: "board",
+            board: currentRoom.Board,
+        }));
+        currentRoom.Players.forEach((p) => {
+            if (p.id == player.id) return;
+            ws.send(JSON.stringify({
+                type: "join",
+                name: p.name,
+                id: p.id,
+                pos: p.pos,
+            }))
+        })
+        currentRoom.broadcast(JSON.stringify({
             type: "join",
-            name: p.name,
-            id: p.id,
-            pos: p.pos,
-        }))
-        ws.send(JSON.stringify({ d: 'data d l9lawi' }))
-    })
-    currentRoom.broadcast(JSON.stringify({
-        type: "join",
-        name: player.name,
-        id: player.id,
-        pos: player.pos,
-    }));
+            name: player.name,
+            id: player.id,
+            pos: player.pos,
+        }));
+    } catch (err) {
+        console.log(err);
+    }
 });
 
 console.log(`🚀 Websocket running at localhost:8080`);
