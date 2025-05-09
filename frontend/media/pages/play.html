@@ -86,19 +86,25 @@
                     }
                     break;
                 case "kill":
+                    console.log(document.getElementById(data.id));
+
                     document.getElementById(data.id).remove()
                 case "bomb":
                     const bomb = document.createElement('img');
+                    setTimeout(() => {
+                        bomb.remove();
+                    }, 2000);
                     bomb.className = 'player';
                     bomb.src = "../img/bomb.gif";
                     bomb.style.top = "0px";
                     bomb.style.left = "0px";
                     board.appendChild(bomb);
                     bomb.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
-                    setTimeout(() => {
-                        bomb.remove();
-                    }, 2000);
                     break;
+                case "gameover":
+                    const popup = document.getElementById("timer");
+                    popup.style.display = "flex";
+                    popup.innerHTML = "Game Over";
                 default:
                     break;
             }

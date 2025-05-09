@@ -5,6 +5,7 @@ export class Room {
         this.Players = [];
         this.Connections = [];
         this.Waiting = true;
+        this.Over = false;
         this.Timer;
     }
 

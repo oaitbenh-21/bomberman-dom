@@ -8,6 +8,15 @@ export function BombPositions(BombPos, currentRoom) {
             y: yPos,
             pos: { left: xPos * 40, top: yPos * 40 }
         }));
+        currentRoom.Players.forEach((player) => {
+            if (Math.floor(player.pos.x / 40) == xPos && Math.floor(player.pos.y / 40) == yPos) {
+                player.lifes--;
+                currentRoom.broadcast(JSON.stringify({
+                    type: "kill",
+                    id: player.id,
+                }));
+            }
+        })
         for (let i = 1; i <= 1; i++) {
             for (let n of [-1, 1]) {
                 [{ y: yPos + (n * i), x: xPos },
@@ -32,6 +41,13 @@ export function BombPositions(BombPos, currentRoom) {
                     }
                 });
             }
+        }
+        if (currentRoom.checkWinner() != 0) {
+            currentRoom.broadcast(JSON.stringify({
+                type: "gameover",
+                id: currentRoom.Players[0].id,
+            }));
+            currentRoom.Waiting = true;
         }
     }, 2000);
 }
