@@ -31,6 +31,7 @@
     const socket = new WebSocket('ws://localhost:8080');
     let Counter = 5;
     let TimerID;
+    let TimeInSecconds = 0
     let PlayersCount;
     function ShowBombed(pos, board) {
         const bombed = document.createElement("img");
@@ -104,7 +105,9 @@
                 case "gameover":
                     const popup = document.getElementById("timer");
                     popup.style.display = "flex";
-                    popup.innerHTML = "Game Over";
+                    popup.innerHTML = `Game Over<br>The Winner is ${data.winner}`;
+                    console.log("there is a winner");
+
                 default:
                     break;
             }
@@ -140,7 +143,13 @@
     }
     function Timer() {
         if (PlayersCount <= 1 || Counter == 0) {
-            if (Counter == 0) document.getElementById("timer").remove();
+            if (Counter == 0) {
+                document.getElementById("timer").style.display = "none";
+                setInterval(() => {
+                    document.getElementById("time").innerHTML = formatSecondsToMinutes(TimeInSecconds);
+                    TimeInSecconds++;
+                }, 1000)
+            }
             return;
         }
         document.getElementById("timer").innerHTML = `Waiting ${Counter}...`;
@@ -189,6 +198,12 @@
         if (!colls || colls.length === 0 || x >= colls.length || x < 0) return;
         colls[x].className = "empty";
     }
+    function formatSecondsToMinutes(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
+
 </script>
 
 </html>

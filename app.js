@@ -19,12 +19,20 @@ wsServer.on('connection', (ws) => {
             Rooms.push(currentRoom);
             nowPlayer = 0;
         }
+        if (currentRoom.Over) return;
         const player = new Player(currentRoom);
         player.color = colors[nowPlayer]
         currentRoom.addPlayer(player, ws);
         ws.on('message', (message) => {
-            if (currentRoom.Waiting || player.lifes < 1) return
             const data = JSON.parse(message);
+            if (data.type == "chat") {
+                if (data.message.trim().length) return;
+                currentRoom.broadcast(JSON.stringify({
+                    type: "chat",
+                    message: data.message,
+                }))
+            }
+            if (currentRoom.Waiting || player.lifes < 1) return
             switch (data.type) {
                 case "bomb":
                     // if (player.Bombs == 0) return;

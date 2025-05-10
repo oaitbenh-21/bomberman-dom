@@ -11,15 +11,24 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100vw;
+    height: 100vh;
 }
 
 .header {
+    position: absolute;
     display: flex;
     align-items: center;
     justify-content: space-around;
     width: 100vw;
     height: 45px;
     background-color: rgb(219, 217, 217);
+    top: 0px;
+}
+
+
+.header .icon {
+    width: 20px;
 }
 
 .header .contain {
@@ -30,30 +39,39 @@ table {
     border-collapse: collapse;
 }
 
-.wall {
+table .wall {
     background-image: url("../img/hard-wall.png");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
 }
 
-.empty {
+table .empty {
     background-color: green;
 }
 
-#boardContainer {
-    position: relative;
-    top: calc(50vh - 300px);
-    left: calc(50vw - 480px);
-}
-
-td {
+table td {
     width: 40px;
     height: 40px;
     text-align: center;
 }
 
-.player {
+table .box {
+    background-image: url("../img/box.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#boardContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#boardContainer .player {
     position: absolute;
     width: 30px;
     height: 30px;
@@ -62,12 +80,7 @@ td {
     left: 0px;
 }
 
-.box {
-    background-image: url("../img/box.png");
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
+
 
 .popup {
     position: absolute;
@@ -83,8 +96,4 @@ td {
     font-size: 25px;
     color: green;
     z-index: 100;
-}
-
-.icon {
-    width: 20px;
 }

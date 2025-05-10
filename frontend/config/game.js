@@ -12,7 +12,7 @@ export class Room {
     checkWinner() {
         let livePlayers = 0
         this.Players.forEach((pl) => {
-            if (pl.lifes < 0) livePlayers++
+            if (pl.lifes > 0) livePlayers++
         })
         if (livePlayers == 1) {
             this.Waiting = true;
@@ -53,6 +53,7 @@ export class Room {
     }
 
     broadcast(message) {
+
         this.Connections.forEach((ws) => {
             ws.send(message)
         })

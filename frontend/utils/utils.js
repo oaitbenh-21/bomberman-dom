@@ -17,6 +17,7 @@ export function BombPositions(BombPos, currentRoom) {
                 }));
             }
         })
+        let winner = "draw";
         for (let i = 1; i <= 1; i++) {
             for (let n of [-1, 1]) {
                 [{ y: yPos + (n * i), x: xPos },
@@ -28,6 +29,8 @@ export function BombPositions(BombPos, currentRoom) {
                                 type: "kill",
                                 id: player.id,
                             }));
+                        } else {
+                            winner = player.name;
                         }
                     })
                     if (currentRoom.Board[coord.y][coord.x] != 2) {
@@ -45,9 +48,9 @@ export function BombPositions(BombPos, currentRoom) {
         if (currentRoom.checkWinner() != 0) {
             currentRoom.broadcast(JSON.stringify({
                 type: "gameover",
-                id: currentRoom.Players[0].id,
+                winner: winner,
             }));
-            currentRoom.Waiting = true;
+            currentRoom.Over = true;
         }
     }, 2000);
 }
