@@ -16,7 +16,7 @@
     <div class="create">
         <img class="chat-icon" src="../img/chat.png">
         <input type="text" placeholder="message">
-        <img class="send" src="../img/send.png" onclick="sendMessage()">
+        <img class="send" src="../img/send.png">
     </div>
     <div class="popup" id="timer">Please Wait More Players</div>
     <div class="header">
@@ -38,6 +38,15 @@
 </body>
 
 <script>
+
+    function debounce(func, timeout = 300) {
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        };
+    }
+
     const socket = new WebSocket('ws://localhost:8080');
     let Counter = 5;
     let TimerID;

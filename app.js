@@ -30,6 +30,7 @@ wsServer.on('connection', (ws) => {
                 if (len < 2 || len > 50) return;
                 currentRoom.broadcast(JSON.stringify({
                     type: "chat",
+                    sender: player.name,
                     message: data.message,
                 }))
             }
