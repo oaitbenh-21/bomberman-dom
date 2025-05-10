@@ -8,6 +8,7 @@
 </head>
 
 <body>
+    <div class="flyMessage"></div>
     <div class="messages">
         <div class="title">
             Game Chat
@@ -38,7 +39,7 @@
 </body>
 
 <script>
-
+    document.querySelector(".messages").style.display = "none";
     function debounce(func, timeout = 300) {
         let timer;
         return (...args) => {
@@ -79,7 +80,8 @@
         socket.send(JSON.stringify({
             type: "chat",
             message: message.value,
-        }))
+        }));
+        message.value = "";
     }
 
     function renderPlayersCount(count) {
@@ -93,11 +95,19 @@
 
             switch (data.type) {
                 case "chat":
-                    console.log(data);
+                    let messages = document.querySelector(".messages");
                     let chatDiv = document.createElement("div");
                     chatDiv.className = "msg";
                     chatDiv.textContent = `${data.sender} : ${data.message}`;
-                    document.querySelector(".messages").appendChild(chatDiv);
+                    messages.appendChild(chatDiv);
+                    if (messages.style.display == "none") {
+                        let fly = document.querySelector(".flyMessage");
+                        clearTimeout(flyTimeout)
+                        fly.textContent = `${data.sender} : ${data.message}`;
+                        var flyTimeout = setTimeout(() => {
+                            fly.textContent = "";
+                        }, 3000)
+                    }
                     break;
                 case "count":
                     renderPlayersCount(data.count);

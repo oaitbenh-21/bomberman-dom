@@ -117,7 +117,7 @@ table .box {
     font-size: 30px;
     background-color: red;
     width: 100%;
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
 }
@@ -155,4 +155,16 @@ table .box {
     text-align: center;
     top: 0px;
     left: 0px;
+}
+
+.flyMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+    height: 40px;
+    position: absolute;
+    bottom: 50px;
+    height: 50px;
+    width: 100vw;
 }
