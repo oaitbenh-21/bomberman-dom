@@ -62,14 +62,14 @@
         } else {
             div.style.display = "none";
         }
-        
+
     })
 
     function sendMessage() {
-        let message = document.querySelector(".messages .create input");
+        let message = document.querySelector(".create input");
         socket.send(JSON.stringify({
             type: "chat",
-            message: messages.value,
+            message: message.value,
         }))
     }
 
@@ -84,6 +84,7 @@
 
             switch (data.type) {
                 case "chat":
+                    console.log(data);
                     let chatDiv = document.createElement("div");
                     chatDiv.className = "msg";
                     chatDiv.textContent = `${data.sender} : ${data.message}`;

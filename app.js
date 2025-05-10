@@ -26,7 +26,8 @@ wsServer.on('connection', (ws) => {
         ws.on('message', (message) => {
             const data = JSON.parse(message);
             if (data.type == "chat") {
-                if (data.message.trim().length) return;
+                let len = data.message.trim().length;
+                if (len < 2 || len > 50) return;
                 currentRoom.broadcast(JSON.stringify({
                     type: "chat",
                     message: data.message,
