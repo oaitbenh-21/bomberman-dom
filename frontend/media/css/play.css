@@ -95,5 +95,64 @@ table .box {
     justify-content: center;
     font-size: 25px;
     color: green;
-    z-index: 100;
+    z-index: 1;
+}
+
+.messages {
+    position: absolute;
+    height: 100vh;
+    width: 70vw;
+    background-color: rgb(159, 159, 182);
+    z-index: 2;
+    flex-direction: column;
+    align-items: center;
+    display: none;
+}
+
+
+.messages .title {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 30px;
+    background-color: red;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.create {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 50px;
+    bottom: 0px;
+    border-top: solid black 2px;
+    z-index: 3;
+}
+
+.create input {
+    width: 85%;
+    height: 50px;
+    text-align: center;
+}
+
+
+.create .send {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    top: 0px;
+    left: 0px;
+}
+
+.create .chat-icon {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    top: 0px;
+    left: 0px;
 }

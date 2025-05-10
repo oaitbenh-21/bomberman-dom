@@ -11,8 +11,7 @@ wsServer.on('connection', (ws) => {
         let currentRoom;
         let nowPlayer;
         const lastRoom = Rooms[Rooms.length - 1];
-        console.log(lastRoom && lastRoom.Players.length < 4 || lastRoom && lastRoom.Waiting);
-        if ((lastRoom && lastRoom.Players.length < 4 || lastRoom && lastRoom.Waiting) && lastRoom && !lastRoom.Over) {
+        if (lastRoom && lastRoom.Players.length < 4 && lastRoom.Waiting && !lastRoom.Over) {
             currentRoom = lastRoom;
             nowPlayer++;
         } else {

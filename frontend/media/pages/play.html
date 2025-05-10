@@ -8,6 +8,16 @@
 </head>
 
 <body>
+    <div class="messages">
+        <div class="title">
+            Game Chat
+        </div>
+    </div>
+    <div class="create">
+        <img class="chat-icon" src="../img/chat.png">
+        <input type="text" placeholder="message">
+        <img class="send" src="../img/send.png" onclick="sendMessage()">
+    </div>
     <div class="popup" id="timer">Please Wait More Players</div>
     <div class="header">
         <div class="contain">
@@ -44,6 +54,24 @@
             bombed.remove()
         }, 400)
     }
+    document.querySelector(".send").addEventListener("click", sendMessage)
+    document.querySelector(".chat-icon").addEventListener("click", () => {
+        let div = document.querySelector(".messages");
+        if (div.style.display == "none") {
+            div.style.display = "flex";
+        } else {
+            div.style.display = "none";
+        }
+        
+    })
+
+    function sendMessage() {
+        let message = document.querySelector(".messages .create input");
+        socket.send(JSON.stringify({
+            type: "chat",
+            message: messages.value,
+        }))
+    }
 
     function renderPlayersCount(count) {
         document.getElementById("count").innerHTML = `${count}/4`;
@@ -55,6 +83,12 @@
             const board = document.getElementById('boardContainer');
 
             switch (data.type) {
+                case "chat":
+                    let chatDiv = document.createElement("div");
+                    chatDiv.className = "msg";
+                    chatDiv.textContent = `${data.sender} : ${data.message}`;
+                    document.querySelector(".messages").appendChild(chatDiv);
+                    break;
                 case "count":
                     renderPlayersCount(data.count);
                     PlayersCount = data.count;
