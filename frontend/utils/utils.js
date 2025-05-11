@@ -12,6 +12,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
             y: yPos,
             pos: { left: xPos * 40, top: yPos * 40 }
         }));
+        let winner = "draw";
         currentRoom.Players.forEach((player) => {
             if (Math.floor(player.pos.x / 40) == xPos && Math.floor(player.pos.y / 40) == yPos) {
                 player.lifes--;
@@ -20,10 +21,11 @@ export function BombPositions(BombPos, currentRoom, flames) {
                         type: "kill",
                         id: player.id,
                     }));
+                } else {
+                    winner = player.name;
                 }
             }
-        })
-        let winner = "draw";
+        });
         const directions = [
             { x: 0, y: -1 }, // Up
             { x: 0, y: 1 },  // Down

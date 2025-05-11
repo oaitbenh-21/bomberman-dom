@@ -37,8 +37,8 @@ wsServer.on('connection', (ws) => {
             if (currentRoom.Waiting || player.lifes < 1) return
             switch (data.type) {
                 case "bomb":
-                    // if (player.Bombs == 0) return;
-                    // player.Bombs--;
+                    if (player.Bombs <= 0) return;
+                    player.Bombs--;
                     const BombPos = { x: player.pos.x, y: player.pos.y };
                     currentRoom.broadcast(JSON.stringify({
                         type: "bomb",
