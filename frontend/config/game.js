@@ -61,13 +61,15 @@ export class Room {
 }
 
 export class Player {
-    constructor(room) {
+    constructor(room, conn) {
         this.id = uuidv4();
         this.name = `Player_${this.id.slice(0, 5)}`;
         this.room = room;
         this.pos = this.assignStartPosition();
         this.Bombs = 100;
-        this.lifes = 1;
+        this.lifes = 3;
+        this.Flames = 1;
+        this.ws = conn;
     }
 
     assignStartPosition() {
@@ -98,13 +100,21 @@ export class Player {
                 const checkX = newX + (i * 29 / checkPoints); // Points from left to right edge
 
                 // Check top edge
-                if (board[Math.floor(newY / 40)][Math.floor(checkX / 40)] !== 0) {
+                if (
+                    board[Math.floor(newY / 40)][Math.floor(checkX / 40)] !== 0
+                    &&
+                    typeof board[Math.floor(newY / 40)][Math.floor(checkX / 40)] != "object"
+                ) {
                     canMove = false;
                     break;
                 }
 
                 // Check bottom edge
-                if (board[Math.floor((newY + 29) / 40)][Math.floor(checkX / 40)] !== 0) {
+                if (
+                    board[Math.floor((newY + 29) / 40)][Math.floor(checkX / 40)] !== 0
+                    &&
+                    typeof board[Math.floor((newY + 29) / 40)][Math.floor(checkX / 40)] != "object"
+                ) {
                     canMove = false;
                     break;
                 }
@@ -116,13 +126,21 @@ export class Player {
                     const checkY = newY + (i * 29 / checkPoints); // Points from top to bottom edge
 
                     // Check left edge
-                    if (board[Math.floor(checkY / 40)][Math.floor(newX / 40)] !== 0) {
+                    if (
+                        board[Math.floor(checkY / 40)][Math.floor(newX / 40)] !== 0
+                        &&
+                        typeof board[Math.floor(checkY / 40)][Math.floor(newX / 40)] != "object"
+                    ) {
                         canMove = false;
                         break;
                     }
 
                     // Check right edge
-                    if (board[Math.floor(checkY / 40)][Math.floor((newX + 29) / 40)] !== 0) {
+                    if (
+                        board[Math.floor(checkY / 40)][Math.floor((newX + 29) / 40)] !== 0
+                        &&
+                        typeof board[Math.floor(checkY / 40)][Math.floor((newX + 29) / 40)] != "object"
+                    ) {
                         canMove = false;
                         break;
                     }

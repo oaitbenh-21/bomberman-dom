@@ -20,7 +20,7 @@ wsServer.on('connection', (ws) => {
             nowPlayer = 0;
         }
         if (currentRoom.Over) return;
-        const player = new Player(currentRoom);
+        const player = new Player(currentRoom, ws);
         player.color = colors[nowPlayer]
         currentRoom.addPlayer(player, ws);
         ws.on('message', (message) => {
@@ -41,10 +41,10 @@ wsServer.on('connection', (ws) => {
                     // player.Bombs--;
                     const BombPos = { x: player.pos.x, y: player.pos.y };
                     currentRoom.broadcast(JSON.stringify({
-                        ...data,
+                        type: "bomb",
                         pos: BombPos,
                     }));
-                    BombPositions(BombPos, currentRoom);
+                    BombPositions(BombPos, currentRoom, player.Flames);
                     break;
                 case "move":
                     let move;
