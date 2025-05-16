@@ -68,7 +68,6 @@ export function BombPositions(BombPos, currentRoom, flames) {
                         id: id,
                         pos: { x: (coord.x * 40), y: (coord.y * 40) },
                     }));
-                    console.log({ left: (coord.x * 40), top: (coord.y * 40) });
                 } else {
                     currentRoom.Board[coord.y][coord.x] = 0;
                 }
@@ -81,7 +80,6 @@ export function BombPositions(BombPos, currentRoom, flames) {
                 lifes: player.lifes,
             }));
         });
-        console.log(currentRoom.checkWinner());
         if (currentRoom.checkWinner() == 0) return;
         currentRoom.broadcast(JSON.stringify({
             type: "gameover",
