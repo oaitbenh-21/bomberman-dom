@@ -84,39 +84,38 @@ export class Player {
     }
 
     move(dx, dy) {
+        let skill = "";
         const newX = this.pos.x + dx;
         const newY = this.pos.y + dy;
         const board = this.room.Board;
         if (newX >= 0 && newY >= 0 &&
             newX + 29 < board[0].length * 40 &&
             newY + 29 < board.length * 40) {
-
             // Define how many points to check along each edge
             const checkPoints = 4; // Check 4 points along each edge (including corners)
             let canMove = true;
-
             // Check top and bottom edges
             for (let i = 0; i <= checkPoints; i++) {
                 const checkX = newX + (i * 29 / checkPoints); // Points from left to right edge
-
                 // Check top edge
-                if (
-                    board[Math.floor(newY / 40)][Math.floor(checkX / 40)] !== 0
-                    &&
-                    typeof board[Math.floor(newY / 40)][Math.floor(checkX / 40)] != "object"
+                if (board[Math.floor(newY / 40)][Math.floor(checkX / 40)] !== 0
+                    && typeof board[Math.floor(newY / 40)][Math.floor(checkX / 40)] != "object"
                 ) {
                     canMove = false;
                     break;
+                } else if (typeof board[Math.floor(newY / 40)][Math.floor(checkX / 40)] == "object") {
+                    skill = board[Math.floor(newY / 40)][Math.floor(checkX / 40)].skill;
+                    board[Math.floor(newY / 40)][Math.floor(checkX / 40)] = 0;
                 }
-
                 // Check bottom edge
-                if (
-                    board[Math.floor((newY + 29) / 40)][Math.floor(checkX / 40)] !== 0
-                    &&
-                    typeof board[Math.floor((newY + 29) / 40)][Math.floor(checkX / 40)] != "object"
+                if (board[Math.floor((newY + 29) / 40)][Math.floor(checkX / 40)] !== 0
+                    && typeof board[Math.floor((newY + 29) / 40)][Math.floor(checkX / 40)] != "object"
                 ) {
                     canMove = false;
                     break;
+                } else if (typeof board[Math.floor(newY / 40)][Math.floor(checkX / 40)] == "object") {
+                    skill = board[Math.floor(newY / 40)][Math.floor(checkX / 40)].skill;
+                    board[Math.floor(newY / 40)][Math.floor(checkX / 40)] = 0;
                 }
             }
 
@@ -124,30 +123,42 @@ export class Player {
             if (canMove) {
                 for (let i = 0; i <= checkPoints; i++) {
                     const checkY = newY + (i * 29 / checkPoints); // Points from top to bottom edge
-
                     // Check left edge
-                    if (
-                        board[Math.floor(checkY / 40)][Math.floor(newX / 40)] !== 0
-                        &&
-                        typeof board[Math.floor(checkY / 40)][Math.floor(newX / 40)] != "object"
+                    if (board[Math.floor(checkY / 40)][Math.floor(newX / 40)] !== 0
+                        && typeof board[Math.floor(checkY / 40)][Math.floor(newX / 40)] != "object"
                     ) {
                         canMove = false;
                         break;
+                    } else if (typeof board[Math.floor(newY / 40)][Math.floor(checkX / 40)] == "object") {
+                        skill = board[Math.floor(newY / 40)][Math.floor(checkX / 40)].skill;
+                        board[Math.floor(newY / 40)][Math.floor(checkX / 40)] = 0;
+                    }
+                    // Check right edge
+                    if (board[Math.floor(checkY / 40)][Math.floor((newX + 29) / 40)] !== 0
+                        && typeof board[Math.floor(checkY / 40)][Math.floor((newX + 29) / 40)] != "object"
+                    ) {
+                        canMove = false;
+                        break;
+                    } else if (typeof board[Math.floor(newY / 40)][Math.floor(checkX / 40)] == "object") {
+                        skill = board[Math.floor(newY / 40)][Math.floor(checkX / 40)].skill;
+                        board[Math.floor(newY / 40)][Math.floor(checkX / 40)] = 0;
                     }
 
-                    // Check right edge
-                    if (
-                        board[Math.floor(checkY / 40)][Math.floor((newX + 29) / 40)] !== 0
-                        &&
-                        typeof board[Math.floor(checkY / 40)][Math.floor((newX + 29) / 40)] != "object"
-                    ) {
-                        canMove = false;
-                        break;
-                    }
                 }
             }
 
             if (canMove) {
+                switch (skill) {
+                    case "bombs":
+                        this.Bombs++;
+                        break;
+                    case "flames":
+                        this.Flames++;
+                        break;
+                    case "lifes":
+                        this.lifes++;
+                        break;
+                }
                 this.pos.x = newX;
                 this.pos.y = newY;
                 return true;
