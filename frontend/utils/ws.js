@@ -9,7 +9,7 @@ export function HandleAll(currentRoom, player, data, ws) {
                   type: "chat",
                   sender: player.name,
                   message: data.message,
-            }))
+            }));
       }
       if (currentRoom.Waiting || player.lifes < 1) return
       switch (data.type) {

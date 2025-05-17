@@ -20,5 +20,8 @@ export function JoinPlayer(ws) {
       const player = new Player(currentRoom, ws);
       player.color = colors[nowPlayer]
       currentRoom.addPlayer(player, ws);
+      if (currentRoom.Players.length == 4) {
+            currentRoom.Waiting = false;
+      }
       return [player, currentRoom]
 }

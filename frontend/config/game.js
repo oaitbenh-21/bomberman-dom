@@ -15,7 +15,7 @@ export class Room {
             if (pl.lifes > 0) livePlayers++
         })
         if (livePlayers == 1) {
-            this.Waiting = true;
+            this.Over = true;
             return 1
         } else if (livePlayers == 0) {
             return 2
@@ -84,87 +84,77 @@ export class Player {
     }
 
     move(dx, dy) {
-        let skill = "";
         const newX = this.pos.x + dx;
         const newY = this.pos.y + dy;
+        const width = 30; // Entity width (30 pixels)
+        const height = 30; // Entity height (30 pixels)
         const board = this.room.Board;
-        if (newX >= 0 && newY >= 0 &&
-            newX + 29 < board[0].length * 40 &&
-            newY + 29 < board.length * 40) {
-            // Define how many points to check along each edge
-            const checkPoints = 4; // Check 4 points along each edge (including corners)
-            let canMove = true;
-            // Check top and bottom edges
+        const tileSize = 40; // Size of each board tile
+        let skill = "";
+
+        // Check if new position is within board boundaries
+        if (newX < 0 || newY < 0 ||
+            newX + width - 1 >= board[0].length * tileSize ||
+            newY + height - 1 >= board.length * tileSize) {
+            return { canMove: false, skill: skill };
+        }
+
+        // Define the number of points to check along each edge
+        const checkPoints = 4;
+
+        // Check all four edges for collisions
+        const edges = [
+            // Top edge: fixed y (newY), varying x
+            { x: i => newX + (i * (width - 1) / checkPoints), y: () => newY },
+            // Bottom edge: fixed y (newY + height - 1), varying x
+            { x: i => newX + (i * (width - 1) / checkPoints), y: () => newY + height - 1 },
+            // Left edge: fixed x (newX), varying y
+            { x: () => newX, y: i => newY + (i * (height - 1) / checkPoints) },
+            // Right edge: fixed x (newX + width - 1), varying y
+            { x: () => newX + width - 1, y: i => newY + (i * (height - 1) / checkPoints) }
+        ];
+
+        // Check each edge for collisions
+        for (const edge of edges) {
             for (let i = 0; i <= checkPoints; i++) {
-                const checkX = newX + (i * 29 / checkPoints); // Points from left to right edge
-                // Check top edge
-                if (board[Math.floor(newY / 40)][Math.floor(checkX / 40)] !== 0
-                    && typeof board[Math.floor(newY / 40)][Math.floor(checkX / 40)] != "object"
-                ) {
-                    canMove = false;
-                    break;
-                } else if (typeof board[Math.floor(newY / 40)][Math.floor(checkX / 40)] == "object") {
-                    skill = board[Math.floor(newY / 40)][Math.floor(checkX / 40)].skill;
-                    board[Math.floor(newY / 40)][Math.floor(checkX / 40)] = 0;
-                }
-                // Check bottom edge
-                if (board[Math.floor((newY + 29) / 40)][Math.floor(checkX / 40)] !== 0
-                    && typeof board[Math.floor((newY + 29) / 40)][Math.floor(checkX / 40)] != "object"
-                ) {
-                    canMove = false;
-                    break;
-                } else if (typeof board[Math.floor(newY / 40)][Math.floor(checkX / 40)] == "object") {
-                    skill = board[Math.floor(newY / 40)][Math.floor(checkX / 40)].skill;
-                    board[Math.floor(newY / 40)][Math.floor(checkX / 40)] = 0;
-                }
-            }
+                const checkX = edge.x(i);
+                const checkY = edge.y(i);
 
-            // Check left and right edges
-            if (canMove) {
-                for (let i = 0; i <= checkPoints; i++) {
-                    const checkY = newY + (i * 29 / checkPoints); // Points from top to bottom edge
-                    // Check left edge
-                    if (board[Math.floor(checkY / 40)][Math.floor(newX / 40)] !== 0
-                        && typeof board[Math.floor(checkY / 40)][Math.floor(newX / 40)] != "object"
-                    ) {
-                        canMove = false;
-                        break;
-                    } else if (typeof board[Math.floor(newY / 40)][Math.floor(checkX / 40)] == "object") {
-                        skill = board[Math.floor(newY / 40)][Math.floor(checkX / 40)].skill;
-                        board[Math.floor(newY / 40)][Math.floor(checkX / 40)] = 0;
-                    }
-                    // Check right edge
-                    if (board[Math.floor(checkY / 40)][Math.floor((newX + 29) / 40)] !== 0
-                        && typeof board[Math.floor(checkY / 40)][Math.floor((newX + 29) / 40)] != "object"
-                    ) {
-                        canMove = false;
-                        break;
-                    } else if (typeof board[Math.floor(newY / 40)][Math.floor(checkX / 40)] == "object") {
-                        skill = board[Math.floor(newY / 40)][Math.floor(checkX / 40)].skill;
-                        board[Math.floor(newY / 40)][Math.floor(checkX / 40)] = 0;
-                    }
+                // Convert pixel coordinates to board indices
+                const boardX = Math.floor(checkX / tileSize);
+                const boardY = Math.floor(checkY / tileSize);
 
-                }
-            }
+                // Get the tile at this position
+                const tile = board[boardY][boardX];
 
-            if (canMove) {
-                switch (skill) {
-                    case "bombs":
-                        this.Bombs++;
-                        break;
-                    case "flames":
-                        this.Flames++;
-                        break;
-                    case "lifes":
-                        this.lifes++;
-                        break;
+                // Check if tile is a solid wall
+                if (tile !== 0 && typeof tile !== "object") {
+                    return { canMove: false, skill: skill };
                 }
-                this.pos.x = newX;
-                this.pos.y = newY;
-                return true;
+                // Check if tile is a collectible object
+                else if (typeof tile === "object") {
+                    skill = tile.skill;
+                    board[boardY][boardX] = 0; // Collect the object
+                }
             }
         }
 
+        if (canMove) {
+            switch (skill) {
+                case "bombs":
+                    this.Bombs++;
+                    break;
+                case "flames":
+                    this.Flames++;
+                    break;
+                case "lifes":
+                    this.lifes++;
+                    break;
+            }
+            this.pos.x = newX;
+            this.pos.y = newY;
+            return true;
+        }
         return false;
     }
 

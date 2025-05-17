@@ -10,8 +10,8 @@ export function StartGame(currentRoom, player, ws) {
                   name: p.name,
                   id: p.id,
                   pos: p.pos,
-            }))
-      })
+            }));
+      });
       currentRoom.broadcast(JSON.stringify({
             type: "join",
             name: player.name,

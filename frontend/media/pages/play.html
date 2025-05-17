@@ -39,6 +39,23 @@
 </body>
 
 <script>
+    let direction = new Map();
+    requestAnimationFrame(MovePlayer);
+    function MovePlayer() {
+        if (direction["ArrowDown"]) {
+            sendMove("b");
+        }
+        if (direction["ArrowUp"]) {
+            sendMove("t");
+        }
+        if (direction["ArrowLeft"]) {
+            sendMove("l");
+        }
+        if (direction["ArrowRight"]) {
+            sendMove("r");
+        }
+        requestAnimationFrame(MovePlayer);
+    }
     document.querySelector(".messages").style.display = "none";
     function debounce(func, timeout = 300) {
         let timer;
@@ -161,7 +178,16 @@
                     popup.style.display = "flex";
                     popup.innerHTML = `Game Over<br>The Winner is ${data.winner}`;
                     console.log("there is a winner");
-
+                case "skill":
+                    const skill = document.createElement('img');
+                    skill.className = 'player';
+                    skill.src = `../img/${data.name}.png`;
+                    skill.id = data.id;
+                    skill.style.top = "0px";
+                    skill.style.left = "0px";
+                    board.appendChild(skill);
+                    skill.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
+                    break;
                 default:
                     break;
             }
@@ -220,27 +246,16 @@
     }
 
     document.addEventListener("keydown", (e) => {
-        switch (e.key) {
-            case "ArrowDown":
-                sendMove("b");
-                break;
-            case "ArrowUp":
-                sendMove("t");
-                break;
-            case "ArrowLeft":
-                sendMove("l");
-                break;
-            case "ArrowRight":
-                sendMove("r");
-                break;
-            case " ":
-                socket.send(JSON.stringify({
-                    type: "bomb",
-                }));
-                break;
-            default:
-                break;
+        if (e.key == " ") {
+            socket.send(JSON.stringify({
+                type: "bomb",
+            }));
+        } else {
+            direction.set(e.key, true);
         }
+    });
+    document.addEventListener("keydown", (e) => {
+        direction.set(e.key, false);
     });
 
     function RemoveElement(y, x) {
