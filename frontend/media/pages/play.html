@@ -141,8 +141,6 @@
                     }
                     break;
                 case "kill":
-                    console.log(document.getElementById(data.id));
-
                     document.getElementById(data.id).remove()
                 case "bomb":
                     const bomb = document.createElement('img');
@@ -161,7 +159,17 @@
                     popup.style.display = "flex";
                     popup.innerHTML = `Game Over<br>The Winner is ${data.winner}`;
                     console.log("there is a winner");
-
+                    break;
+                case "skill":
+                    const skill = document.createElement('img');
+                    skill.className = 'player';
+                    skill.src = `../img/${data.name}.png`;
+                    skill.id = data.id;
+                    skill.style.top = "0px";
+                    skill.style.left = "0px";
+                    board.appendChild(skill);
+                    skill.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
+                    break;
                 default:
                     break;
             }

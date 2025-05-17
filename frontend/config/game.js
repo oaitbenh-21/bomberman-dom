@@ -148,6 +148,29 @@ export class Player {
             }
 
             if (canMove) {
+                if (typeof board[Math.floor(newY / 40)][Math.floor(newX / 40)] == "object") {
+                    switch (board[Math.floor(newY / 40)][Math.floor(newX / 40)].skill) {
+                        case "bombs":
+                            this.Bombs++;
+                            break;
+                        case "speed":
+                            this.Speed += 2.5;
+                            break;
+                        case "lifes":
+                            this.lifes++;
+                            break;
+                        case "flames":
+                            this.Flames++;
+                            break;
+                        default:
+                            break;
+                    }
+                    this.room.broadcast(JSON.stringify({
+                        type: "kill",
+                        id: board[Math.floor(newY / 40)][Math.floor(newX / 40)].id,
+                    }));
+                    board[Math.floor(newY / 40)][Math.floor(newX / 40)] = 0;
+                }
                 this.pos.x = newX;
                 this.pos.y = newY;
                 return true;

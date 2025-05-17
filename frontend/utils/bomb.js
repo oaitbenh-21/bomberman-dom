@@ -80,7 +80,9 @@ export function BombPositions(BombPos, currentRoom, flames) {
                 lifes: player.lifes,
             }));
         });
+
         if (currentRoom.checkWinner() == 0) return;
+        currentRoom.Over = true;
         currentRoom.broadcast(JSON.stringify({
             type: "gameover",
             winner: winner,
