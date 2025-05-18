@@ -47,7 +47,7 @@ export class Room {
             this.Waiting = false;
         }, 5000)
         this.broadcast(JSON.stringify({
-            type: "count",
+            type: "count-server",
             count: this.Players.length,
         }))
     }
@@ -166,7 +166,7 @@ export class Player {
                             break;
                     }
                     this.room.broadcast(JSON.stringify({
-                        type: "kill",
+                        type: "kill-server",
                         id: board[Math.floor(newY / 40)][Math.floor(newX / 40)].id,
                     }));
                     board[Math.floor(newY / 40)][Math.floor(newX / 40)] = 0;

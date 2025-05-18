@@ -78,7 +78,7 @@
     function sendMessage() {
         let message = document.querySelector(".create input");
         socket.send(JSON.stringify({
-            type: "chat",
+            type: "chat-client",
             message: message.value,
         }));
         message.value = "";
@@ -94,7 +94,7 @@
             const board = document.getElementById('boardContainer');
 
             switch (data.type) {
-                case "chat":
+                case "chat-server":
                     let messages = document.querySelector(".messages");
                     let chatDiv = document.createElement("div");
                     chatDiv.className = "msg";
@@ -109,14 +109,14 @@
                         }, 3000)
                     }
                     break;
-                case "count":
+                case "count-server":
                     renderPlayersCount(data.count);
                     PlayersCount = data.count;
                     break;
-                case "board":
+                case "board-server":
                     renderBoard(data.board);
                     break;
-                case "join":
+                case "join-server":
                     if (TimerID) clearTimeout(TimerID)
                     Counter = 5;
                     Timer();
@@ -130,45 +130,46 @@
                     board.appendChild(player);
                     break;
 
-                case "move":
+                case "move-server":
                     MovePlayer(data.player);
                     break;
 
-                case "remove":
+                case "remove-server":
                     RemoveElement(data.y, data.x);
                     if (data.pos) {
                         ShowBombed(data.pos, board);
                     }
                     break;
-                case "kill":
-                    document.getElementById(data.id).remove()
-                case "bomb":
+                case "kill-server":
+                    const kill = document.getElementById(data.id);
+                    kill.parentNode.removeChild(kill);
+                case "bomb-server":
                     const bomb = document.createElement('img');
-                    setTimeout(() => {
-                        bomb.remove();
-                    }, 2000);
                     bomb.className = 'player';
                     bomb.src = "../img/bomb.gif";
                     bomb.style.top = "0px";
                     bomb.style.left = "0px";
-                    board.appendChild(bomb);
                     bomb.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
+                    board.appendChild(bomb);
+                    setTimeout(() => {
+                        bomb.remove();
+                    }, 2000);
                     break;
-                case "gameover":
+                case "gameover-server":
                     const popup = document.getElementById("timer");
                     popup.style.display = "flex";
                     popup.innerHTML = `Game Over<br>The Winner is ${data.winner}`;
                     console.log("there is a winner");
                     break;
-                case "skill":
+                case "skill-server":
                     const skill = document.createElement('img');
                     skill.className = 'player';
                     skill.src = `../img/${data.name}.png`;
                     skill.id = data.id;
                     skill.style.top = "0px";
                     skill.style.left = "0px";
-                    board.appendChild(skill);
                     skill.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
+                    board.appendChild(skill);
                     break;
                 default:
                     break;
@@ -177,7 +178,7 @@
     };
 
     function sendMove(direction) {
-        socket.send(JSON.stringify({ type: 'move', direction }));
+        socket.send(JSON.stringify({ type: 'move-client', direction }));
     }
 
     function renderBoard(board) {
@@ -243,7 +244,7 @@
                 break;
             case " ":
                 socket.send(JSON.stringify({
-                    type: "bomb",
+                    type: "bomb-client",
                 }));
                 break;
             default:

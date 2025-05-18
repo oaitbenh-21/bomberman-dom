@@ -44,6 +44,7 @@ table .wall {
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+    z-index: 3;
 }
 
 table .empty {
@@ -95,7 +96,7 @@ table .box {
     justify-content: center;
     font-size: 25px;
     color: green;
-    z-index: 1;
+    z-index: 100;
 }
 
 .messages {

@@ -7,7 +7,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
         let xPos = Math.floor(BombPos.x / 40)
         let yPos = Math.floor(BombPos.y / 40)
         currentRoom.broadcast(JSON.stringify({
-            type: "remove",
+            type: "remove-server",
             x: xPos,
             y: yPos,
             pos: { left: xPos * 40, top: yPos * 40 }
@@ -18,7 +18,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
                 player.lifes--;
                 if (player.lifes == 0) {
                     currentRoom.broadcast(JSON.stringify({
-                        type: "kill",
+                        type: "kill-server",
                         id: player.id,
                     }));
                 } else {
@@ -41,7 +41,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
                         player.lifes--;
                         if (player.lifes == 0) {
                             currentRoom.broadcast(JSON.stringify({
-                                type: "kill",
+                                type: "kill-server",
                                 id: player.id,
                             }));
                         }
@@ -50,7 +50,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
                     }
                 });
                 currentRoom.broadcast(JSON.stringify({
-                    type: "remove",
+                    type: "remove-server",
                     x: coord.x,
                     y: coord.y,
                     pos: { left: coord.x * 40, top: coord.y * 40 }
@@ -63,7 +63,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
                         id: id,
                     };
                     currentRoom.broadcast(JSON.stringify({
-                        type: "skill",
+                        type: "skill-server",
                         name: skills[skillindex],
                         id: id,
                         pos: { x: (coord.x * 40), y: (coord.y * 40) },
@@ -76,7 +76,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
 
         currentRoom.Players.forEach((player) => {
             player.ws.send(JSON.stringify({
-                type: "lifes",
+                type: "lifes-server",
                 lifes: player.lifes,
             }));
         });
@@ -84,7 +84,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
         if (currentRoom.checkWinner() == 0) return;
         currentRoom.Over = true;
         currentRoom.broadcast(JSON.stringify({
-            type: "gameover",
+            type: "gameover-server",
             winner: winner,
         }));
     }, 2000);

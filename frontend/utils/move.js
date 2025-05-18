@@ -17,7 +17,7 @@ export function MovePlayer(data, player, currentRoom) {
                   break;
       }
       if (move) currentRoom.broadcast(JSON.stringify({
-            type: "move",
+            type: "move-server",
             player: {
                   id: player.id,
                   pos: player.pos,
