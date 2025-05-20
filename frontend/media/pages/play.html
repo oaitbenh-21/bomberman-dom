@@ -33,6 +33,10 @@
             <div id="lifes">3</div>
             <img class="icon" src="../img/lifes.png">
         </div>
+        <div class="contain">
+            <div id="Bombs">0</div>
+            <img class="icon" src="../img/bombs.png">
+        </div>
     </div>
     <div id="boardContainer"></div>
     <div id="status"></div>
@@ -88,11 +92,12 @@
         document.getElementById("count").innerHTML = `${count}/4`;
     }
 
+
     socket.onmessage = (event) => {
         try {
             const data = JSON.parse(event.data);
             const board = document.getElementById('boardContainer');
-
+            socket.send(JSON.stringify({ type: "data-client" }));
             switch (data.type) {
                 case "chat-server":
                     let messages = document.querySelector(".messages");
@@ -171,6 +176,9 @@
                     skill.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
                     board.appendChild(skill);
                     break;
+                case "data-server":
+                    document.querySelector("#lifes").innerHTML = data.lifes;
+                    document.querySelector("#Bombs").innerHTML = data.Bombs;
                 default:
                     break;
             }
@@ -255,7 +263,7 @@
     function RemoveElement(y, x) {
         const boardContainer = document.getElementById("boardContainer");
         if (!boardContainer) return;
-        const rows = boardContainer.getElementsByTagName("tr");
+        const rows = boardContainedata - serverr.getElementsByTagName("tr");
         if (!rows || rows.length === 0 || y >= rows.length || y < 0) return;
         const colls = rows[y].getElementsByTagName("td");
         if (!colls || colls.length === 0 || x >= colls.length || x < 0) return;

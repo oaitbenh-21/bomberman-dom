@@ -81,8 +81,6 @@ table .box {
     left: 0px;
 }
 
-
-
 .popup {
     position: absolute;
     top: calc(50vh - 100px);
@@ -109,7 +107,6 @@ table .box {
     align-items: center;
     display: none;
 }
-
 
 .messages .title {
     margin-top: 10px;

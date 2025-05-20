@@ -66,7 +66,7 @@ export class Player {
         this.name = `Player_${this.id.slice(0, 5)}`;
         this.room = room;
         this.pos = this.assignStartPosition();
-        this.Bombs = 100;
+        this.Bombs = 1;
         this.lifes = 3;
         this.Flames = 1;
         this.ws = conn;
