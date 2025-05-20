@@ -149,18 +149,24 @@ export class Player {
 
             if (canMove) {
                 if (typeof board[Math.floor(newY / 40)][Math.floor(newX / 40)] == "object") {
-                    switch (board[Math.floor(newY / 40)][Math.floor(newX / 40)].skill) {
+                    switch (board[Math.floor(newY / 40)][Math.floor(newX / 40)].name) {
                         case "bombs":
                             this.Bombs++;
                             break;
                         case "speed":
                             this.Speed += 2.5;
+                            setTimeout(() => {
+                                this.Speed -= 2.5;
+                            }, 5000);
                             break;
                         case "lifes":
                             this.lifes++;
                             break;
                         case "flames":
                             this.Flames++;
+                            setTimeout(() => {
+                                this.Flames--;
+                            }, 3000);
                             break;
                         default:
                             break;

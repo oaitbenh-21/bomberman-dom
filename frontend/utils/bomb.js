@@ -33,7 +33,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
             { x: 1, y: 0 }   // Right
         ];
         directions.forEach((dir) => {
-            for (let i = 0; i < flames; i++) {
+            for (let i = 0; i <= flames; i++) {
                 let coord = { y: yPos + (dir.y * i), x: xPos + (dir.x * i) };
                 if (currentRoom.Board[coord.y][coord.x] == 2) return;
                 currentRoom.Players.forEach((player) => {

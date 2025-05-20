@@ -15,14 +15,14 @@ export function HandleAll(currentRoom, player, data, ws) {
       switch (data.type) {
             case "bomb-client":
                   if (player.Bombs < 1) break;
-                  player.Bombs -= 1;
+                  player.Bombs--;
                   setTimeout(() => {
-                        player.Bombs = player.Bombs + 1;
+                        player.Bombs++;
                   }, 2000);
                   const BombPos = { x: player.pos.x, y: player.pos.y };
                   currentRoom.broadcast(JSON.stringify({
                         type: "bomb-server",
-                        pos: BombPos,
+                        pos: { x: BombPos.x, y: BombPos.y },
                   }));
                   BombPositions(BombPos, currentRoom, player.Flames);
                   break;

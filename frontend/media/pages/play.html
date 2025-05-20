@@ -34,7 +34,7 @@
             <img class="icon" src="../img/lifes.png">
         </div>
         <div class="contain">
-            <div id="Bombs">0</div>
+            <div id="Bombs">1</div>
             <img class="icon" src="../img/bombs.png">
         </div>
     </div>
@@ -57,17 +57,6 @@
     let TimerID;
     let TimeInSecconds = 0
     let PlayersCount;
-    function ShowBombed(pos, board) {
-        const bombed = document.createElement("img");
-        bombed.src = "../img/bombed.gif";
-        bombed.className = "player";
-        bombed.style.top = pos.top + "px";
-        bombed.style.left = pos.left + "px";
-        board.appendChild(bombed);
-        setTimeout(() => {
-            bombed.remove()
-        }, 400)
-    }
     document.querySelector(".send").addEventListener("click", sendMessage)
     document.querySelector(".chat-icon").addEventListener("click", () => {
         let div = document.querySelector(".messages");
@@ -128,8 +117,6 @@
                     const player = document.createElement('img');
                     player.className = 'player';
                     player.src = "../img/down-1.png";
-                    // player.style.top = data.pos.y + "px";
-                    // player.style.left = data.pos.x + "px";
                     player.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
                     player.id = data.id;
                     board.appendChild(player);
@@ -142,7 +129,17 @@
                 case "remove-server":
                     RemoveElement(data.y, data.x);
                     if (data.pos) {
-                        ShowBombed(data.pos, board);
+                        const bombed = document.createElement("img");
+                        console.log(bombed);
+                        bombed.src = "../img/bombed.gif";
+                        bombed.className = "player";
+                        bombed.style.top = data.pos.top + "px";
+                        bombed.style.left = data.pos.left + "px";
+                        board.appendChild(bombed);
+                        console.log(bombed);
+                        setTimeout(() => {
+                            bombed.parentElement.removeChild(bombed);
+                        }, 400)
                     }
                     break;
                 case "kill-server":
@@ -157,7 +154,7 @@
                     bomb.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
                     board.appendChild(bomb);
                     setTimeout(() => {
-                        bomb.remove();
+                        bomb.parentElement.removeChild(bomb);
                     }, 2000);
                     break;
                 case "gameover-server":
@@ -178,7 +175,7 @@
                     break;
                 case "data-server":
                     document.querySelector("#lifes").innerHTML = data.lifes;
-                    document.querySelector("#Bombs").innerHTML = data.Bombs;
+                    document.querySelector("#Bombs").innerHTML = data.bombs;
                 default:
                     break;
             }
@@ -263,7 +260,7 @@
     function RemoveElement(y, x) {
         const boardContainer = document.getElementById("boardContainer");
         if (!boardContainer) return;
-        const rows = boardContainedata - serverr.getElementsByTagName("tr");
+        const rows = boardContainer.getElementsByTagName("tr");
         if (!rows || rows.length === 0 || y >= rows.length || y < 0) return;
         const colls = rows[y].getElementsByTagName("td");
         if (!colls || colls.length === 0 || x >= colls.length || x < 0) return;
