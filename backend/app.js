@@ -1,5 +1,5 @@
 const WebSocket = require('ws');
-const { JoinPlayer } = require('./join.js');
+const { JoinPlayer } = require('./utils/join.js');
 const { HandleAll } = require('./utils/ws.js');
 const { StartGame } = require('./utils/run.js');
 

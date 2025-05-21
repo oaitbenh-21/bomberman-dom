@@ -68,7 +68,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
                         id: id,
                         pos: { x: (coord.x * 40), y: (coord.y * 40) },
                     }));
-                } else {
+                } else if (typeof currentRoom.Board[coord.y][coord.x] != "object") {
                     currentRoom.Board[coord.y][coord.x] = 0;
                 }
             }
