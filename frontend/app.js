@@ -4,9 +4,66 @@ import renderHeader from "./components/header.js";
 import renderChat from "./components/chat.js";
 import Socket from "./src/socket.js";
 
+class EventManager {
+    constructor() {
+        this.customEvents = {};
+        this.nativeListeners = new Map(); // Tracks native event handlers
+    }
+
+    isNativeEvent(eventName) {
+        const nativeEvents = ['keydown', 'keyup', 'click', 'scroll', 'mousedown', 'mouseup'];
+        return nativeEvents.includes(eventName);
+    }
+
+    on(eventName, callback, element = window) {
+        if (!this.customEvents[eventName]) {
+            this.customEvents[eventName] = [];
+
+            // Setup native event listener if applicable
+            if (this.isNativeEvent(eventName)) {
+                const handler = (e) => this.emit(eventName, e);
+                element.addEventListener(eventName, handler);
+                this.nativeListeners.set(eventName, { element, handler });
+            }
+        }
+
+        this.customEvents[eventName].push(callback);
+    }
+
+    off(eventName, callback) {
+        if (!this.customEvents[eventName]) return;
+
+        // Remove the callback
+        this.customEvents[eventName] = this.customEvents[eventName].filter(
+            cb => cb !== callback
+        );
+
+        // If no more callbacks, remove native listener
+        if (this.customEvents[eventName].length === 0) {
+            const nativeListener = this.nativeListeners.get(eventName);
+            if (nativeListener) {
+                nativeListener.element.removeEventListener(eventName, nativeListener.handler);
+                this.nativeListeners.delete(eventName);
+            }
+            delete this.customEvents[eventName];
+        }
+    }
+
+    emit(eventName, data) {
+        const listeners = this.customEvents[eventName];
+        if (listeners) {
+            listeners.forEach(cb => cb(data));
+        }
+    }
+}
+
 
 class App {
     constructor() {
+        this.event = new EventManager();
+        this.setupControls();
+
+
         this.state = {
             player: "Player 1",
             players: [],
@@ -22,13 +79,13 @@ class App {
         };
         this.container = document.getElementById("app");
         this.boardGrade = [];
+        this.socket = null;
     }
     sendMove(direction) {
         this.socket.send(JSON.stringify({ type: 'move-client', direction }));
     }
-    init() {
-        this.socket = new Socket();
-        document.addEventListener("keydown", (e) => {
+    setupControls() {
+        const move = (e) => {
             switch (e.key) {
                 case "ArrowDown":
                     this.sendMove("b");
@@ -43,14 +100,18 @@ class App {
                     this.sendMove("r");
                     break;
                 case " ":
-                    this.socket.send(JSON.stringify({
-                        type: "bomb-client",
-                    }));
-                    break;
-                default:
+                    this.socket.send(JSON.stringify({ type: "bomb-client" }));
                     break;
             }
-        });
+        };
+
+        // Register 'keydown' handler; EventManager handles the native listener
+        this.event.on("keydown", move); // Uses default window as the element
+    }
+
+    init() {
+        this.socket = new Socket();
+
         this.socket.onOpen((event) => {
             console.log("WebSocket connection opened:", event);
         });
@@ -117,6 +178,7 @@ class App {
         });
 
         this.render();
+        // Added cleanup method
     }
 
     render() {
@@ -132,6 +194,11 @@ class App {
         ]);
 
         render(appElement, this.container);
+    }
+    // Added cleanup method
+    destroy() {
+        this.event.off("keydown", this.moveHandler);
+        this.socket.close();
     }
 }
 
