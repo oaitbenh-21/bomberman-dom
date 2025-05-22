@@ -10,6 +10,7 @@ class App {
             player: "Player 1",
             players: [],
             skills: [],
+            effects: [],
             bombs: [],
             board: [],
             countDown: {
@@ -133,6 +134,13 @@ class App {
                     break;
                 case "remove-server":
                     this.state.board[message.y][message.x] = 0;
+                    if (this.state.pos) {
+                        this.state.effects = [message.pos]
+                        setTimeout(() => {
+                            this.state.effects = []
+                            this.render();
+                        }, 400);
+                    }
                     this.render();
                     break;
                 case "move-server":
@@ -171,11 +179,11 @@ class App {
 
     render() {
         const board = this.state.board.length ? this.state.board : this.boardGrade;
-        const { gameData, messages, players, skills, status, bombs } = this.state;
+        const { gameData, messages, players, skills, status, bombs, effects } = this.state;
         const appElement = createElement("div", { class: "container" }, [
             renderHeader(gameData),
             createElement("div", { class: "game" }, [
-                renderBoard(board, players, skills, status, bombs),
+                renderBoard(board, players, skills, status, bombs, effects),
                 renderChat(messages, this.socket)
             ])
         ]);
