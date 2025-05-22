@@ -310,4 +310,16 @@ form {
     top: calc(50vh - 150px);
     z-index: 1;
     background-color: aqua;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.StausContainer .title {
+    font-size: 35px;
+}
+
+.StausContainer .message {
+    font-size: 20px;
 }
