@@ -3,8 +3,6 @@ import renderBoard from "./components/board.js";
 import renderHeader from "./components/header.js";
 import renderChat from "./components/chat.js";
 import Socket from "./src/socket.js";
-import { endGame } from "./components/endGame.js";
-
 
 class App {
     constructor() {
@@ -12,8 +10,17 @@ class App {
             player: "Player 1",
             players: [],
             skills: [],
+            bombs: [],
             board: [],
-            status: 0,
+            countDown: {
+                id: undefined,
+                timer: 4,
+            },
+            status: {
+                number: 0,
+                title: "Waiting Room",
+                message: "Waiting for players",
+            },
             message: "message",
             winner: "",
             gameData: {
@@ -80,6 +87,28 @@ class App {
                     break;
                 case "join-server":
                     this.state.players = [...this.state.players, message];
+                    this.state.countDown.timer = 4;
+                    let count = () => {
+                        this.state.countDown.timer--;
+                        if (this.state.countDown.timer >= 0) {
+                            this.state.status.title = "Starting...";
+                            this.state.status.message = `Waiting ${this.state.countDown.timer}`;
+                            this.state.status.number = 0;
+                            this.render();
+                        } else {
+                            this.state.status.title = "Game Started";
+                            this.state.status.message = "";
+                            this.state.status.number = 1;
+                            this.render();
+                            clearInterval(this.state.countDown.id);
+                        }
+                        this.render();
+                    }
+                    if (this.state.players.length >= 2) {
+                        if (this.state.countDown.id == undefined) {
+                            this.state.countDown.id = setInterval(count, 1000);
+                        }
+                    }
                     this.render();
                     break;
                 case "kill-server":
@@ -92,6 +121,14 @@ class App {
                     break;
                 case "skill-server":
                     this.state.skills = [...this.state.skills, message];
+                    this.render();
+                    break;
+                case "bomb-server":
+                    this.state.bombs = [message];
+                    setTimeout(() => {
+                        this.state.bombs = [];
+                        this.render();
+                    }, 2000);
                     this.render();
                     break;
                 case "remove-server":
@@ -134,12 +171,11 @@ class App {
 
     render() {
         const board = this.state.board.length ? this.state.board : this.boardGrade;
-        const { gameData, messages, players, message, status } = this.state;
+        const { gameData, messages, players, skills, status, bombs } = this.state;
         const appElement = createElement("div", { class: "container" }, [
             renderHeader(gameData),
             createElement("div", { class: "game" }, [
-                endGame(message, status),
-                renderBoard(board, players),
+                renderBoard(board, players, skills, status, bombs),
                 renderChat(messages, this.socket)
             ])
         ]);

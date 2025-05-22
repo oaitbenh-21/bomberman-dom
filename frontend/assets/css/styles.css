@@ -100,6 +100,9 @@ body {
     background-color: var(--color-bg);
     gap: 1rem;
     padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .board {
@@ -306,14 +309,14 @@ form {
     position: absolute;
     width: 400px;
     height: 300px;
-    left: calc(50vw - 200px);
-    top: calc(50vh - 150px);
     z-index: 1;
-    background-color: aqua;
+    background-color: var(--color-primary);
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 30px;
     flex-wrap: wrap;
+    transform: translate(calc(50% - 50px), calc(-50% - 225px));
 }
 
 .StausContainer .title {
