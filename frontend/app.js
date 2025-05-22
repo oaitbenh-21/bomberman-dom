@@ -3,6 +3,7 @@ import renderBoard from "./components/board.js";
 import renderHeader from "./components/header.js";
 import renderChat from "./components/chat.js";
 import Socket from "./src/socket.js";
+import { endGame } from "./components/endGame.js";
 
 
 class App {
@@ -12,6 +13,9 @@ class App {
             players: [],
             skills: [],
             board: [],
+            status: 0,
+            message: "message",
+            winner: "",
             gameData: {
                 count: 0,
                 time: "00:00",
@@ -103,6 +107,10 @@ class App {
                     });
                     this.render();
                     break;
+                case "gameover-server":
+                    this.state.status = 1;
+                    this.winner = message.winner;
+                    this.render()
                 default:
                     break;
             }
@@ -121,11 +129,11 @@ class App {
 
     render() {
         const board = this.state.board.length ? this.state.board : this.boardGrade;
-        const { gameData, messages, players } = this.state;
-
+        const { gameData, messages, players, message, status } = this.state;
         const appElement = createElement("div", { class: "container" }, [
             renderHeader(gameData),
             createElement("div", { class: "game" }, [
+                endGame(message, status),
                 renderBoard(board, players),
                 renderChat(messages, this.socket)
             ])
