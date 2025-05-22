@@ -3,7 +3,9 @@ const { JoinPlayer } = require('./utils/join.js');
 const { handlePlayerAction } = require('./utils/ws.js');
 const { handlePlayerJoin } = require('./utils/run.js');
 
+
 const wsServer = new WebSocket.Server({ port: 8080 });
+
 wsServer.on('connection', (ws) => {
     try {
         const [player, currentRoom] = JoinPlayer(ws)
@@ -24,4 +26,4 @@ wsServer.on('connection', (ws) => {
     }
 });
 
-console.log(`🚀 Websocket running at localhost:8080`);
+console.log(`🚀 Websocket running at ws://localhost:8080`);
