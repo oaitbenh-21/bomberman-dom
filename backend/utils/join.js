@@ -3,6 +3,9 @@ const Rooms = [];
 const Connections = [];
 const colors = ["red", "blue", "yellow", "green"];
 
+// Room 
+// Player 
+
 export function JoinPlayer(ws) {
       Connections.push(ws) // add ws to the connection pool
 

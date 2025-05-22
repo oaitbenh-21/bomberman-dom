@@ -1,8 +1,7 @@
 const WebSocket = require('ws');
 const { JoinPlayer } = require('./utils/join.js');
-const { HandleAll } = require('./utils/ws.js');
-const { StartGame } = require('./utils/run.js');
-
+const { handlePlayerAction } = require('./utils/ws.js');
+const { handlePlayerJoin } = require('./utils/run.js');
 
 const wsServer = new WebSocket.Server({ port: 8080 });
 wsServer.on('connection', (ws) => {
@@ -11,7 +10,7 @@ wsServer.on('connection', (ws) => {
         ws.on('message', (message) => {
             const data = JSON.parse(message);
             if (!data) return;
-            HandleAll(currentRoom, player, data);
+            handlePlayerAction(currentRoom, player, data);
             currentRoom.broadcast(JSON.stringify({
                 type: "data-server",
                 lifes: player.lifes,
@@ -19,7 +18,7 @@ wsServer.on('connection', (ws) => {
                 flames: player.Flames,
             }));
         });
-        StartGame(currentRoom, player, ws);
+        handlePlayerJoin(currentRoom, player, ws);
     } catch (err) {
         console.log(err);
     }
