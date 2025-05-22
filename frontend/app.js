@@ -10,6 +10,7 @@ class App {
         this.state = {
             player: "Player 1",
             players: [],
+            skills: [],
             board: [],
             gameData: {
                 count: 0,
@@ -77,10 +78,26 @@ class App {
                     this.state.players = [...this.state.players, message];
                     this.render();
                     break;
+                case "kill-server":
+                    this.state.players = this.state.players.filter((player) => player.id != message.id);
+                    this.state.skills = this.state.skills.filter((skill) => skill.id != message.id);
+                    if (this.state.pos) {
+                        this.state.effect = message.pos
+                    }
+                    this.render();
+                    break;
+                case "skill-server":
+                    this.state.skills = [...this.state.skills, message];
+                    this.render();
+                    break;
+                case "remove-server":
+                    this.state.board[message.y][message.x] = 0;
+                    this.render();
+                    break;
                 case "move-server":
                     this.state.players = this.state.players.map((player) => {
-                        if (player.id === message.id) {
-                            return { ...player, pos: message.pos };
+                        if (player.id === message.player.id) {
+                            return { ...player, pos: message.player.pos };
                         }
                         return player;
                     });
@@ -90,7 +107,6 @@ class App {
                     break;
             }
         });
-
         this.socket.onClose((event) => {
             console.log("WebSocket connection closed:", event);
         });

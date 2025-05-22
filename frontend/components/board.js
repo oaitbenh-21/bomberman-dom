@@ -1,6 +1,6 @@
 import { createElement } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.7/dist/mini-framework-z01.min.js";
 
-const renderBoard = (board = [], players = []) => {
+const renderBoard = (board = [], players = [], skills = []) => {
       if (!Array.isArray(board)) return createElement('div', { class: 'board' }, "Loading...");
       if (board.length === 0) return createElement('div', { class: 'board' }, [
             // create loading animation
@@ -19,7 +19,11 @@ const renderBoard = (board = [], players = []) => {
                         })]
                   )
             ),
-            ...players.map(player => createElement('div', { class: 'player', style: `left: 0px; top: 0px; transform: translate(${player.pos?.x}px, ${player.pos?.y}px);`, id: player.id }))]);
+            ...players.map(player => createElement('img',
+                  { class: 'player', src: "./assets/img/down-1.png", style: `left: 0px; top: 0px; transform: translate(${player.pos?.x}px, ${player.pos?.y}px);`, id: player.id })),
+            ...skills.map(skill => createElement('img',
+                  { class: 'player', src: `../img/${skill.name}.png`, style: `left: 0px; top: 0px; transform: translate(${skill.pos?.x}px, ${skill.pos?.y}px);`, id: skill.id })),
+            ]);
 };
 
 
