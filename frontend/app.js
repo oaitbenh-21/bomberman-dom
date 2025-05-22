@@ -16,8 +16,8 @@ class EventManager {
     }
 
     on(eventName, callback, element = window) {
-        if (!this.customEvents[eventName]) {
-            this.customEvents[eventName] = [];
+        if (!this.customEvents[eventName]) { // the event isn't registered
+            this.customEvents[eventName] = []; // register the event
 
             // Setup native event listener if applicable
             if (this.isNativeEvent(eventName)) {
@@ -26,8 +26,8 @@ class EventManager {
                 this.nativeListeners.set(eventName, { element, handler });
             }
         }
-
-        this.customEvents[eventName].push(callback);
+        // event registered
+        this.customEvents[eventName].push(callback); // overite the event 
     }
 
     off(eventName, callback) {
