@@ -108,10 +108,15 @@ class App {
                     this.render();
                     break;
                 case "gameover-server":
-                    this.state.status = 1;
-                    this.winner = message.winner;
-                    this.render()
+                    this.state.status = {
+                        number: 0,
+                        title: "Game Over",
+                        message: `the Winner is ${message.winner}`,
+                    };
+                    this.render();
+                    break
                 default:
+                    console.error("There is Websocket Message you don't Handle it");
                     break;
             }
         });
