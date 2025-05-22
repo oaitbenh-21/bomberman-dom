@@ -1,13 +1,13 @@
 import { BombPositions } from './bomb.js';
 import { MovePlayer } from './move.js';
 
-export function HandleAll(currentRoom, player, data, ws) {
+export function HandleAll(currentRoom, player, data) {
       if (data.type == "chat-client") {
             let len = data.message.trim().length;
             if (len < 2 || len > 50) return;
             currentRoom.broadcast(JSON.stringify({
                   type: "chat-server",
-                  sender: player.name,
+                  username: player.name,
                   message: data.message,
             }))
       }
@@ -29,13 +29,6 @@ export function HandleAll(currentRoom, player, data, ws) {
             case "move-client":
                   MovePlayer(data, player, currentRoom);
                   break;
-            case "data-client":
-                  ws.send(JSON.stringify({
-                        type: "data-server",
-                        lifes: player.lifes,
-                        bombs: player.Bombs,
-                        flames: player.Flames,
-                  }));
             default:
                   break;
       }

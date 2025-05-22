@@ -1,48 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Multiplayer Game Client</title>
-    <link rel="stylesheet" href="../css/play.css">
-</head>
-
-<body>
-    <div class="flyMessage"></div>
-    <div class="messages">
-        <div class="title">
-            Game Chat
-        </div>
-    </div>
-    <div class="create">
-        <img class="chat-icon" src="../img/chat.png">
-        <input type="text" placeholder="message">
-        <img class="send" src="../img/send.png">
-    </div>
-    <div class="popup" id="timer">Please Wait More Players</div>
-    <div class="header">
-        <div class="contain">
-            <div id="count">0/4</div>
-            <img class="icon" src="../img/player.png">
-        </div>
-        <div class="contain">
-            <div id="time">00:00</div>
-            <img class="icon" src="../img/timer.png">
-        </div>
-        <div class="contain">
-            <div id="lifes">3</div>
-            <img class="icon" src="../img/lifes.png">
-        </div>
-        <div class="contain">
-            <div id="Bombs">1</div>
-            <img class="icon" src="../img/bombs.png">
-        </div>
-    </div>
-    <div id="boardContainer"></div>
-    <div id="status"></div>
-</body>
-
-<script>
     document.querySelector(".messages").style.display = "none";
     function debounce(func, timeout = 300) {
         let timer;
@@ -116,12 +71,11 @@
                     Timer();
                     const player = document.createElement('img');
                     player.className = 'player';
-                    player.src = "../img/down-1.png";
+                    player.src = "./assets/img/down-1.png";
                     player.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
                     player.id = data.id;
                     board.appendChild(player);
                     break;
-
                 case "move-server":
                     MovePlayer(data.player);
                     break;
@@ -131,7 +85,7 @@
                     if (data.pos) {
                         const bombed = document.createElement("img");
                         console.log(bombed);
-                        bombed.src = "../img/bombed.gif";
+                        bombed.src = "./assets/img/bombed.gif";
                         bombed.className = "player";
                         bombed.style.top = data.pos.top + "px";
                         bombed.style.left = data.pos.left + "px";
@@ -148,7 +102,7 @@
                 case "bomb-server":
                     const bomb = document.createElement('img');
                     bomb.className = 'player';
-                    bomb.src = "../img/bomb.gif";
+                    bomb.src = "./assets/img/bomb.gif";
                     bomb.style.top = "0px";
                     bomb.style.left = "0px";
                     bomb.style.transform = `translate(${data.pos.x}px, ${data.pos.y}px)`;
@@ -271,6 +225,3 @@
         const remainingSeconds = seconds % 60;
         return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     }
-</script>
-
-</html>

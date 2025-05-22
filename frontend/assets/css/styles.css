@@ -1,0 +1,304 @@
+:root {
+    --color-bg: hsla(220, 40%, 8%, 1);
+    --color-card: hsla(220, 35%, 12%, 1);
+    --color-item: hsla(220, 35%, 18%, 1);
+    --color-text: hsla(0, 0%, 100%, 1);
+    --color-muted: hsla(0, 0%, 70%, 1);
+
+    --color-shadow: hsla(200, 100%, 60%, 0.1);
+    --color-primary: rgb(255, 255, 255);
+    --color-primary-light: hsla(0, 0%, 100%, 0.2);
+    --color-accent: hsla(50, 100%, 60%, 1);
+
+    --color-wall: hsla(240, 10%, 25%, 1);
+    --color-box: hsla(30, 100%, 45%, 1);
+    --color-empty: hsla(220, 40%, 10%, 1);
+    --color-bomb: hsla(0, 100%, 50%, 1);
+    --color-fire: hsla(35, 100%, 55%, 1);
+    --color-grass: hsla(120, 100%, 30%, 1);
+
+    --radius: 1rem;
+    --radius-small: 0.5rem;
+    --font-main: 'Press Start 2P', 'Quicksand', sans-serif;
+}
+
+* {
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    gap: 0px;
+    box-sizing: border-box;
+    font-family: var(--font-main);
+    background: cover no-repeat center;
+}
+
+
+
+body {
+    width: 100%;
+    height: 100%;
+    background-color: var(--game-bg);
+}
+
+.app {
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    position: sticky;
+    top: 0px;
+    width: 100%;
+    height: 80px;
+    background-color: var(--color-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: var(--game-bg);
+    gap: 10px;
+    z-index: 10;
+}
+
+.header .item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem 1.2rem;
+    border-radius: 10px;
+    background-color: var(--game-bg);
+    color: var(--header-bg);
+    font-size: medium;
+    z-index: 2;
+    gap: 10px;
+}
+
+.header .item img {
+    width: 20px;
+    height: 20px;
+}
+
+
+
+.game {
+    height: 100%;
+    min-height: calc(100vh - 80px - 4rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-bg);
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.board {
+    width: calc(40px * 17);
+    height: calc(40px * 11);
+    background-color: var(--color-grass);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.board .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wall,
+.box,
+.empty {
+    width: 40px;
+    height: 40px;
+    /* border-radius: 4px; */
+}
+
+.wall {
+    background: var(--color-accent);
+    background: url('../img/hard-wall.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: var(--color-bg);
+}
+
+.box {
+    background: orange;
+    background: url('../img/box.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: var(--color-bg);
+}
+
+.empty {
+    background-color: var(--color-grass);
+}
+
+.player {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: url('../img/down-1.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    left: 0px;
+    top: 0px;
+}
+
+.chat {
+    --board-width: calc(100% - 40% - 2rem);
+    width: calc(100% - var(--board-width) - 2rem);
+    min-height: calc(100vh - 80px - 2rem);
+    max-height: calc(100vh - 80px - 2rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--color-card);
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.chat-messages {
+    width: 100%;
+    min-height: calc(100vh - 80px - 10rem);
+    max-height: calc(100vh - 120px);
+    overflow-y: scroll;
+    margin-bottom: 10px;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: var(--color-primary);
+}
+
+.chat-messages::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-card);
+}
+
+.chat-message {
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    background-color: var(--color-muted);
+    color: var(--color-bg);
+    font-size: 16px;
+    margin: 0.5rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.chat-message:hover {
+    transform: scale(1.02);
+}
+
+.chat-message.me {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+}
+
+.chat-message.user {
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+}
+
+
+form {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--color-text);
+    border-radius: 10px;
+}
+
+.chat-input {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 0.4rem;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+    font-size: 16px;
+    outline: none;
+    transition: background-color 0.2s ease;
+}
+
+
+
+.chat-input input:focus {
+    background-color: var(--color-primary-light);
+}
+
+.chat-input button {
+    padding: 0.4rem 1.4rem;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--color-muted);
+    color: var(--color-bg);
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.chat-input button img {
+    width: 20px;
+    height: 20px;
+}
+
+.chat-input button:hover img {
+    transform: translate3d(3px, -2px, -3px);
+    transition: transform 0.2s ease;
+}
+
+.louding {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--color-accent);
+    border-top: 2px solid var(--color-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-bar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--color-accent);
+    border-top: 2px solid var(--color-bg);
+    animation: loading 1s linear infinite;
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

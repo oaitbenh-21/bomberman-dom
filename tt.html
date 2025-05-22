@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Multiplayer Game Client</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+
+<body>
+    <div id="app" class="container">
+            <div class="popup" id="timer">Please Wait More Players</div>
+            <div class="header">
+                <div class="contain">
+                    <div id="count">0/4</div>
+                    <img class="icon" src="./assets/img/player.png">
+                </div>
+                <div class="contain">
+                    <div id="time">00:00</div>
+                    <img class="icon" src="./assets/img/timer.png">
+                </div>
+                <div class="contain">
+                    <div id="lifes">3</div>
+                    <img class="icon" src="./assets/img/lifes.png">
+                </div>
+                <div class="contain">
+                    <div id="Bombs">1</div>
+                    <img class="icon" src="./assets/img/bombs.png">
+                </div>
+            </div>
+            <div id="boardContainer"></div>
+            <div class="footer">
+                <div class="flyMessage"></div>
+                <div class="create">
+                    <img class="chat-icon" src="./assets/img/chat.png">
+                    <input type="text" placeholder="message">
+                    <img class="send" src="./assets/img/send.png">
+                </div>
+            <div class="messages">
+                <div class="title">
+                    Game Chat
+                </div>
+            </div>
+            </div>
+            <div id="status"></div>
+    </div>
+    <div id="app" class="app"> </div>
+</body>
+<script src="./app.js" type="module" > </script>
+</html>

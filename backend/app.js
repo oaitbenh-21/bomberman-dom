@@ -11,9 +11,15 @@ wsServer.on('connection', (ws) => {
         ws.on('message', (message) => {
             const data = JSON.parse(message);
             if (!data) return;
-            HandleAll(currentRoom, player, data, ws);
+            HandleAll(currentRoom, player, data);
+            currentRoom.broadcast(JSON.stringify({
+                type: "data-server",
+                lifes: player.lifes,
+                bombs: player.Bombs,
+                flames: player.Flames,
+            }));
         });
-        StartGame(currentRoom, player, ws)
+        StartGame(currentRoom, player, ws);
     } catch (err) {
         console.log(err);
     }
