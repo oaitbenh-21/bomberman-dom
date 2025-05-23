@@ -1,6 +1,6 @@
 import { createElement } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.7/dist/mini-framework-z01.min.js";
 
-const renderChat = (messages = [], ws) => {
+const renderChat = (messages = [], ws, isChating) => {
       const sendMessage = (message) => {
             const data = {
                   type: "chat-client",
@@ -30,6 +30,11 @@ const renderChat = (messages = [], ws) => {
                         }
                   }, [
                         createElement('input', {
+                              onclick: () => {
+                                    console.log('input clicked, chating:', isChating);
+                                    isChating.setState(true)
+                                    console.log('did it change:', isChating);
+                              },
                               type: 'text',
                               name: 'chat',
                               placeholder: 'Type your message...',

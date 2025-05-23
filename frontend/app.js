@@ -1,4 +1,4 @@
-import { createElement, render, events } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.8/dist/mini-framework-z01.min.js";
+import { createElement, render, events, createStore } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.8/dist/mini-framework-z01.min.js";
 import renderBoard from "./components/board.js";
 import renderHeader from "./components/header.js";
 import renderChat from "./components/chat.js";
@@ -9,6 +9,8 @@ class App {
         this.event = events;
         this.setupControls();
 
+        // is the user chatting or playing
+        this.isChating = createStore(false);
 
         this.state = {
             player: "Player 1",
@@ -40,10 +42,15 @@ class App {
         this.boardGrade = [];
         this.socket = null;
     }
+
     sendMove(direction) {
         this.socket.send(JSON.stringify({ type: 'move-client', direction }));
     }
+
     setupControls() {
+        // if the user is don't move the player or make actions
+        if (this.isChating) return;
+
         const move = (e) => {
             switch (e.key) {
                 case "ArrowDown":
@@ -59,6 +66,7 @@ class App {
                     this.sendMove("r");
                     break;
                 case " ":
+                    console.log('bomb dropped!!')
                     this.socket.send(JSON.stringify({ type: "bomb-client" }));
                     break;
             }
@@ -74,6 +82,7 @@ class App {
         this.socket.onOpen((event) => {
             console.log("WebSocket connection opened:", event);
         });
+
         this.socket.onMessage((data) => {
             const message = JSON.parse(data);
             switch (message.type) {
@@ -189,13 +198,16 @@ class App {
     }
 
     render() {
+        console.log('rendering...')
+        console.log('isChating', this.isChating)
+
         const board = this.state.board.length ? this.state.board : this.boardGrade;
         const { gameData, messages, players, skills, status, bombs, effects } = this.state;
         const appElement = createElement("div", { class: "container" }, [
             renderHeader(gameData),
             createElement("div", { class: "game" }, [
-                renderBoard(board, players, skills, status, bombs, effects),
-                renderChat(messages, this.socket)
+                renderBoard(board, players, skills, status, bombs, effects, this.isChating),
+                renderChat(messages, this.socket, this.isChating)
             ])
         ]);
 
