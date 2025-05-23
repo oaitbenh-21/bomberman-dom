@@ -54,31 +54,36 @@ class App {
     }
 
     setupControls() {
-        console.log("this isChating controle:", this.isChating);
-        // if the user is don't move the player or make actions
-        if (this.isChating) return;
+        console.log("this isChating controle:", this.isChating.getState());
 
         const move = (e) => {
-            e.preventDefault();
+            if (this.isChating.getState()) return;
+
+            const keys = [
+                "ArrowUp",
+                "ArrowDown",
+                "ArrowLeft",
+                "ArrowRight",
+                " ",
+            ];
+            if (!keys.includes(e.key)) return;
+
+            e.preventDefault(); // Stop scroll BEFORE anything else
+
             switch (e.key) {
                 case "ArrowDown":
-                    e.preventDefault();
                     this.sendMove("b");
                     break;
                 case "ArrowUp":
-                    e.preventDefault();
                     this.sendMove("t");
                     break;
                 case "ArrowLeft":
-                    e.preventDefault();
                     this.sendMove("l");
                     break;
                 case "ArrowRight":
-                    e.preventDefault();
                     this.sendMove("r");
                     break;
                 case " ":
-                    e.preventDefault();
                     console.log("bomb dropped!!");
                     this.socket.send(JSON.stringify({ type: "bomb-client" }));
                     break;
@@ -174,9 +179,9 @@ class App {
                     break;
                 case "remove-server":
                     this.state.board[message.y][message.x] = 0;
-                    if (message.pos) {
+                    if (this.state.pos) {
                         const index = this.state.effects.length;
-                        this.state.effects = [...this.state.effects, { ...message, id: index }];
+                        this.state.effects = { ...message, id: index };
                         setTimeout(() => {
                             this.state.effects = this.state.effects.filter(
                                 (effect) => effect.id != index
