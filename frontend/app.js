@@ -1,4 +1,4 @@
-import { createElement, render, EventManager } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.7/dist/mini-framework-z01.min.js";
+import { createElement, render, events } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.8/dist/mini-framework-z01.min.js";
 import renderBoard from "./components/board.js";
 import renderHeader from "./components/header.js";
 import renderChat from "./components/chat.js";
@@ -6,7 +6,7 @@ import Socket from "./src/socket.js";
 
 class App {
     constructor() {
-        this.event = new EventManager();
+        this.event = events;
         this.setupControls();
 
 
