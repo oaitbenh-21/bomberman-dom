@@ -1,4 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
+
+
 export class Room {
     constructor() {
         this.Board = this.createBoard();
@@ -23,6 +25,7 @@ export class Room {
         return 0
     }
 
+    // it should be randomly generated
     createBoard() {
         return [
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
@@ -86,7 +89,9 @@ export class Player {
     move(dx, dy) {
         const newX = this.pos.x + dx;
         const newY = this.pos.y + dy;
+
         const board = this.room.Board;
+
         if (newX >= 0 && newY >= 0 &&
             newX + 29 < board[0].length * 40 &&
             newY + 29 < board.length * 40) {

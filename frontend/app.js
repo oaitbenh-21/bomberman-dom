@@ -1,4 +1,4 @@
-import { createElement, render } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.7/dist/mini-framework-z01.min.js";
+import { createElement, render, events } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.8/dist/mini-framework-z01.min.js";
 import renderBoard from "./components/board.js";
 import renderHeader from "./components/header.js";
 import renderChat from "./components/chat.js";
@@ -6,6 +6,10 @@ import Socket from "./src/socket.js";
 
 class App {
     constructor() {
+        this.event = events;
+        this.setupControls();
+
+
         this.state = {
             player: "Player 1",
             players: [],
@@ -34,13 +38,13 @@ class App {
         };
         this.container = document.getElementById("app");
         this.boardGrade = [];
+        this.socket = null;
     }
     sendMove(direction) {
         this.socket.send(JSON.stringify({ type: 'move-client', direction }));
     }
-    init() {
-        this.socket = new Socket();
-        document.addEventListener("keydown", (e) => {
+    setupControls() {
+        const move = (e) => {
             switch (e.key) {
                 case "ArrowDown":
                     this.sendMove("b");
@@ -55,14 +59,18 @@ class App {
                     this.sendMove("r");
                     break;
                 case " ":
-                    this.socket.send(JSON.stringify({
-                        type: "bomb-client",
-                    }));
-                    break;
-                default:
+                    this.socket.send(JSON.stringify({ type: "bomb-client" }));
                     break;
             }
-        });
+        };
+
+        // Register 'keydown' handler; EventManager handles the native listener
+        this.event.on("keydown", move); // Uses default window as the element
+    }
+
+    init() {
+        this.socket = new Socket();
+
         this.socket.onOpen((event) => {
             console.log("WebSocket connection opened:", event);
         });
@@ -175,6 +183,7 @@ class App {
         });
 
         this.render();
+        // Added cleanup method
     }
 
     render() {
@@ -189,6 +198,11 @@ class App {
         ]);
 
         render(appElement, this.container);
+    }
+    // Added cleanup method
+    destroy() {
+        this.event.off("keydown", this.moveHandler);
+        this.socket.close();
     }
 }
 
