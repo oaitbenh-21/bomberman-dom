@@ -1,4 +1,9 @@
-import { createElement, render, events, createStore } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.8/dist/mini-framework-z01.min.js";
+import {
+    createElement,
+    render,
+    events,
+    createStore,
+} from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.8/dist/mini-framework-z01.min.js";
 import renderBoard from "./components/board.js";
 import renderHeader from "./components/header.js";
 import renderChat from "./components/chat.js";
@@ -7,10 +12,11 @@ import Socket from "./src/socket.js";
 class App {
     constructor() {
         this.event = events;
+        this.isChating = createStore(false);
+
         this.setupControls();
 
         // is the user chatting or playing
-        this.isChating = createStore(false);
 
         this.state = {
             player: "Player 1",
@@ -36,7 +42,7 @@ class App {
                 lifes: 0,
                 bombs: 0,
             },
-            messages: [{ username: 'System', message: 'Welcome to the chat!' }],
+            messages: [{ username: "System", message: "Welcome to the chat!" }],
         };
         this.container = document.getElementById("app");
         this.boardGrade = [];
@@ -44,29 +50,36 @@ class App {
     }
 
     sendMove(direction) {
-        this.socket.send(JSON.stringify({ type: 'move-client', direction }));
+        this.socket.send(JSON.stringify({ type: "move-client", direction }));
     }
 
     setupControls() {
+        console.log("this isChating controle:", this.isChating);
         // if the user is don't move the player or make actions
         if (this.isChating) return;
 
         const move = (e) => {
+            e.preventDefault();
             switch (e.key) {
                 case "ArrowDown":
+                    e.preventDefault();
                     this.sendMove("b");
                     break;
                 case "ArrowUp":
+                    e.preventDefault();
                     this.sendMove("t");
                     break;
                 case "ArrowLeft":
+                    e.preventDefault();
                     this.sendMove("l");
                     break;
                 case "ArrowRight":
+                    e.preventDefault();
                     this.sendMove("r");
                     break;
                 case " ":
-                    console.log('bomb dropped!!')
+                    e.preventDefault();
+                    console.log("bomb dropped!!");
                     this.socket.send(JSON.stringify({ type: "bomb-client" }));
                     break;
             }
@@ -121,7 +134,7 @@ class App {
                             clearInterval(this.state.countDown.id);
                         }
                         this.render();
-                    }
+                    };
                     if (this.state.players.length >= 2) {
                         if (this.state.countDown.id == undefined) {
                             this.state.countDown.id = setInterval(count, 1000);
@@ -130,10 +143,14 @@ class App {
                     this.render();
                     break;
                 case "kill-server":
-                    this.state.players = this.state.players.filter((player) => player.id != message.id);
-                    this.state.skills = this.state.skills.filter((skill) => skill.id != message.id);
+                    this.state.players = this.state.players.filter(
+                        (player) => player.id != message.id
+                    );
+                    this.state.skills = this.state.skills.filter(
+                        (skill) => skill.id != message.id
+                    );
                     if (this.state.pos) {
-                        this.state.effect = message.pos
+                        this.state.effect = message.pos;
                     }
                     this.render();
                     break;
@@ -143,9 +160,14 @@ class App {
                     break;
                 case "bomb-server":
                     const index = this.state.bombs.length;
-                    this.state.bombs = [...this.state.bombs, { ...message, id: index }];
+                    this.state.bombs = this.state.bombs.push({
+                        ...message,
+                        id: index,
+                    });
                     setTimeout(() => {
-                        this.state.bombs = this.state.bombs.filter((bomb) => bomb.id != index);
+                        this.state.bombs = this.state.bombs.filter(
+                            (bomb) => bomb.id != index
+                        );
                         this.render();
                     }, 2000);
                     this.render();
@@ -156,7 +178,9 @@ class App {
                         const index = this.state.effects.length;
                         this.state.effects = [...this.state.effects, { ...message, id: index }];
                         setTimeout(() => {
-                            this.state.effects = this.state.effects.filter((effect) => effect.id != index);
+                            this.state.effects = this.state.effects.filter(
+                                (effect) => effect.id != index
+                            );
                             this.render();
                         }, 400);
                     }
@@ -178,9 +202,11 @@ class App {
                         message: `the Winner is ${message.winner}`,
                     };
                     this.render();
-                    break
+                    break;
                 default:
-                    console.error("There is Websocket Message you don't Handle it");
+                    console.error(
+                        "There is Websocket Message you don't Handle it"
+                    );
                     break;
             }
         });
@@ -190,7 +216,11 @@ class App {
 
         this.socket.onError((event) => {
             console.error("WebSocket error:", event);
-            createElement("div", { class: "error" }, "WebSocket error. Please refresh the page.");
+            createElement(
+                "div",
+                { class: "error" },
+                "WebSocket error. Please refresh the page."
+            );
         });
 
         this.render();
@@ -198,17 +228,28 @@ class App {
     }
 
     render() {
-        console.log('rendering...')
-        console.log('isChating', this.isChating)
+        console.log("rendering...");
+        console.log("isChating", this.isChating);
 
-        const board = this.state.board.length ? this.state.board : this.boardGrade;
-        const { gameData, messages, players, skills, status, bombs, effects } = this.state;
+        const board = this.state.board.length
+            ? this.state.board
+            : this.boardGrade;
+        const { gameData, messages, players, skills, status, bombs, effects } =
+            this.state;
         const appElement = createElement("div", { class: "container" }, [
             renderHeader(gameData),
             createElement("div", { class: "game" }, [
-                renderBoard(board, players, skills, status, bombs, effects, this.isChating),
-                renderChat(messages, this.socket, this.isChating)
-            ])
+                renderBoard(
+                    board,
+                    players,
+                    skills,
+                    status,
+                    bombs,
+                    effects,
+                    this.isChating
+                ),
+                renderChat(messages, this.socket, this.isChating),
+            ]),
         ]);
 
         render(appElement, this.container);

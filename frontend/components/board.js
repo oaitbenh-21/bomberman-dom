@@ -10,16 +10,18 @@ const renderBoard = (
       effects = [],
       isChating
 ) => {
-      if (!Array.isArray(board))
-            return createElement("div", { class: "board" }, "Loading...");
-      if (board.length === 0)
-            return createElement("div", { class: "board" }, [
-                  // create loading animation
-                  createElement("div", { class: "loading" }, [
-                        "loading...",
-                        createElement("div", { class: "loading-bar" }),
-                  ]),
-            ]);
+    bombs = Array.isArray(bombs) ? bombs : [];
+
+    if (!Array.isArray(board))
+        return createElement("div", { class: "board" }, "Loading...");
+    if (board.length === 0)
+        return createElement("div", { class: "board" }, [
+            // create loading animation
+            createElement("div", { class: "loading" }, [
+                "loading...",
+                createElement("div", { class: "loading-bar" }),
+            ]),
+        ]);
 
       // returned html
       return createElement(
