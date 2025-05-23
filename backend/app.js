@@ -26,4 +26,4 @@ wsServer.on('connection', (ws) => {
     }
 });
 
-console.log(`🚀 Websocket running at ws://localhost:8080`);
+console.log(`🚀 Websocket running at ws://0.0.0.0:8080`);
