@@ -133,9 +133,10 @@ class App {
                     this.render();
                     break;
                 case "bomb-server":
-                    this.state.bombs = [message];
+                    const index = this.state.bombs.length;
+                    this.state.bombs = this.state.bombs.push({ ...message, id: index });
                     setTimeout(() => {
-                        this.state.bombs = [];
+                        this.state.bombs = this.state.bombs.filter((bomb) => bomb.id != index);
                         this.render();
                     }, 2000);
                     this.render();
@@ -143,9 +144,10 @@ class App {
                 case "remove-server":
                     this.state.board[message.y][message.x] = 0;
                     if (this.state.pos) {
-                        this.state.effects = [message.pos]
+                        const index = this.state.effects.length;
+                        this.state.effects = { ...message, id: index };
                         setTimeout(() => {
-                            this.state.effects = []
+                            this.state.effects = this.state.effects.filter((effect) => effect.id != index);
                             this.render();
                         }, 400);
                     }
