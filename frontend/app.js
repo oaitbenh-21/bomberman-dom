@@ -1,6 +1,4 @@
 import {
-    createElement,
-    render,
     events,
     createStore,
 } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.10/dist/mini-framework-z01.min.js";
