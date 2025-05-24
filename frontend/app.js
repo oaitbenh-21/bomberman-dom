@@ -70,6 +70,7 @@ class App {
 
         // Run at 16 FPS (62.5ms per frame)
         if (deltaTime >= this.frameInterval) {
+            console.log(`Frame time: ${deltaTime.toFixed(2)}ms`);
             this.render();
             this.lastFrameTime = timestamp - (deltaTime % this.frameInterval);
         }
