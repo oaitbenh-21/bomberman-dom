@@ -28,4 +28,5 @@ export default function renderUI(container, state, socket, isChating) {
     ]);
 
     render(appElement, container);
+    
 }
