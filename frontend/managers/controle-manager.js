@@ -1,4 +1,3 @@
-
 // src/control-handler.js
 export default class ControlHandler {
     constructor(event, isChating, moveCallback, bombCallback) {
@@ -14,7 +13,13 @@ export default class ControlHandler {
 
     move(e) {
         if (this.isChating.getState()) return;
-
+        if (
+            ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(
+                e.key
+            )
+        ) {
+            e.preventDefault();
+        }
         switch (e.key) {
             case "ArrowDown":
                 this.moveCallback("b");
