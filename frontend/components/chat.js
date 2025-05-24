@@ -1,12 +1,15 @@
-import {
-    createElement,
-    createStore,
-} from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.7/dist/mini-framework-z01.min.js";
-
-const message = createStore("");
+import { createElement } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.10/dist/mini-framework-z01.min.js";
 
 const renderChat = (messages = [], ws, isChating) => {
-
+    function handleSubmit(e) {
+        e.preventDefault();
+        const input = e.target.elements.chat.value;
+        const msg = input.trim();
+        if (msg) {
+            sendMessage(msg);
+            e.target.elements.chat.value = "";
+        }
+    }
     const sendMessage = (message) => {
         const data = {
             type: "chat-client",
@@ -38,15 +41,7 @@ const renderChat = (messages = [], ws, isChating) => {
             "form",
             {
                 class: "chat-input",
-                onsubmit: (e) => {
-                    e.preventDefault();
-                    //   const input = e.target.elements.chat;
-                    const msg = message.getState().trim();
-                    if (msg) {
-                        sendMessage(msg);
-                        message.setState("");
-                    }
-                },
+                onsubmit: handleSubmit,
             },
             [
                 createElement("input", {
@@ -55,18 +50,12 @@ const renderChat = (messages = [], ws, isChating) => {
                         isChating.setState(true);
                         console.log("did it change:", isChating);
                     },
-                    onchange: (e) => {
-                        message.setState(e.target.value);
-                    },
-                    value: message.getState(),
                     type: "text",
                     name: "chat",
                     placeholder: "Type your message...",
-                    autocomplete: "off",
                 }),
                 createElement(
                     "button",
-                    { type: "submit" },
                     createElement("img", {
                         src: "../assets/img/send.png",
                         alt: "send",

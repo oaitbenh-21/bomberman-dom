@@ -3,7 +3,7 @@ import {
     render,
     events,
     createStore,
-} from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.8/dist/mini-framework-z01.min.js";
+} from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.10/dist/mini-framework-z01.min.js";
 import renderBoard from "./components/board.js";
 import renderHeader from "./components/header.js";
 import renderChat from "./components/chat.js";
@@ -259,6 +259,7 @@ class App {
 
         render(appElement, this.container);
     }
+
     // Added cleanup method
     destroy() {
         this.event.off("keydown", this.moveHandler);

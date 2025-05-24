@@ -1,4 +1,4 @@
-import { createElement } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.7/dist/mini-framework-z01.min.js";
+import { createElement } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.10/dist/mini-framework-z01.min.js";
 
 const renderHeader = (gameData={count: 0,time: "00:00",lifes: 2,bombs: 1,}) => {
   return createElement('header', { class: 'header' },
