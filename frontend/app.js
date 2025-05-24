@@ -164,11 +164,9 @@ class App {
                     this.render();
                     break;
                 case "bomb-server":
+
                     const index = this.state.bombs.length;
-                    this.state.bombs = this.state.bombs.push({
-                        ...message,
-                        id: index,
-                    });
+                    this.state.bombs = [...this.state.bombs, { ...message, id: index }];
                     setTimeout(() => {
                         this.state.bombs = this.state.bombs.filter(
                             (bomb) => bomb.id != index
@@ -179,13 +177,11 @@ class App {
                     break;
                 case "remove-server":
                     this.state.board[message.y][message.x] = 0;
-                    if (this.state.pos) {
+                    if (message.pos) {
                         const index = this.state.effects.length;
-                        this.state.effects = { ...message, id: index };
+                        this.state.effects = [...this.state.effects, { ...message, id: index }];
                         setTimeout(() => {
-                            this.state.effects = this.state.effects.filter(
-                                (effect) => effect.id != index
-                            );
+                            this.state.effects = this.state.effects.filter((effect) => effect.id != index);
                             this.render();
                         }, 400);
                     }
@@ -212,6 +208,8 @@ class App {
                     console.error(
                         "There is Websocket Message you don't Handle it"
                     );
+                    console.log("Type : ", message);
+
                     break;
             }
         });
@@ -233,9 +231,6 @@ class App {
     }
 
     render() {
-        console.log("rendering...");
-        console.log("isChating", this.isChating);
-
         const board = this.state.board.length
             ? this.state.board
             : this.boardGrade;
