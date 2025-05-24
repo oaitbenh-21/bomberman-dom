@@ -54,13 +54,12 @@ const renderChat = (messages = [], ws, isChating) => {
                     name: "chat",
                     placeholder: "Type your message...",
                 }),
-                createElement(
-                    "button",
+                createElement("button", { type: "submit" }, [
                     createElement("img", {
                         src: "../assets/img/send.png",
                         alt: "send",
-                    })
-                ),
+                    }),
+                ]),
             ]
         ),
     ]);
