@@ -8,6 +8,7 @@ import renderBoard from "./components/board.js";
 import renderHeader from "./components/header.js";
 import renderChat from "./components/chat.js";
 import Socket from "./src/socket.js";
+import GameState from "./state-manager.js";
 
 class App {
     constructor() {
@@ -16,34 +17,8 @@ class App {
 
         this.setupControls();
 
-        // is the user chatting or playing
+        this.gameState = new GameState();
 
-        this.state = {
-            player: "Player 1",
-            players: [],
-            skills: [],
-            effects: [],
-            bombs: [],
-            board: [],
-            countDown: {
-                id: undefined,
-                timer: 4,
-            },
-            status: {
-                number: 0,
-                title: "Waiting Room",
-                message: "Waiting for players",
-            },
-            message: "message",
-            winner: "",
-            gameData: {
-                count: 0,
-                time: "00:00",
-                lifes: 0,
-                bombs: 0,
-            },
-            messages: [{ username: "System", message: "Welcome to the chat!" }],
-        };
         this.container = document.getElementById("app");
         this.boardGrade = [];
         this.socket = null;
@@ -105,99 +80,123 @@ class App {
             const message = JSON.parse(data);
             switch (message.type) {
                 case "board-server":
-                    this.state.board = message.board;
+                    this.gameState.getState().board = message.board;
                     this.render();
                     break;
                 case "chat-server":
-                    this.state.messages.push(message);
+                    this.gameState.getState().messages.push(message);
                     this.render();
                     break;
                 case "data-server":
-                    this.state.gameData.lifes = message.lifes;
-                    this.state.gameData.bombs = message.bombs;
+                    this.gameState.getState().gameData.lifes = message.lifes;
+                    this.gameState.getState().bombs = message.bombs;
                     this.render();
                     break;
                 case "count-server":
-                    this.state.gameData.count = message.count;
+                    this.gameState.getState().gameData.count = message.count;
                     this.render();
                     break;
                 case "join-server":
-                    this.state.players = [...this.state.players, message];
-                    this.state.countDown.timer = 4;
+                    this.gameState.getState().players = [
+                        ...this.gameState.getState().players,
+                        message,
+                    ];
+                    this.gameState.getState().countDown.timer = 4;
                     let count = () => {
-                        this.state.countDown.timer--;
-                        if (this.state.countDown.timer >= 0) {
-                            this.state.status.title = "Starting...";
-                            this.state.status.message = `Waiting ${this.state.countDown.timer}`;
-                            this.state.status.number = 0;
+                        this.gameState.getState().countDown.timer--;
+                        if (this.gameState.getState().countDown.timer >= 0) {
+                            this.gameState.getState().status.title =
+                                "Starting...";
+                            this.gameState.getState().status.message = `Waiting ${
+                                this.gameState.getState().countDown.timer
+                            }`;
+                            this.gameState.getState().status.number = 0;
                             this.render();
                         } else {
-                            this.state.status.title = "Game Started";
-                            this.state.status.message = "";
-                            this.state.status.number = 1;
+                            this.gameState.getState().status.title =
+                                "Game Started";
+                            this.gameState.getState().status.message = "";
+                            this.gameState.getState().status.number = 1;
                             this.render();
-                            clearInterval(this.state.countDown.id);
+                            clearInterval(
+                                this.gameState.getState().countDown.id
+                            );
                         }
                         this.render();
                     };
-                    if (this.state.players.length >= 2) {
-                        if (this.state.countDown.id == undefined) {
-                            this.state.countDown.id = setInterval(count, 1000);
+                    if (this.gameState.getState().players.length >= 2) {
+                        if (
+                            this.gameState.getState().countDown.id == undefined
+                        ) {
+                            this.gameState.getState().countDown.id =
+                                setInterval(count, 1000);
                         }
                     }
                     this.render();
                     break;
                 case "kill-server":
-                    this.state.players = this.state.players.filter(
-                        (player) => player.id != message.id
-                    );
-                    this.state.skills = this.state.skills.filter(
-                        (skill) => skill.id != message.id
-                    );
-                    if (this.state.pos) {
-                        this.state.effect = message.pos;
+                    this.gameState.getState().players = this.gameState
+                        .getState()
+                        .players.filter((player) => player.id != message.id);
+                    this.gameState.getState().skills = this.gameState
+                        .getState()
+                        .skills.filter((skill) => skill.id != message.id);
+                    if (this.gameState.getState().pos) {
+                        this.gameState.getState().effect = message.pos;
                     }
                     this.render();
                     break;
                 case "skill-server":
-                    this.state.skills = [...this.state.skills, message];
+                    this.gameState.getState().skills = [
+                        ...this.gameState.getState().skills,
+                        message,
+                    ];
                     this.render();
                     break;
                 case "bomb-server":
-
-                    const index = this.state.bombs.length;
-                    this.state.bombs = [...this.state.bombs, { ...message, id: index }];
+                    const index = this.gameState.getState().bombs.length;
+                    this.gameState.getState().bombs = [
+                        ...this.gameState.getState().bombs,
+                        { ...message, id: index },
+                    ];
                     setTimeout(() => {
-                        this.state.bombs = this.state.bombs.filter(
-                            (bomb) => bomb.id != index
-                        );
+                        this.gameState.getState().bombs = this.gameState
+                            .getState()
+                            .bombs.filter((bomb) => bomb.id != index);
                         this.render();
                     }, 2000);
                     this.render();
                     break;
                 case "remove-server":
-                    this.state.board[message.y][message.x] = 0;
+                    this.gameState.getState().board[message.y][message.x] = 0;
                     if (message.pos) {
-                        const index = this.state.effects.length;
-                        this.state.effects = [...this.state.effects, { ...message, id: index }];
+                        const index = this.gameState.getState().effects.length;
+                        this.gameState.getState().effects = [
+                            ...this.gameState.getState().effects,
+                            { ...message, id: index },
+                        ];
                         setTimeout(() => {
-                            this.state.effects = this.state.effects.filter((effect) => effect.id != index);
+                            this.gameState.getState().effects = this.gameState
+                                .getState()
+                                .effects.filter((effect) => effect.id != index);
                             this.render();
                         }, 400);
                     }
                     this.render();
                     break;
                 case "move-server":
-                    this.state.players = this.state.players.map((player) => {
-                        if (player.id === message.player.id) {
-                            return { ...player, pos: message.player.pos };
-                        }
-                        return player;
-                    });
+                    this.gameState.getState().players = this.gameState
+                        .getState()
+                        .players.map((player) => {
+                            if (player.id === message.player.id) {
+                                return { ...player, pos: message.player.pos };
+                            }
+                            return player;
+                        });
                     this.render();
                     break;
                 case "gameover-server":
-                    this.state.status = {
+                    this.gameState.getState().status = {
                         number: 0,
                         title: "Game Over",
                         message: `the Winner is ${message.winner}`,
@@ -231,11 +230,11 @@ class App {
     }
 
     render() {
-        const board = this.state.board.length
-            ? this.state.board
-            : this.boardGrade;
+        const state = this.gameState.getState();
+        const board = state.board.length ? state.board : this.boardGrade;
         const { gameData, messages, players, skills, status, bombs, effects } =
-            this.state;
+            state;
+
         const appElement = createElement("div", { class: "container" }, [
             renderHeader(gameData),
             createElement("div", { class: "game" }, [
