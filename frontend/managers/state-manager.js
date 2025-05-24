@@ -36,6 +36,13 @@ export default class GameState {
         return this.state;
     }
 
+    addBomb(pos) {
+        this.state.bombs.push(pos);
+    }
+    addMessage(message) {
+        this.state.messages.push(message);
+    }
+
     updateBoard(board) {
         this.state.board = board;
     }
