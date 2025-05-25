@@ -21,7 +21,7 @@ class App {
         this.lastFrameTime = 0;
         this.animationFrameId = null;
         this.isRunning = false;
-
+        this.moveNumber = 0;
         this.gameState = new GameState();
         this.socket = new Socket();
 
@@ -51,7 +51,8 @@ class App {
             this.event,
             this.isChating,
             this.sendMove,
-            this.dropBomb
+            this.dropBomb,
+            this.gameState
         );
 
         this.startGameLoop();
@@ -60,21 +61,30 @@ class App {
     startGameLoop() {
         this.isRunning = true;
         this.lastFrameTime = performance.now();
-        // this.render(); // Initial render
         this.animationFrameId = requestAnimationFrame(this.gameLoop);
     }
-    gameLoop(timestamp) {
+    gameLoop(/*timestamp*/) {
         if (!this.isRunning) return;
 
         // Calculate time since last frame
-        const deltaTime = timestamp - this.lastFrameTime;
-
-        // Run at 16 FPS (62.5ms per frame)
-        if (deltaTime >= this.frameInterval) {
-            console.log(`Frame time: ${deltaTime.toFixed(2)}ms`);
+        // const deltaTime = timestamp - this.lastFrameTime;
+        if (this.moveNumber == 5) {
+            Object.entries(this.gameState.state.Movement).forEach(([key, value]) => {
+                if (value) {
+                    this.sendMove(key);
+                } else {
+                    this.gameState.removeMoveDirection(key);
+                }
+            });
+            this.moveNumber = 0;
             this.render();
-            this.lastFrameTime = timestamp - (deltaTime % this.frameInterval);
         }
+        this.moveNumber++;
+        // Run at 16 FPS (62.5ms per frame)
+        // if (deltaTime >= this.frameInterval) {
+        //     // console.log(`Frame time: ${deltaTime.toFixed(2)}ms`);
+        //     this.lastFrameTime = timestamp - (deltaTime % this.frameInterval);
+        // }
 
         // Keep requesting new frames
         this.animationFrameId = requestAnimationFrame(this.gameLoop);

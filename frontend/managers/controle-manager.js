@@ -1,45 +1,46 @@
 // src/control-handler.js
+const DirectionMap = {
+    "ArrowUp": "t",
+    "ArrowDown": "b",
+    "ArrowLeft": "l",
+    "ArrowRight": "r",
+};
+
 export default class ControlHandler {
-    constructor(event, isChating, moveCallback, bombCallback) {
+    constructor(event, isChating, moveCallback, bombCallback, gameState) {
+        this.gameState = gameState;
         this.event = event;
         this.isChating = isChating;
-
         this.moveCallback = moveCallback;
         this.bombCallback = bombCallback;
 
         this.move = this.move.bind(this);
         this.event.on("keydown", this.move);
+        this.event.on("keyup", this.reset);
     }
 
     move(e) {
         if (this.isChating.getState()) return;
-        if (
-            ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(
-                e.key
-            )
-        ) {
+        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
             e.preventDefault();
+            this.gameState.addMoveDirection(DirectionMap[e.key]);
         }
-        switch (e.key) {
-            case "ArrowDown":
-                this.moveCallback("b");
-                break;
-            case "ArrowUp":
-                this.moveCallback("t");
-                break;
-            case "ArrowLeft":
-                this.moveCallback("l");
-                break;
-            case "ArrowRight":
-                this.moveCallback("r");
-                break;
-            case " ":
-                this.bombCallback();
-                break;
+
+        if (e.key === " ") {
+            e.preventDefault();
+            this.bombCallback();
         }
     }
 
+    reset = (e) => {
+        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+            e.preventDefault();
+            this.gameState.removeMoveDirection(DirectionMap[e.key]);
+        }
+    };
+
     destroy() {
         this.event.off("keydown", this.move);
+        this.event.off("keyup", this.reset);
     }
 }

@@ -5,6 +5,13 @@ export default class GameState {
 
     reset() {
         this.state = {
+            Movement: {
+                "t": false,
+                "b": false,
+                "l": false,
+                "r": false,
+            },
+            moveNumber: 0,
             player: "Player 1",
             players: [],
             skills: [],
@@ -42,7 +49,12 @@ export default class GameState {
     addMessage(message) {
         this.state.messages.push(message);
     }
-
+    addMoveDirection(direction) {
+        this.state.Movement[direction] = true;
+    }
+    removeMoveDirection(direction) {
+        this.state.Movement[direction] = false;
+    }
     updateBoard(board) {
         this.state.board = board;
     }
