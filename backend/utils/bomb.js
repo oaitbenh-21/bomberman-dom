@@ -16,7 +16,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
         currentRoom.Players.forEach((player) => {
             if (Math.floor(player.pos.x / 40) == xPos && Math.floor(player.pos.y / 40) == yPos) {
                 player.lifes--;
-                if (player.lifes == 0) {
+                if (player.lifes <= 0) {
                     currentRoom.broadcast(JSON.stringify({
                         type: "kill-server",
                         id: player.id,
@@ -33,7 +33,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
             { x: 1, y: 0 }   // Right
         ];
         directions.forEach((dir) => {
-            for (let i = 0; i <= flames; i++) {
+            for (let i = 1; i <= flames; i++) {
                 let coord = { y: yPos + (dir.y * i), x: xPos + (dir.x * i) };
                 if (currentRoom.Board[coord.y][coord.x] == 2) return;
                 currentRoom.Players.forEach((player) => {
@@ -55,8 +55,8 @@ export function BombPositions(BombPos, currentRoom, flames) {
                     y: coord.y,
                     pos: { left: coord.x * 40, top: coord.y * 40 }
                 }));
-                let skillindex = Math.floor(Math.random() * 4)
-                let id = v4()
+                let skillindex = Math.floor(Math.random() * 10);
+                let id = v4();
                 if (skills[skillindex] && currentRoom.Board[coord.y][coord.x] == 3) {
                     currentRoom.Board[coord.y][coord.x] = {
                         name: skills[skillindex],
@@ -72,13 +72,6 @@ export function BombPositions(BombPos, currentRoom, flames) {
                     currentRoom.Board[coord.y][coord.x] = 0;
                 }
             }
-        });
-
-        currentRoom.Players.forEach((player) => {
-            player.ws.send(JSON.stringify({
-                type: "lifes-server",
-                lifes: player.lifes,
-            }));
         });
 
         if (currentRoom.checkWinner() == 0) return;
