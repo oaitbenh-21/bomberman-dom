@@ -60,6 +60,7 @@ class App {
     startGameLoop() {
         this.isRunning = true;
         this.lastFrameTime = performance.now();
+        // this.render(); // Initial render
         this.animationFrameId = requestAnimationFrame(this.gameLoop);
     }
     gameLoop(timestamp) {

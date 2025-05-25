@@ -17,7 +17,6 @@ export default class SocketHandler {
                 this.render();
                 break;
             case "data-server":
-            case "data-server":
                 const state = this.gameState.getState();
                 state.gameData.lifes = message.lifes;
                 state.gameData.bombs = message.bombs; // Correct place
@@ -37,9 +36,8 @@ export default class SocketHandler {
                     this.gameState.getState().countDown.timer--;
                     if (this.gameState.getState().countDown.timer >= 0) {
                         this.gameState.getState().status.title = "Starting...";
-                        this.gameState.getState().status.message = `Waiting ${
-                            this.gameState.getState().countDown.timer
-                        }`;
+                        this.gameState.getState().status.message = `Waiting ${this.gameState.getState().countDown.timer
+                            }`;
                         this.gameState.getState().status.number = 0;
                         this.render();
                     } else {
@@ -105,6 +103,7 @@ export default class SocketHandler {
                             .effects.filter((effect) => effect.id != index);
                         this.render();
                     }, 400);
+                    this.socket.send(JSON.stringify({}));
                 }
                 this.render();
                 break;
