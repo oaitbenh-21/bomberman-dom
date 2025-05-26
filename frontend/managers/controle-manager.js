@@ -33,10 +33,9 @@ export default class ControlHandler {
     }
 
     reset = (e) => {
-        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        
             e.preventDefault();
-            this.gameState.removeMoveDirection(DirectionMap[e.key]);
-        }
+            this.gameState.removeMoveDirection(DirectionMap[e.key] ? DirectionMap[e.key] : null);
     };
 
     destroy() {

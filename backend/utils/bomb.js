@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 
-let skills = ["flames", "bombs", "speed", "lifes"];
+let skills = [undefined, undefined, undefined, undefined, "flames", "bombs", "speed", "lifes"];
 
 export function BombPositions(BombPos, currentRoom, flames) {
     setTimeout(() => {
