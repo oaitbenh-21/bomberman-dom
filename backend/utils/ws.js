@@ -30,7 +30,7 @@ export function handlePlayerAction(currentRoom, player, data) {
                         player.Bombs++;
                   }, 2000);
 
-                  const BombPos = { x: player.pos.x, y: player.pos.y };
+                  const BombPos = { x: Math.floor(player.pos.x / 40) * 40 + 5, y: Math.floor(player.pos.y / 40) * 40 + 5 };
                   currentRoom.broadcast(JSON.stringify({
                         type: "bomb-server",
                         pos: { x: BombPos.x, y: BombPos.y },
