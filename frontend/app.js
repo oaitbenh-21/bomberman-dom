@@ -43,7 +43,7 @@ class App {
         this.socketHandler = new SocketHandler(
             this.socket,
             this.gameState,
-            () => this.scheduleRender() // Schedule render on state changes
+            () => this.render() // Schedule render on state changes
         );
         this.socketHandler.setup();
 
@@ -61,14 +61,11 @@ class App {
     startGameLoop() {
         this.isRunning = true;
         this.lastFrameTime = performance.now();
+        console.log("starting request Animation Frame");
         this.animationFrameId = requestAnimationFrame(this.gameLoop);
     }
-    gameLoop(/*timestamp*/) {
-        if (!this.isRunning) return;
-
-        // Calculate time since last frame
-        // const deltaTime = timestamp - this.lastFrameTime;
-        if (this.moveNumber == 5) {
+    gameLoop() {
+        if (this.moveNumber == 10) {
             Object.entries(this.gameState.state.Movement).forEach(([key, value]) => {
                 if (value) {
                     this.sendMove(key);
@@ -77,16 +74,8 @@ class App {
                 }
             });
             this.moveNumber = 0;
-            this.render();
         }
         this.moveNumber++;
-        // Run at 16 FPS (62.5ms per frame)
-        // if (deltaTime >= this.frameInterval) {
-        //     // console.log(`Frame time: ${deltaTime.toFixed(2)}ms`);
-        //     this.lastFrameTime = timestamp - (deltaTime % this.frameInterval);
-        // }
-
-        // Keep requesting new frames
         this.animationFrameId = requestAnimationFrame(this.gameLoop);
     }
 

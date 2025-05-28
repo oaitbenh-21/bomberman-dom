@@ -14,17 +14,14 @@ export default class SocketHandler {
                 break;
             case "chat-server":
                 this.gameState.addMessage(message);
-                this.render();
                 break;
             case "data-server":
                 const state = this.gameState.getState();
                 state.gameData.lifes = message.lifes;
                 state.gameData.bombs = message.bombs; // Correct place
-                this.render();
                 break;
             case "count-server":
                 this.gameState.getState().gameData.count = message.count;
-                this.render();
                 break;
             case "join-server":
                 this.gameState.getState().players = [
@@ -39,33 +36,24 @@ export default class SocketHandler {
                         this.gameState.getState().status.message = `Waiting ${this.gameState.getState().countDown.timer
                             }`;
                         this.gameState.getState().status.number = 0;
-                        this.render();
                     } else {
                         this.gameState.getState().status.title = "Game Started";
                         this.gameState.getState().status.message = "";
                         this.gameState.getState().status.number = 1;
-                        this.render();
                         clearInterval(this.gameState.getState().countDown.id);
                     }
                     this.render();
                 };
                 if (this.gameState.getState().players.length >= 2) {
                     if (this.gameState.getState().countDown.id == undefined) {
-                        this.gameState.getState().countDown.id = setInterval(
-                            count,
-                            1000
-                        );
+                        this.gameState.getState().countDown.id = setInterval(count, 1000);
                     }
                 }
                 this.render();
                 break;
             case "kill-server":
-                this.gameState.getState().players = this.gameState
-                    .getState()
-                    .players.filter((player) => player.id != message.id);
-                this.gameState.getState().skills = this.gameState
-                    .getState()
-                    .skills.filter((skill) => skill.id != message.id);
+                this.gameState.getState().players = this.gameState.getState().players.filter((player) => player.id != message.id);
+                this.gameState.getState().skills = this.gameState.getState().skills.filter((skill) => skill.id != message.id);
                 if (this.gameState.getState().pos) {
                     this.gameState.getState().effect = message.pos;
                 }
@@ -131,7 +119,6 @@ export default class SocketHandler {
                 console.log("Type : ", message);
                 break;
         }
-        this.render();
     }
 
     setup() {

@@ -72,6 +72,7 @@ export class Player {
         this.Bombs = 1;
         this.lifes = 3;
         this.Flames = 1;
+        this.Speed = 10;
         this.ws = conn;
     }
 
@@ -159,9 +160,9 @@ export class Player {
                             this.Bombs++;
                             break;
                         case "speed":
-                            this.Speed += 2.5;
+                            this.Speed += 5;
                             setTimeout(() => {
-                                this.Speed -= 2.5;
+                                this.Speed -= 5;
                             }, 5000);
                             break;
                         case "lifes":
@@ -191,8 +192,8 @@ export class Player {
         return false;
     }
 
-    Left() { return this.move(-10, 0); }
-    Right() { return this.move(10, 0); }
-    Top() { return this.move(0, -10); }
-    Bottom() { return this.move(0, 10); }
+    Left() { return this.move(-this.Speed, 0); }
+    Right() { return this.move(this.Speed, 0); }
+    Top() { return this.move(0, -this.Speed); }
+    Bottom() { return this.move(0, this.Speed); }
 }
