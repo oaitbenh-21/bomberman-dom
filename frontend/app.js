@@ -42,9 +42,7 @@ class App {
     init() {
         this.socketHandler = new SocketHandler(
             this.socket,
-            this.gameState,
-            () => this.render() // Schedule render on state changes
-        );
+            this.gameState);
         this.socketHandler.setup();
 
         this.controlHandler = new ControlHandler(
@@ -74,6 +72,7 @@ class App {
                 }
             });
             this.moveNumber = 0;
+            this.render();
         }
         this.moveNumber++;
         this.animationFrameId = requestAnimationFrame(this.gameLoop);

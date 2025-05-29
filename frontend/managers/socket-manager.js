@@ -42,14 +42,12 @@ export default class SocketHandler {
                         this.gameState.getState().status.number = 1;
                         clearInterval(this.gameState.getState().countDown.id);
                     }
-                    this.render();
                 };
                 if (this.gameState.getState().players.length >= 2) {
                     if (this.gameState.getState().countDown.id == undefined) {
                         this.gameState.getState().countDown.id = setInterval(count, 1000);
                     }
                 }
-                this.render();
                 break;
             case "kill-server":
                 this.gameState.getState().players = this.gameState.getState().players.filter((player) => player.id != message.id);
@@ -57,14 +55,12 @@ export default class SocketHandler {
                 if (this.gameState.getState().pos) {
                     this.gameState.getState().effect = message.pos;
                 }
-                this.render();
                 break;
             case "skill-server":
                 this.gameState.getState().skills = [
                     ...this.gameState.getState().skills,
                     message,
                 ];
-                this.render();
                 break;
             case "bomb-server":
                 const index = this.gameState.getState().bombs.length;
@@ -73,9 +69,7 @@ export default class SocketHandler {
                     this.gameState.getState().bombs = this.gameState
                         .getState()
                         .bombs.filter((bomb) => bomb.id != index);
-                    this.render();
                 }, 2000);
-                this.render();
                 break;
             case "remove-server":
                 this.gameState.getState().board[message.y][message.x] = 0;
@@ -89,11 +83,9 @@ export default class SocketHandler {
                         this.gameState.getState().effects = this.gameState
                             .getState()
                             .effects.filter((effect) => effect.id != index);
-                        this.render();
                     }, 400);
                     this.socket.send(JSON.stringify({}));
                 }
-                this.render();
                 break;
             case "move-server":
                 this.gameState.getState().players = this.gameState
@@ -104,7 +96,6 @@ export default class SocketHandler {
                         }
                         return player;
                     });
-                this.render();
                 break;
             case "gameover-server":
                 this.gameState.getState().status = {
@@ -112,7 +103,6 @@ export default class SocketHandler {
                     title: "Game Over",
                     message: `the Winner is ${message.winner}`,
                 };
-                this.render();
                 break;
             default:
                 console.error("There is Websocket Message you don't Handle it");
