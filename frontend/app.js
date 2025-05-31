@@ -1,18 +1,18 @@
 import {
     events,
     createStore,
-} from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.10/dist/mini-framework-z01.min.js";
+} from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.22/dist/mini-framework-z01.min.js";
 
 import Socket from "./src/socket.js";
 import GameState from "./managers/state-manager.js";
 import SocketHandler from "./managers/socket-manager.js";
-import ControlHandler from "./managers/controle-manager.js";
+import ControlHandler from "./managers/control-manager.js";
 import renderUI from "./managers/ui-manager.js";
 
 class App {
     constructor() {
         this.event = events;
-        this.isChating = createStore(false);
+        this.isChatting = createStore(false);
         this.container = document.getElementById("app");
 
         // Game loop controls
@@ -47,7 +47,7 @@ class App {
 
         this.controlHandler = new ControlHandler(
             this.event,
-            this.isChating,
+            this.isChatting,
             this.sendMove,
             this.dropBomb,
             this.gameState
@@ -64,13 +64,15 @@ class App {
     }
     gameLoop() {
         if (this.moveNumber == 10) {
-            Object.entries(this.gameState.state.Movement).forEach(([key, value]) => {
-                if (value) {
-                    this.sendMove(key);
-                } else {
-                    this.gameState.removeMoveDirection(key);
-                }
-            });
+            if (this.gameState.state && this.gameState.state.Movement) {
+                Object.entries(this.gameState.state.Movement).forEach(([key, value]) => {
+                    if (value) {
+                        this.sendMove(key);
+                    } else {
+                        this.gameState.removeMoveDirection(key);
+                    }
+                });
+            }
             this.moveNumber = 0;
             this.render();
         }
@@ -90,7 +92,7 @@ class App {
             this.container,
             this.gameState.getState(),
             this.socket,
-            this.isChating
+            this.isChatting
         );
     }
 

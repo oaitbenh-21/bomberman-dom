@@ -1,5 +1,6 @@
-import { createElement } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.10/dist/mini-framework-z01.min.js";
+import { createElement } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.22/dist/mini-framework-z01.min.js";
 import { endGame } from "./endGame.js";
+import Players from "./players.js";
 
 const renderBoard = (
       board = [],
@@ -47,14 +48,7 @@ const renderBoard = (
                         ])
                   ),
                   // render players
-                  ...players.map((player) =>
-                        createElement("img", {
-                              class: "player",
-                              src: "./assets/img/down-1.png",
-                              style: `left: 0px; top: 0px; transform: translate(${player.pos?.x}px, ${player.pos?.y}px);`,
-                              id: player.id,
-                        })
-                  ),
+                  Players(players),
                   // render image of players
                   ...skills.map((skill) =>
                         createElement("img", {

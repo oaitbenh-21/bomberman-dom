@@ -58,8 +58,4 @@ export default class GameState {
     updateBoard(board) {
         this.state.board = board;
     }
-
-    addMessage(message) {
-        this.state.messages.push(message);
-    }
 }
