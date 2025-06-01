@@ -96,7 +96,7 @@ export default class SocketHandler {
 
         if (message?.remove?.id && message?.effect.pos) {
           id = message.remove.id
-          pos = message.pos
+          pos = message.effect.pos
         }
 
         console.log('remove server message', id, pos)
