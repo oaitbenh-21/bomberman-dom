@@ -7,10 +7,10 @@ export function BombPositions(BombPos, currentRoom, flames) {
         let xPos = Math.floor(BombPos.x / 40)
         let yPos = Math.floor(BombPos.y / 40)
         currentRoom.broadcast(JSON.stringify({
-                    type: "remove-server",
-                    remove: { id: yPos * 17 + xPos, },
-                    effect: { id: v4(), pos: { left: xPos * 40, top: yPos * 40 } }
-                }));
+            type: "remove-server",
+            remove: { id: yPos * 17 + xPos, },
+            effect: { id: v4(), pos: { left: xPos * 40, top: yPos * 40 } }
+        }));
         let winner = "draw";
         currentRoom.Players.forEach((player) => {
             if (Math.floor(player.pos.x / 40) == xPos && Math.floor(player.pos.y / 40) == yPos) {

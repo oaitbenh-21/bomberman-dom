@@ -93,9 +93,10 @@ export default class SocketHandler {
       case "remove-server": {
         let id = null;
         let pos = null;
+  
         if (message?.remove?.id && message?.pos) {
-          const id = message.remove.id
-          const pos = message.pos
+          id = message.remove.id
+          pos = message.pos
         }
 
         console.log('remove server message', id, pos)
