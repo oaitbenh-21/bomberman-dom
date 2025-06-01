@@ -20,12 +20,14 @@ export function setBoxes(boxes) {
  * destroy the box.
  */
 export function destroyBox(id, newPos) {
-    console.log('destroy is called:', id , newPos)
-    const signal = boxSignals[id];
+    console.log('destroy is called:', id, newPos)
+    const signal = boxSignals[String(id)];
     if (signal) {
         signal.set({ x: newPos.x, y: newPos.y, distroyed: true });
     } else {
         console.warn(`No signal found for player ${id}`);
+        console.warn('box signal', signal)
+        console.warn('all signals:', boxSignals)
     }
 }
 /**
@@ -50,7 +52,7 @@ const Boxes = () => {
                 id,
                 key: id,
                 onMount(el) {
-                     const stop = effect(() => {
+                    const stop = effect(() => {
                         const state = signal.get();
                         console.log('signal to remove the brick', state)
                         if (state.distroyed) {

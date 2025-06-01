@@ -91,16 +91,23 @@ export default class SocketHandler {
       }
 
       case "remove-server": {
-        console.log('remove server message', message)
+        let id = null;
+        let pos = null;
+        if (message?.remove?.id && message?.pos) {
+          const id = message.remove.id
+          const pos = message.pos
+        }
+
+        console.log('remove server message', id, pos)
         // const state = this.gameState.getState();
         // state.board[message.y][message.x] = 0;
-        if (message.pos) {
+        if (id && pos) {
           // const index = state.effects.length;
           // state.effects.push({ ...message, id: index });
           setTimeout(() => {
             // state.effects = state.effects.filter(e => e.id !== index);
             // this.render();
-            destroyBox(message.remove.id , message.pos);
+            destroyBox(id, pos);
           }, 400);
         }
         break;

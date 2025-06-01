@@ -11,7 +11,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
                     remove: { id: yPos * 17 + xPos, },
                     effect: { id: v4(), pos: { left: xPos * 40, top: yPos * 40 } }
                 }));
-        Pet winner = "draw";
+        let winner = "draw";
         currentRoom.Players.forEach((player) => {
             if (Math.floor(player.pos.x / 40) == xPos && Math.floor(player.pos.y / 40) == yPos) {
                 player.lifes--;
