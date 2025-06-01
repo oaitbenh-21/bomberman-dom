@@ -58,9 +58,7 @@ class VirtualDOM {
     const element = document.createElement(node.tag);
 
     for (const [attr, value] of Object.entries(node.attrs || {})) {
-      console.log('looking for children')
       if (attr === "onMount") {
-        console.log('Dom: onMount detected')
         // We'll defer this until after mounting
         element._onMount = value;
 

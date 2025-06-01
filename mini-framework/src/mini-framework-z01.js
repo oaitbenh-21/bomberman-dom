@@ -59,10 +59,23 @@ export const createEventManager = () => miniFramework.createEventManager();
 export const createSignal = (...args) => miniFramework.createSignal(...args);
 
 export const effect = (fn) => {
-  Signal.currentEffect = fn;
-  fn();
-  Signal.currentEffect = null;
+  let stopped = false;
+
+  const wrapped = () => {
+    if (stopped) return;
+    Signal.currentEffect = wrapped;
+    fn();
+    Signal.currentEffect = null;
+  };
+
+  wrapped();
+
+  // Return stop function
+  return () => {
+    stopped = true;
+  };
 };
+
 
 // Direct access to core singletons if needed
 export const dom = miniFramework.DOM;

@@ -1,3 +1,4 @@
+import { destroyBox, setBoxes } from "../components/box.js";
 import { setPlayers, setPlayerPosition } from "../components/players.js";
 
 export default class SocketHandler {
@@ -10,9 +11,9 @@ export default class SocketHandler {
   handleMessage(data) {
     const message = JSON.parse(data);
     switch (message.type) {
-      case "board-server":
+      case "board-server": destroyBox
         this.gameState.getState().board = message.board;
-        this.render();
+        setBoxes(message.board)
         break;
 
       case "chat-server":
@@ -84,27 +85,28 @@ export default class SocketHandler {
           this.gameState.getState().bombs = this.gameState
             .getState()
             .bombs.filter(bomb => bomb.id !== index);
-          this.render();
+          // this.render();
         }, 2000);
         break;
       }
 
       case "remove-server": {
-        const state = this.gameState.getState();
-        state.board[message.y][message.x] = 0;
+        console.log('remove server message', message)
+        // const state = this.gameState.getState();
+        // state.board[message.y][message.x] = 0;
         if (message.pos) {
-          const index = state.effects.length;
-          state.effects.push({ ...message, id: index });
+          // const index = state.effects.length;
+          // state.effects.push({ ...message, id: index });
           setTimeout(() => {
-            state.effects = state.effects.filter(e => e.id !== index);
-            this.render();
+            // state.effects = state.effects.filter(e => e.id !== index);
+            // this.render();
+            destroyBox(message.remove.id , message.pos);
           }, 400);
         }
         break;
       }
 
       case "move-server": {
-        console.log("move-server message:", message);
         setPlayerPosition(message.player.id, message.player.pos);
         break;
       }

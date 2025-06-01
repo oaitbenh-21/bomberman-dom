@@ -1,6 +1,6 @@
 export default class Socket {
     constructor() {
-        this.socket = new WebSocket("ws://localhost:8080");
+        this.socket = new WebSocket("ws://10.1.3.5:8080");
     }
 
     send(data) {
@@ -33,5 +33,4 @@ export default class Socket {
     close() {
         this.socket.close();
     }
-
 }

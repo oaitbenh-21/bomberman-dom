@@ -10,14 +10,14 @@ import renderBoard from "../components/board.js";
 // src/ui-renderer.js
 export default function renderUI(container, state, socket, isChating) {
     console.log("Rendering UI with state:", state);
-    
-    const board = state.board.length ? state.board : [];
+
+    const boxes = state.board.length ? state.board : [];
 
     const appElement = createElement("div", { class: "container" }, [
         renderHeader(state.gameData),
         createElement("div", { class: "game" }, [
             renderBoard(
-                board,
+                boxes,
                 state.players,
                 state.skills,
                 state.status,
@@ -30,5 +30,4 @@ export default function renderUI(container, state, socket, isChating) {
     ]);
 
     render(appElement, container);
-    
 }

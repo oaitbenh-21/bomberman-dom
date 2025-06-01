@@ -1,9 +1,10 @@
 import { createElement } from "../../mini-framework/src/mini-framework-z01.js";
 import { endGame } from "./endGame.js";
 import Players, { setPlayers } from "./players.js";
+import Boxes, { setBoxes } from "./box.js";
 
 const renderBoard = (
-      board = [],
+      boxes = [],
       players = [],
       skills = [],
       status = {},
@@ -11,18 +12,35 @@ const renderBoard = (
       effects = [],
       isChating
 ) => {
-    bombs = Array.isArray(bombs) ? bombs : [];
-    setPlayers(players);
-    if (!Array.isArray(board))
-        return createElement("div", { class: "board" }, "Loading...");
-    if (board.length === 0)
-        return createElement("div", { class: "board" }, [
-            // create loading animation
-            createElement("div", { class: "loading" }, [
-                "loading...",
-                createElement("div", { class: "loading-bar" }),
-            ]),
-        ]);
+      let board = [
+            ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+            ['w', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'w'],
+            ['w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w'],
+            ['w', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'w'],
+            ['w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w'],
+            ['w', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'w'],
+            ['w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w'],
+            ['w', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'w'],
+            ['w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w', 'e', 'w'],
+            ['w', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'w'],
+            ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+      ];
+
+      bombs = Array.isArray(bombs) ? bombs : [];
+
+      setPlayers(players);
+      setBoxes(boxes);
+
+      if (!Array.isArray(board))
+            return createElement("div", { class: "board" }, "Loading...");
+      if (board.length === 0)
+            return createElement("div", { class: "board" }, [
+                  // create loading animation
+                  createElement("div", { class: "loading" }, [
+                        "loading...",
+                        createElement("div", { class: "loading-bar" }),
+                  ]),
+            ]);
 
       // returned html
       return createElement(
@@ -39,14 +57,15 @@ const renderBoard = (
                   ...board.map((row) =>
                         createElement("div", { class: "row" }, [
                               ...row.map((cell) => {
-                                    if (cell === 2)
+                                    if (cell === 'w')
                                           return createElement("div", { class: "wall" });
-                                    if (cell === 3)
-                                          return createElement("div", { class: "box" });
+                                    // if (cell === 3)
+                                    //       return createElement("div", { class: "box" });
                                     return createElement("div", { class: "empty" });
                               }),
                         ])
                   ),
+                  Boxes(),
                   // render players
                   Players(),
                   // render image of players

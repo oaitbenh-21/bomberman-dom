@@ -59,6 +59,7 @@ class App {
         this.lastFrameTime = performance.now();
         this.animationFrameId = requestAnimationFrame(this.gameLoop);
     }
+
     gameLoop() {
         if (this.moveNumber == 10) {
             Object.entries(this.gameState.state.Movement).forEach(([key, value]) => {
