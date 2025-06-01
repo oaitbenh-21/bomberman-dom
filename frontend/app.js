@@ -27,8 +27,8 @@ class App {
 
         this.sendMove = this.sendMove.bind(this);
         this.dropBomb = this.dropBomb.bind(this);
-        this.render = this.render.bind(this);
-        this.gameLoop = this.gameLoop.bind(this);
+        this.render = renderUI.bind( this, this.container, this.gameState.state, this.socket, this.isChating);
+        this.gameLoop = this.gameLoop.bind(this); 
     }
 
     sendMove(direction) {
@@ -40,9 +40,7 @@ class App {
     }
 
     init() {
-        this.socketHandler = new SocketHandler(
-            this.socket,
-            this.gameState);
+        this.socketHandler = new SocketHandler(this.socket,this.gameState,this.render);
         this.socketHandler.setup();
 
         this.controlHandler = new ControlHandler(
@@ -59,7 +57,6 @@ class App {
     startGameLoop() {
         this.isRunning = true;
         this.lastFrameTime = performance.now();
-        console.log("starting request Animation Frame");
         this.animationFrameId = requestAnimationFrame(this.gameLoop);
     }
     gameLoop() {
@@ -72,7 +69,6 @@ class App {
                 }
             });
             this.moveNumber = 0;
-            this.render();
         }
         this.moveNumber++;
         this.animationFrameId = requestAnimationFrame(this.gameLoop);
@@ -85,14 +81,6 @@ class App {
         }
     }
 
-    render() {
-        renderUI(
-            this.container,
-            this.gameState.getState(),
-            this.socket,
-            this.isChating
-        );
-    }
 
     destroy() {
         this.isRunning = false;
