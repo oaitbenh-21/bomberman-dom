@@ -61,7 +61,7 @@ class App {
     }
 
     gameLoop() {
-        if (this.moveNumber == 10) {
+        if (this.moveNumber == 5) {
             Object.entries(this.gameState.state.Movement).forEach(([key, value]) => {
                 if (value) {
                     this.sendMove(key);

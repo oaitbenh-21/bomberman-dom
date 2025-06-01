@@ -162,6 +162,14 @@ body {
     top: 0px;
 }
 
+.skill {
+    position: "absolute";
+    width: 30;
+    height: "30px";
+    left: "0px";
+    top: "0px";
+}
+
 .chat {
     --board-width: calc(100% - 40% - 2rem);
     width: calc(100% - var(--board-width) - 2rem);

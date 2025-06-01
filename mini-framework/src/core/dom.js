@@ -26,7 +26,6 @@ class VirtualDOM {
   }
 
   render(newTree, container) {
-    console.log('render from framework')
     if (this.tree === null) {
       const domElement = this.createDOMElement(newTree, true);
       if (!(container instanceof HTMLElement)) {

@@ -2,6 +2,7 @@ import { createElement } from "../../mini-framework/src/mini-framework-z01.js";
 import { endGame } from "./endGame.js";
 import Players, { setPlayers } from "./players.js";
 import Boxes, { setBoxes } from "./box.js";
+import Skills from "./skills.js";
 
 const renderBoard = (
       boxes = [],
@@ -68,15 +69,7 @@ const renderBoard = (
                   Boxes(),
                   // render players
                   Players(),
-                  // render image of players
-                  ...skills.map((skill) =>
-                        createElement("img", {
-                              class: "player",
-                              src: `./assets/img/${skill.name}.png`,
-                              style: `left: 0px; top: 0px; transform: translate(${skill.pos?.x}px, ${skill.pos?.y}px);`,
-                              id: skill.id,
-                        })
-                  ),
+                  Skills(),
 
                   endGame(status),
                   ...bombs.map((bomb) =>
