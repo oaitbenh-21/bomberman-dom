@@ -51,8 +51,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
                 });
                 currentRoom.broadcast(JSON.stringify({
                     type: "remove-server",
-                    x: coord.x,
-                    y: coord.y,
+                    id: coord.y * 17 + coord.x,
                     pos: { left: coord.x * 40, top: coord.y * 40 }
                 }));
                 let skillindex = Math.floor(Math.random() * 10);
