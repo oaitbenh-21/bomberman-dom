@@ -1,7 +1,7 @@
 import {
     render,
     createElement,
-} from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.22/dist/mini-framework-z01.min.js";
+} from "../../mini-framework/src/mini-framework-z01.js";
 import renderHeader from "../components/header.js";
 import renderChat from "../components/chat.js";
 import renderBoard from "../components/board.js";
