@@ -151,6 +151,7 @@ body {
 }
 
 .player {
+    transition: transform 0.2s ease;
     position: absolute;
     width: 30px;
     height: 30px;

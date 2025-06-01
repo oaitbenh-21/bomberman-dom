@@ -1,6 +1,6 @@
 import { createElement } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.22/dist/mini-framework-z01.min.js";
 import { endGame } from "./endGame.js";
-import Players from "./players.js";
+import Players, { setPlayers } from "./players.js";
 
 const renderBoard = (
       board = [],
@@ -12,7 +12,7 @@ const renderBoard = (
       isChating
 ) => {
     bombs = Array.isArray(bombs) ? bombs : [];
-
+    setPlayers(players);
     if (!Array.isArray(board))
         return createElement("div", { class: "board" }, "Loading...");
     if (board.length === 0)
@@ -48,7 +48,7 @@ const renderBoard = (
                         ])
                   ),
                   // render players
-                  Players(players),
+                  Players(),
                   // render image of players
                   ...skills.map((skill) =>
                         createElement("img", {
