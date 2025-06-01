@@ -9,7 +9,7 @@ export function BombPositions(BombPos, currentRoom, flames) {
         currentRoom.broadcast(JSON.stringify({
                     type: "remove-server",
                     remove: { id: yPos * 17 + xPos, },
-                    effect: { id: v4(), pos: { left: xPox * 40, top: yPox * 40 } }
+                    effect: { id: v4(), pos: { left: xPos * 40, top: yPos * 40 } }
                 }));
         Pet winner = "draw";
         currentRoom.Players.forEach((player) => {
