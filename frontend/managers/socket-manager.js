@@ -1,6 +1,6 @@
 import { destroyBox, setBoxes } from "../components/box.js";
 import { setPlayers, setPlayerPosition } from "../components/players.js";
-import {setSkills } from "../components/skills.js";
+import { destroySkill, setSkills } from "../components/skills.js";
 
 export default class SocketHandler {
   constructor(socket, gameState, renderCallback) {
@@ -72,13 +72,14 @@ export default class SocketHandler {
         state.effect = message.pos;
         console.log("kill-server message:", message);
         // destroySkill(state.skills);
-        setSkills(state.skills);
+        // setSkills(state.skills);
+        destroySkill(message.id)
         break;
       }
 
       case "skill-server":
         this.gameState.getState().skills.push(message);
-        console.log( this.gameState.getState().skills)
+        console.log(this.gameState.getState().skills)
         setSkills(this.gameState.getState().skills);
         break;
 

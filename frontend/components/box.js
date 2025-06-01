@@ -20,21 +20,17 @@ export function setBoxes(boxes) {
  * destroy the box.
  */
 export function destroyBox(id, newPos) {
-    console.log('destroy is called:', id, newPos)
     const signal = boxSignals[String(id)];
     if (signal) {
         signal.set({ x: newPos.x, y: newPos.y, distroyed: true });
     } else {
         console.warn(`No signal found for player ${id}`);
-        console.warn('box signal', signal)
-        console.warn('all signals:', boxSignals)
     }
 }
 /**
  * Render players with reactive position effects.
  */
 const Boxes = () => {
-    console.log('now put the boxes in placee')
     return createElement(
         "div",
         { class: "box" },
@@ -54,9 +50,7 @@ const Boxes = () => {
                 onMount(el) {
                     const stop = effect(() => {
                         const state = signal.get();
-                        console.log('signal to remove the brick', state)
                         if (state.distroyed) {
-                            console.log('the brick is going to be removed');
                             el.remove();
                             stop();
                         }
