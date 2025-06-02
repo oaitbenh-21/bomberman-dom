@@ -56,7 +56,6 @@ const Boxes = () => {
                             el.remove();
                         }
                     });
-                    stop();
                 }
 
             });

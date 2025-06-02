@@ -82,7 +82,6 @@ const Skills = () => {
                       el.remove();
                     }
                   });
-                  stop();
                 }
               });
               setTimeout(() => {
