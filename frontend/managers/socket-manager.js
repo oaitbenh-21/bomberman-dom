@@ -35,7 +35,7 @@ export default class SocketHandler {
 
       case "count-server":
         this.gameState.getState().gameData.count = message.count;
-        this.render();
+        // this.render();
         break;
 
       case "join-server": {
