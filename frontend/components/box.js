@@ -54,9 +54,9 @@ const Boxes = () => {
                         if (state.distroyed) {
                             el.src = "./assets/img/bombed.gif";
                             el.remove();
-                            stop();
                         }
                     });
+                    stop();
                 }
 
             });

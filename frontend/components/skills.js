@@ -80,9 +80,9 @@ const Skills = () => {
                     if (state.destroyed) {
                       console.log('should be distroyed')
                       el.remove();
-                      stop();
                     }
                   });
+                  stop();
                 }
               });
               setTimeout(() => {

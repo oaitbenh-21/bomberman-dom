@@ -59,9 +59,9 @@ const Effects = () => {
                                             delete current[state.id];
                                             effectSignals.set(current);
 
-                                            stop();
                                         }, 200);
                                     });
+                                    stop();
                                 }
                             });
                             appendTo(el, img)

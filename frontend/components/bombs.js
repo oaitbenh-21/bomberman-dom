@@ -85,9 +85,9 @@ const Bombs = () => {
                                             const current = { ...bombsSignals.get() };
                                             delete current[state.id]; // Remove from signals map
                                             bombsSignals.set(current); // Trigger reactivity
-                                            stop(); // Stop reactivity
                                         }, 1900);
                                     });
+                                    stop(); // Stop reactivity
                                 }
 
                             });
