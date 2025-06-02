@@ -20,7 +20,7 @@ const renderHeader = (gameData) => {
           });
         }
       }, [
-        `count: ${gameData.count}/4`,
+        `${gameData.count}/4`,
         createElement('img', { src: './assets/img/player.png', alt: "player" })
       ]),
       createElement('div', {
@@ -28,12 +28,12 @@ const renderHeader = (gameData) => {
         onMount(el) {
           effect(() => {
             const data = HeaderSignals.get();
-            el.textContent = `Time: ${data.time}`;
+            el.textContent = `${data.time}`;
             appendTo(el, createElement('img', { src: './assets/img/timer.png', alt: "timer" }));
           });
         }
       }, [
-        `Time: ${gameData.time}`,
+        `${gameData.time}`,
       ]),
       createElement('div', {
         class: 'item',
@@ -45,7 +45,7 @@ const renderHeader = (gameData) => {
           });
         }
       }, [
-        `Lifes: ${gameData.lifes}`,
+        `${gameData.lifes}`,
       ]),
       createElement('div', {
         class: 'item',
@@ -57,7 +57,7 @@ const renderHeader = (gameData) => {
           });
         }
       }, [
-        `Bombs: ${gameData.bombs}`,
+        `${gameData.bombs}`,
       ])
     ]
   );
