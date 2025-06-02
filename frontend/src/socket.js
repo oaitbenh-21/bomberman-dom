@@ -1,8 +1,11 @@
 export default class Socket {
     constructor() {
         this.socket = new WebSocket("ws://localhost:8080");
+        this.socket.addEventListener('open', () => {
+            const event = new CustomEvent('socket-ready');
+            window.dispatchEvent(event);
+        });
     }
-
     send(data) {
         this.socket.send(data);
     }

@@ -7,13 +7,11 @@ import renderChat from "../components/chat.js";
 import renderBoard from "../components/board.js";
 import renderWelcome from "../components/Welcome.js";
 
-export default function renderUI(container, state, socket, isChating) {
+export default function renderUI(container, gameState, socket, isChating) {
+    const state = gameState.getState();
     console.log("Rendering UI with state:", state);
-
     const boxes = state.board.length ? state.board : [];
-    const player =""
-    // Only show game content if player has entered name
-    const content = state.playerName ?
+    const content = state.player?
         createElement("div", { class: "container" }, [
             renderHeader(state.gameData),
             createElement("div", { class: "game" }, [
@@ -31,9 +29,9 @@ export default function renderUI(container, state, socket, isChating) {
         ])
         :
         renderWelcome(
-            state.playerName || "",
+            state.player ||"",
             (name) => {
-               player =name
+                gameState.getState().player = name
             },
             (name) => {
                 socket.send(JSON.stringify({

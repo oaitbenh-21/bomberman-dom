@@ -27,8 +27,11 @@ class App {
 
         this.sendMove = this.sendMove.bind(this);
         this.dropBomb = this.dropBomb.bind(this);
-        this.render = renderUI.bind( this, this.container, this.gameState.state, this.socket, this.isChating);
-        this.gameLoop = this.gameLoop.bind(this); 
+        this.render = renderUI.bind(this, this.container, this.gameState, this.socket, this.isChating);
+        this.gameLoop = this.gameLoop.bind(this);
+        window.addEventListener('socket-ready', () => {
+            this.render();
+        });
     }
 
     sendMove(direction) {
@@ -40,7 +43,7 @@ class App {
     }
 
     init() {
-        this.socketHandler = new SocketHandler(this.socket,this.gameState,this.render);
+        this.socketHandler = new SocketHandler(this.socket, this.gameState, this.render);
         this.socketHandler.setup();
 
         this.controlHandler = new ControlHandler(

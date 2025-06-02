@@ -12,7 +12,7 @@ export default class GameState {
                 "r": false,
             },
             moveNumber: 0,
-            player: "Player 1",
+            player: "",
             players: [],
             skills: [],
             effects: [],
