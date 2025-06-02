@@ -104,12 +104,26 @@ const Bombs = () => {
                                 onMount(el) {
                                     const stop = effect(() => {
                                         const state = value.get();
+
                                         setTimeout(() => {
-                                            el.remove();
-                                            stop();
-                                        }, 2000)
+                                            // Show explosion
+                                            el.src = `./assets/img/bombed.gif`;
+
+                                            // Optional delay to show explosion image
+                                            setTimeout(() => {
+                                                el.remove(); // Remove from DOM
+
+                                                // Clean up the signal
+                                                const current = { ...bombsSignals.get() };
+                                                delete current[state.id]; // Remove from signals map
+                                                bombsSignals.set(current); // Trigger reactivity
+
+                                                stop(); // Stop reactivity
+                                            }, 200); // Adjust if needed to control explosion duration
+                                        }, 2000);
                                     });
                                 }
+
                             });
                             appendTo(el, img)
 
