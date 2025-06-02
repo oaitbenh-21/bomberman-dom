@@ -1,3 +1,4 @@
+import { setBombs } from "../components/bombs.js";
 import { destroyBox, setBoxes } from "../components/box.js";
 import { setPlayers, setPlayerPosition } from "../components/players.js";
 import { destroySkill, setSkills } from "../components/skills.js";
@@ -88,6 +89,9 @@ export default class SocketHandler {
         const bombs = this.gameState.getState().bombs;
         const index = bombs.length;
         this.gameState.addBomb({ ...message, id: index });
+
+        setBombs(message.id)
+
         setTimeout(() => {
           this.gameState.getState().bombs = this.gameState
             .getState()

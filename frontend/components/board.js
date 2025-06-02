@@ -3,11 +3,12 @@ import { endGame } from "./endGame.js";
 import Players, { setPlayers } from "./players.js";
 import Boxes, { setBoxes } from "./box.js";
 import Skills from "./skills.js";
+import Bombs from "./bombs.js"
+
 
 const renderBoard = (
       boxes = [],
       players = [],
-      skills = [],
       status = {},
       bombs = [],
       effects = [],
@@ -66,10 +67,11 @@ const renderBoard = (
                               }),
                         ])
                   ),
+
                   Boxes(),
-                  // render players
                   Players(),
                   Skills(),
+                  Bombs(),
 
                   endGame(status),
                   ...bombs.map((bomb) =>

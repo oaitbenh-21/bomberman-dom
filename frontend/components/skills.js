@@ -15,21 +15,17 @@ const skillSignals = createSignal({});
  * Initialize players with signals and refs.
  */
 export function setSkills(skills) {
-  console.log('skill apeared')
   const currentMap = { ...skillSignals.get() }; // clone to trigger signal
-  console.log('current map:', currentMap)
   let updated = false;
 
   skills.forEach(skill => {
     if (!currentMap[skill.id]) {
-      console.log('looping on skills:', skill)
       currentMap[skill.id] = createSignal({ ...skill, destroyed: false });
       updated = true;
     }
   });
 
   if (updated) {
-    console.log('setting the skill')
     skillSignals.set(currentMap); // now effects depending on this will re-run
   }
 }
@@ -59,13 +55,11 @@ const Skills = () => {
         effect(() => {
           const skills = skillSignals.get(); // initial render (not reactive here)
 
-          console.log('render the skill to the UI', skills)
 
           if (skills && typeof skills === "object") {
             for (const [key, value] of Object.entries(skills)) {
               let signal = value._value;
               let id = signal.id
-              console.log('signal', signal);
 
 
               const img = createElement("img", {
@@ -81,13 +75,11 @@ const Skills = () => {
                 onMount(el) {
                   const stop = effect(() => {
                     const state = value.get();
-                    console.log(state)
                     if (state.destroyed) {
-                      console.log('should be distroyed')
                       el.remove();
-                      stop();
                     }
                   });
+                  stop();
                 }
               });
               setTimeout(() => {

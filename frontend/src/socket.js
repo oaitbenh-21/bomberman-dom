@@ -1,6 +1,6 @@
 export default class Socket {
     constructor() {
-        this.socket = new WebSocket("ws://10.1.3.5:8080");
+        this.socket = new WebSocket("ws://10.1.10.5:8080");
     }
 
     send(data) {
