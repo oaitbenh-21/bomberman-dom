@@ -15,7 +15,7 @@ const renderHeader = (gameData) => {
         onMount(el) {
           effect(() => {
             const data = HeaderSignals.get();
-            el.textContent = `Players: ${data.count}/4`;
+            el.textContent = `${data.count}/4`;
             appendTo(el, createElement('img', { src: './assets/img/player.png', alt: "player" }));
           });
         }
@@ -40,7 +40,7 @@ const renderHeader = (gameData) => {
         onMount(el) {
           effect(() => {
             const data = HeaderSignals.get();
-            el.textContent = `Lifes: ${data.lifes}`;
+            el.textContent = `${data.lifes}`;
             appendTo(el, createElement('img', { src: './assets/img/lifes.png', alt: "lifes" }));
           });
         }
@@ -52,7 +52,7 @@ const renderHeader = (gameData) => {
         onMount(el) {
           effect(() => {
             const data = HeaderSignals.get();
-            el.textContent = `Bombs: ${data.bombs}`;
+            el.textContent = `${data.bombs}`;
             appendTo(el, createElement('img', { src: './assets/img/bombs.png', alt: "bomb" }));
           });
         }
