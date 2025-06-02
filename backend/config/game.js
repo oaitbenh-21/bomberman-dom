@@ -55,7 +55,7 @@ export class Room {
         if (this.Timer) clearTimeout(this.Timer);
         if (this.Players.length >= 2) this.Timer = setTimeout(() => {
             this.Waiting = false;
-        }, 5000)
+        }, 1000)
         this.broadcast(JSON.stringify({
             type: "count-server",
             count: this.Players.length,
