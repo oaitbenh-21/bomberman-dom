@@ -1,6 +1,6 @@
-import { createElement } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.10/dist/mini-framework-z01.min.js";
+import { createElement } from "../../mini-framework/src/mini-framework-z01.js";
 
-const renderChat = (messages = [], ws, isChating) => {
+const renderChat = (ws, isChating) => {
     function handleSubmit(e) {
         e.preventDefault();
         const input = e.target.elements.chat.value;

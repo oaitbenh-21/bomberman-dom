@@ -1,4 +1,4 @@
-import { createElement } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.10/dist/mini-framework-z01.min.js";
+import { createElement } from "../../mini-framework/src/mini-framework-z01.js";
 
 export const endGame = (status) => {
     return createElement('div', { class: "GameStatus" }, [

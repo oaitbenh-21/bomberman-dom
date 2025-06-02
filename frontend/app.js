@@ -1,7 +1,7 @@
 import {
     events,
     createStore,
-} from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.10/dist/mini-framework-z01.min.js";
+} from "../../mini-framework/src/mini-framework-z01.js";
 
 import Socket from "./src/socket.js";
 import GameState from "./managers/state-manager.js";

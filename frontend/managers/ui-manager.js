@@ -11,20 +11,16 @@ export default function renderUI(container, gameState, socket, isChating) {
     console.log("Rendering UI with state:", gameState);
     const state = gameState.getState();
     const boxes = state.board.length ? state.board : [];
-    const content = state.player?
+    const content = state.player ?
         createElement("div", { class: "container" }, [
             renderHeader(state.gameData),
             createElement("div", { class: "game" }, [
                 renderBoard(
                     boxes,
                     state.players,
-                    state.skills,
-                    state.status,
-                    state.bombs,
-                    state.effects,
                     isChating
                 ),
-                renderChat(state.messages, socket, isChating),
+                renderChat(socket, isChating),
             ]),
         ])
         :
