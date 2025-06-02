@@ -1,3 +1,9 @@
+import {
+    createSignal,
+} from "../../mini-framework/src/mini-framework-z01.js";
+
+
+
 export default class GameState {
     constructor() {
         this.reset();
@@ -12,7 +18,7 @@ export default class GameState {
                 "r": false,
             },
             moveNumber: 0,
-            player: "",
+            player: createSignal(""),
             players: [],
             skills: [],
             effects: [],
