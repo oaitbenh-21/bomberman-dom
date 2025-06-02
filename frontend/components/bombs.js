@@ -120,7 +120,7 @@ const Bombs = () => {
 
                                                 stop(); // Stop reactivity
                                             }, 200); // Adjust if needed to control explosion duration
-                                        }, 2000);
+                                        }, 1500);
                                     });
                                 }
 
