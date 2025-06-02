@@ -8,17 +8,14 @@ import {
 const effectSignals = createSignal({})
 
 export function setEffect(id, pos) {
-    console.log('not what effect:', id, pos)
 
     const currentMap = { ...effectSignals.get() }; // clone to trigger signal
     let updated = false;
 
-    // effects.forEach(effect => {
     if (!currentMap[id]) {
         currentMap[id] = createSignal({ id, pos });
         updated = true;
     }
-    // });
 
     if (updated) {
         effectSignals.set(currentMap); // now effects depending on this will re-run
@@ -26,15 +23,12 @@ export function setEffect(id, pos) {
 }
 
 const Effects = () => {
-    console.log('render the effects')
     return createElement(
         "div",
         {
             class: "effect", onMount(el) {
                 effect(() => {
                     const effects = effectSignals.get(); // initial render (not reactive here)
-
-                    console.log('render the effects to the UI', effects)
 
                     if (effects && typeof effects === "object") {
                         for (const [key, value] of Object.entries(effects)) {
@@ -58,23 +52,19 @@ const Effects = () => {
                                     const stop = effect(() => {
                                         const state = value.get();
 
-                                        // Optional delay to show explosion image
                                         setTimeout(() => {
-                                            el.remove(); // Remove from DOM
+                                            el.remove();
 
-                                            // Clean up the signal
                                             const current = { ...effectSignals.get() };
-                                            delete current[state.id]; // Remove from signals map
-                                            effectSignals.set(current); // Trigger reactivity
+                                            delete current[state.id];
+                                            effectSignals.set(current);
 
-                                            stop(); // Stop reactivity
-                                        }, 200); // Adjust if needed to control explosion duration
+                                            stop();
+                                        }, 200);
                                     });
                                 }
-
                             });
                             appendTo(el, img)
-
                         }
                     }
 

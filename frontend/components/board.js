@@ -10,9 +10,6 @@ import Effects from "./effect.js";
 const renderBoard = (
       boxes = [],
       players = [],
-      status = {},
-      bombs = [],
-      effects = [],
       isChating
 ) => {
       let board = [
@@ -29,7 +26,6 @@ const renderBoard = (
             ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
       ];
 
-      bombs = Array.isArray(bombs) ? bombs : [];
 
       setPlayers(players);
       setBoxes(boxes);
@@ -50,9 +46,7 @@ const renderBoard = (
             "div",
             {
                   onclick: () => {
-                        console.log("board clicked, chating:", isChating);
                         isChating.setState(false);
-                        console.log("did it ischating changed", isChating);
                   },
                   class: "board",
             },
@@ -62,8 +56,6 @@ const renderBoard = (
                               ...row.map((cell) => {
                                     if (cell === 'w')
                                           return createElement("div", { class: "wall" });
-                                    // if (cell === 3)
-                                    //       return createElement("div", { class: "box" });
                                     return createElement("div", { class: "empty" });
                               }),
                         ])
