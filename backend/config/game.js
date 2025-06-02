@@ -69,10 +69,13 @@ export class Room {
         if (this.Players.length >= 2) this.Timer = setTimeout(() => {
             setTimeout(() => {
                 this.Waiting = false;
+                this.broadcast(JSON.stringify({
+                    type: "start-server",
+                }))
             }, 1000);
             this.broadcast(JSON.stringify({
                 type: "waiting",
-                time: 10,
+                time: 1,
             }))
         }, 1000)
         // this.broadcast(JSON.stringify({

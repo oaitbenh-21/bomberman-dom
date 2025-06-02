@@ -123,7 +123,10 @@ export default class SocketHandler {
         this.gameState.getState().countDown.timer = message.time;
         break;
       }
-
+      case "start-server": {
+        this.render();
+        break;
+      }
       case "gameover-server":
         this.gameState.getState().status = {
           number: 0,
@@ -136,7 +139,6 @@ export default class SocketHandler {
         console.warn("Unhandled WebSocket message:", message);
         break;
     }
-
   }
 
   setup() {
