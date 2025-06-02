@@ -36,6 +36,7 @@ export function handlePlayerAction(currentRoom = new Room(), player, data) {
                         currentRoom.Joining--;
                         return;
                   }
+                  player.name = data.name;
                   currentRoom.addPlayer(currentRoom);
                   let boxes = [];
                   // console.log(currentRoom.Board);
