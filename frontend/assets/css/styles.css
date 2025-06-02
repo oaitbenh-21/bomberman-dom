@@ -376,6 +376,12 @@ form {
     color: var(--color-text);
     margin-bottom: 1.5rem;
 }
+.form{
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap:10px
+}
 
 .welcome input[type="text"] {
     padding: 0.7rem 1.2rem;
