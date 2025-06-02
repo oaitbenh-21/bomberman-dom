@@ -4,6 +4,7 @@ import Players, { setPlayers } from "./players.js";
 import Boxes, { setBoxes } from "./box.js";
 import Skills from "./skills.js";
 import Bombs from "./bombs.js"
+import Effects from "./effect.js";
 
 
 const renderBoard = (
@@ -72,6 +73,7 @@ const renderBoard = (
                   Players(),
                   Skills(),
                   Bombs(),
+                  Effects(),
 
                   endGame(status),
                   ...bombs.map((bomb) =>

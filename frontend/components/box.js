@@ -4,6 +4,7 @@ import {
     effect
 } from "../../mini-framework/src/mini-framework-z01.js";
 
+
 const boxSignals = {};
 
 /**
@@ -24,7 +25,7 @@ export function destroyBox(id, newPos) {
     if (signal) {
         signal.set({ x: newPos.x, y: newPos.y, distroyed: true });
     } else {
-        console.warn(`No signal found for player ${id}`);
+        console.warn(`No signal found for box ${id}`);
     }
 }
 /**
@@ -51,11 +52,16 @@ const Boxes = () => {
                     const stop = effect(() => {
                         const state = signal.get();
                         if (state.distroyed) {
-                            el.remove();
-                            stop();
+                            el.src = "./assets/img/bombed.gif";
+
+                            setTimeout(() => {
+                                el.remove();
+                                stop();
+                            }, 200);
                         }
                     });
                 }
+
             });
         })
     );

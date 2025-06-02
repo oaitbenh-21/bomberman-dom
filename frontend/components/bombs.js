@@ -10,11 +10,13 @@ import {
 const bombsSignals = createSignal({});
 
 
+
+
+
 /**
  * Initialize players with signals and refs.
  */
 export function setBombs(bombs) {
-    console.log('not what:', bombs)
     const currentMap = { ...bombsSignals.get() }; // clone to trigger signal
     let updated = false;
 
@@ -29,29 +31,7 @@ export function setBombs(bombs) {
         bombsSignals.set(currentMap); // now effects depending on this will re-run
     }
 }
-/**
- * Initialize players with signals and refs.
- */
-// export function setBombs(bombs) {
-//     console.log('bomb apeared')
-//     const currentMap = { ...bombsSignals.get() }; // clone to trigger signal
-//     console.log('current map:', currentMap)
-//     let updated = false;
-//     if (bombs && typeof bombs === "object") {
-//         bombs.forEach(bomb => {
-//             if (!currentMap[bomb.id]) {
-//                 console.log('looping on skills:', bomb)
-//                 currentMap[bomb.id] = createSignal({ ...bomb, destroyed: false });
-//                 updated = true;
-//             }
-//         });
-//     }
 
-//     if (updated) {
-//         console.log('setting the bomb')
-//         bombsSignals.set(currentMap); // now effects depending on this will re-run
-//     }
-// }
 
 /**
  * destroy the box.
@@ -66,9 +46,8 @@ export function destroyBombs(id) {
 }
 
 /**
- * Render players with reactive position effects.
+ * Render bombs with reactive position effects.
  */
-
 
 const Bombs = () => {
     return createElement(
@@ -78,14 +57,11 @@ const Bombs = () => {
                 effect(() => {
                     const bombs = bombsSignals.get(); // initial render (not reactive here)
 
-                    console.log('render the bomb to the UI', bombs)
 
                     if (bombs && typeof bombs === "object") {
                         for (const [key, value] of Object.entries(bombs)) {
                             let signal = value._value;
                             let id = signal.id
-                            console.log('signal bomb', signal);
-
 
                             const img = createElement("img", {
                                 class: "bomb",
@@ -107,20 +83,16 @@ const Bombs = () => {
 
                                         setTimeout(() => {
                                             // Show explosion
-                                            el.src = `./assets/img/bombed.gif`;
-
+                                            // el.src = `./assets/img/bombed.gif`;
                                             // Optional delay to show explosion image
-                                            setTimeout(() => {
-                                                el.remove(); // Remove from DOM
+                                            el.remove(); // Remove from DOM
 
-                                                // Clean up the signal
-                                                const current = { ...bombsSignals.get() };
-                                                delete current[state.id]; // Remove from signals map
-                                                bombsSignals.set(current); // Trigger reactivity
-
-                                                stop(); // Stop reactivity
-                                            }, 200); // Adjust if needed to control explosion duration
-                                        }, 1500);
+                                            // Clean up the signal
+                                            const current = { ...bombsSignals.get() };
+                                            delete current[state.id]; // Remove from signals map
+                                            bombsSignals.set(current); // Trigger reactivity
+                                            stop(); // Stop reactivity
+                                        }, 2200);
                                     });
                                 }
 
@@ -135,7 +107,5 @@ const Bombs = () => {
         },
     );
 };
-
-
 
 export default Bombs;
