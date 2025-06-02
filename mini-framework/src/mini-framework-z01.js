@@ -41,6 +41,7 @@ const miniFramework = new MiniFramework();
 // Virtual DOM API
 export const createElement = (...args) => miniFramework.DOM.createElement(...args);
 export const render = (...args) => miniFramework.DOM.render(...args);
+export const appendTo = (...arg) => miniFramework.DOM.appendTo(...arg);
 
 // State Management
 export const createStore = (...args) => miniFramework.createStore(...args);

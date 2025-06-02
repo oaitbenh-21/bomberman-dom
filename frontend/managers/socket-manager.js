@@ -106,7 +106,6 @@ export default class SocketHandler {
           pos = message.effect.pos
         }
 
-        console.log('remove server message', id, pos)
         // const state = this.gameState.getState();
         // state.board[message.y][message.x] = 0;
         if (id && pos) {

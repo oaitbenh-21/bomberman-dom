@@ -27,13 +27,6 @@ class Signal {
   set value(newValue) {
     this.set(newValue);
   }
-
-
 }
 
-function effect(fn) {
-  Signal.currentEffect = fn;
-  fn(); // run once to collect dependencies
-  Signal.currentEffect = null;
-}
 export default Signal;

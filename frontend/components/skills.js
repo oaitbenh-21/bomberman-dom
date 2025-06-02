@@ -1,73 +1,108 @@
 import {
   createElement,
   createSignal,
-  effect
+  effect,
+  appendTo
 } from "../../mini-framework/src/mini-framework-z01.js";
 
-const skillSignals = {};
+
+
+const skillSignals = createSignal({});
+
+
 
 /**
  * Initialize players with signals and refs.
  */
 export function setSkills(skills) {
+  console.log('skill apeared')
+  const currentMap = { ...skillSignals.get() }; // clone to trigger signal
+  console.log('current map:', currentMap)
+  let updated = false;
+
   skills.forEach(skill => {
-    if (!skillSignals[skill.id]) {
-      skillSignals[skill.id] = createSignal({ ...skill, distroyed: false });
+    if (!currentMap[skill.id]) {
+      console.log('looping on skills:', skill)
+      currentMap[skill.id] = createSignal({ ...skill, destroyed: false });
+      updated = true;
     }
   });
+
+  if (updated) {
+    console.log('setting the skill')
+    skillSignals.set(currentMap); // now effects depending on this will re-run
+  }
 }
+
 /**
  * destroy the box.
  */
 export function destroySkill(id) {
-  console.log('destroy skill is called:', id)
-  const signal = skillSignals[String(id)];
+  const signal = skillSignals.get()[id];
   if (signal) {
-    signal.set({ distroyed: true });
+    signal.set({ ...signal.get(), destroyed: true });
   } else {
-    console.warn(`No signal found for skill${id}`);
-    console.warn('box signal', signal)
-    console.warn('all signals:', skillSignals)
+    console.warn(`No signal found for skill ${id}`);
   }
 }
+
 /**
  * Render players with reactive position effects.
  */
+
+
 const Skills = () => {
-  console.log('now put the skills in placee')
   return createElement(
     "div",
-    { class: "skills" },
-    Object.entries(skillSignals).map(([id, signal]) => {
-      return createElement("img", {
-        class: "skill",
-        src: `./assets/img/${signal.get().name}`,
-        alt: "skill",
-        style: {
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: 30,
-          height: 30,
-          backgroud: "#ddd",
-          transform: `translate(${signal.get().x}px, ${signal.get().y}px)`, // initial render
-        },
-        id,
-        key: id,
-        onMount(el) {
-          const stop = effect(() => {
-            const state = signal.get();
-            console.log('signal to remove the skill', state)
-            if (state.distroyed) {
-              console.log('the brick is going to be removed');
-              el.remove();
-              stop();
+    {
+      class: "skills", onMount(el) {
+        effect(() => {
+          const skills = skillSignals.get(); // initial render (not reactive here)
+
+          console.log('render the skill to the UI', skills)
+
+          if (skills && typeof skills === "object") {
+            for (const [key, value] of Object.entries(skills)) {
+              let signal = value._value;
+              let id = signal.id
+              console.log('signal', signal);
+
+
+              const img = createElement("img", {
+                class: "skill",
+                src: `./assets/img/${signal.name}.png`,
+                style: {
+                  position: "absolute",
+                  transform: `translate(${signal.pos.x}px, ${signal.pos.y}px)`, // initial render
+                },
+                alt: "skill",
+                id,
+                key: id,
+                onMount(el) {
+                  const stop = effect(() => {
+                    const state = value.get();
+                    console.log(state)
+                    if (state.destroyed) {
+                      console.log('should be distroyed')
+                      el.remove();
+                      stop();
+                    }
+                  });
+                }
+              });
+              setTimeout(() => {
+                appendTo(el, img)
+              }, 500)
+
             }
-          });
-        }
-      });
-    })
+          }
+
+        })
+      }
+    },
   );
 };
+
+
 
 export default Skills;

@@ -165,9 +165,9 @@ body {
 .skill {
     position: "absolute";
     width: 30;
-    height: "30px";
-    left: "0px";
-    top: "0px";
+    height: 30px;
+    left: 0;
+    top: 0;
 }
 
 .chat {

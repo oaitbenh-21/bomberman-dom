@@ -41,7 +41,7 @@ class VirtualDOM {
   }
 
   createDOMElement(node) {
-  
+
     // Reactive text node from signal
     if (typeof node === "function" && node.isSignal) {
       const textNode = document.createTextNode(node());
@@ -191,6 +191,12 @@ class VirtualDOM {
   subscribe(signal, callback) {
     signal.subscribers.add(callback);
   }
+
+  appendTo(parent, vnode) {
+    const dom = this.createDOMElement(vnode);
+    parent.appendChild(dom);
+  }
+
 }
 
 export default VirtualDOM;
