@@ -5,6 +5,7 @@ export class Room {
     constructor() {
         this.Board = this.createBoard();
         this.Players = [];
+        this.Joining = 0;
         this.Connections = [];
         this.Waiting = true;
         this.Over = false;
@@ -25,6 +26,18 @@ export class Room {
         return 0
     }
 
+    isValid(name) {
+        let valid = true;
+        if (name.length <= 2) {
+            return false;
+        }
+        this.Players.forEach((p) => {
+            if (p.name == name) {
+                valid = false;
+            }
+        });
+        return valid;
+    }
     // it should be randomly generated
     createBoard() {
         let map = [
@@ -54,12 +67,18 @@ export class Room {
         this.Connections.push(conn);
         if (this.Timer) clearTimeout(this.Timer);
         if (this.Players.length >= 2) this.Timer = setTimeout(() => {
-            this.Waiting = false;
+            setTimeout(() => {
+                this.Waiting = false;
+            }, 1000);
+            this.broadcast(JSON.stringify({
+                type: "waiting",
+                time: 10,
+            }))
         }, 1000)
-        this.broadcast(JSON.stringify({
-            type: "count-server",
-            count: this.Players.length,
-        }))
+        // this.broadcast(JSON.stringify({
+        //     type: "count-server",
+        //     count: this.Players.length,
+        // }))
     }
 
     broadcast(message) {
@@ -73,7 +92,7 @@ export class Room {
 export class Player {
     constructor(room, conn) {
         this.id = uuidv4();
-        this.name = `Player_${this.id.slice(0, 5)}`;
+        this.name = "";
         this.room = room;
         this.pos = this.assignStartPosition();
         this.Bombs = 1;

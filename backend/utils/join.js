@@ -13,7 +13,7 @@ export function JoinPlayer(ws) {
       const lastRoom = Rooms[Rooms.length - 1];
 
       // check if possible to add to the last room
-      if (lastRoom && lastRoom.Players.length < 4 && lastRoom.Waiting && !lastRoom.Over) {
+      if (lastRoom && lastRoom.Joining < 4 && lastRoom.Waiting && !lastRoom.Over) {
             currentRoom = lastRoom;
 
             //currentPlayer++;  // i changed this because it could be undefined and it will cause something unexpected
@@ -26,7 +26,7 @@ export function JoinPlayer(ws) {
       }
 
       if (currentRoom.Over) return;
-
+      currentRoom.Joining++;
       // create a new player and set it's color
       const player = new Player(currentRoom, ws);
       player.color = colors[currentPlayer]
