@@ -1,6 +1,5 @@
-import { Room } from '../config/game.js';
+import { Player, Room } from '../config/game.js';
 import { BombPositions } from './bomb.js';
-import { JoinPlayer } from './join.js';
 import { MovePlayer } from './move.js';
 
 
@@ -8,7 +7,7 @@ import { MovePlayer } from './move.js';
 // MovePlayer
 
 
-export function handlePlayerAction(currentRoom = new Room(), player, data) {
+export function handlePlayerAction(currentRoom = new Room(), player = new Player(), data) {
       // handle chats
       if (data.type == "chat-client") {
             let len = data.message.trim().length;
@@ -19,13 +18,11 @@ export function handlePlayerAction(currentRoom = new Room(), player, data) {
                   message: data.message,
             }))
       }
-      // don't move player if still waiting
-      if (currentRoom.Waiting || player.lifes < 1) return
 
       // handle player actions
       switch (data.type) {
             // case of bomming
-            case "join-client":
+            case "join-player":
                   console.log(data);
                   // check name is Valid
                   if (!currentRoom.isValid(data.name)) {
@@ -37,7 +34,7 @@ export function handlePlayerAction(currentRoom = new Room(), player, data) {
                         return;
                   }
                   player.name = data.name;
-                  currentRoom.addPlayer(currentRoom);
+                  currentRoom.addPlayer(player);
                   let boxes = [];
                   // console.log(currentRoom.Board);
 
@@ -49,7 +46,7 @@ export function handlePlayerAction(currentRoom = new Room(), player, data) {
                         })
                   });
 
-                  ws.send(JSON.stringify({
+                  player.ws.send(JSON.stringify({
                         type: "board-server",
                         board: boxes,
                   }));
@@ -57,7 +54,7 @@ export function handlePlayerAction(currentRoom = new Room(), player, data) {
                   // Sends info about all existing players in the room to the new player
                   currentRoom.Players.forEach((p) => {
                         if (p.id == player.id) return;
-                        ws.send(JSON.stringify({
+                        player.ws.send(JSON.stringify({
                               type: "join-server",
                               name: p.name,
                               id: p.id,
@@ -74,6 +71,8 @@ export function handlePlayerAction(currentRoom = new Room(), player, data) {
                   }));
                   break;
             case "bomb-client":
+                  // don't move player if still waiting
+                  if (currentRoom.Waiting || player.lifes < 1) return
                   if (player.Bombs < 1) break;
                   player.Bombs--;
                   setTimeout(() => {
@@ -90,6 +89,8 @@ export function handlePlayerAction(currentRoom = new Room(), player, data) {
                   break;
             // case of moving
             case "move-client":
+                  // don't move player if still waiting
+                  if (currentRoom.Waiting || player.lifes < 1) return
                   MovePlayer(data, player, currentRoom);
                   break;
 

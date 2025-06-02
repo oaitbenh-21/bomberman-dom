@@ -62,9 +62,9 @@ export class Room {
         return map
     }
 
-    addPlayer(player, conn) {
+    addPlayer(player = new Player()) {
         this.Players.push(player);
-        this.Connections.push(conn);
+        this.Connections.push(player.ws);
         if (this.Timer) clearTimeout(this.Timer);
         if (this.Players.length >= 2) this.Timer = setTimeout(() => {
             setTimeout(() => {
