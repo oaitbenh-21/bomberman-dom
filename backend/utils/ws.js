@@ -26,6 +26,7 @@ export function handlePlayerAction(currentRoom = new Room(), player, data) {
       switch (data.type) {
             // case of bomming
             case "join-client":
+                  console.log(data);
                   // check name is Valid
                   if (!currentRoom.isValid(data.name)) {
                         player.ws.send(JSON.stringify({
