@@ -3,7 +3,7 @@ import { destroyBox, setBoxes } from "../components/box.js";
 import { setEffect } from "../components/effect.js";
 import { setPlayers, setPlayerPosition } from "../components/players.js";
 import { destroySkill, setSkills } from "../components/skills.js";
-import { addMessages } from "../components/chat.js";
+import { setMessages } from "../components/chat.js";
 
 
 
@@ -26,7 +26,7 @@ export default class SocketHandler {
       case "chat-server":
         // this.gameState.addMessage(message);
         // this.render();
-        addMessages(message);
+        setMessages(message);
         break;
 
       case "data-server": {
