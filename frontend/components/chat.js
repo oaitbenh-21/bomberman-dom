@@ -1,4 +1,4 @@
-import { createElement , effect, createSignal} from "../../mini-framework/src/mini-framework-z01.js";
+import { createElement , effect, createSignal, appendTo} from "../../mini-framework/src/mini-framework-z01.js";
 
 
 
@@ -51,7 +51,7 @@ const renderChat = (ws, isChating) => {
                                 createElement("span", { class: "chat-user" }, `${message.username}: `),
                                 createElement("span", { class: "chat-text" }, message.message),
                             ]);
-                            el.appendChild(messageElement);
+                            appendTo(el, messageElement);
                         });
                     })
                 },
