@@ -4,6 +4,7 @@ import { setEffect } from "../components/effect.js";
 import { setPlayers, setPlayerPosition } from "../components/players.js";
 import { destroySkill, setSkills } from "../components/skills.js";
 import { setMessages } from "../components/chat.js";
+import { setHeaderData } from "../components/header.js";
 
 
 
@@ -36,6 +37,7 @@ export default class SocketHandler {
         state.gameData.lifes = message.lifes;
         state.gameData.bombs = message.bombs;
         state.gameData.time = message.time;
+        setHeaderData(state.gameData);
         break;
       }
       case "start-server": {
