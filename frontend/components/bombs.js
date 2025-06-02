@@ -14,20 +14,20 @@ const bombsSignals = createSignal({});
  * Initialize players with signals and refs.
  */
 export function setBombs(bombs) {
-    console.log('not what:',bombs)
-  const currentMap = { ...bombsSignals.get() }; // clone to trigger signal
-  let updated = false;
+    console.log('not what:', bombs)
+    const currentMap = { ...bombsSignals.get() }; // clone to trigger signal
+    let updated = false;
 
-  bombs.forEach(bomb=> {
-    if (!currentMap[bomb.id]) {
-      currentMap[bomb.id] = createSignal({ ...bomb, destroyed: false });
-      updated = true;
+    // bombs.forEach(bomb => {
+    if (!currentMap[bombs.id]) {
+        currentMap[bombs.id] = createSignal({ ...bombs, destroyed: false });
+        updated = true;
     }
-  });
+    // });
 
-  if (updated) {
-    bombsSignals.set(currentMap); // now effects depending on this will re-run
-  }
+    if (updated) {
+        bombsSignals.set(currentMap); // now effects depending on this will re-run
+    }
 }
 /**
  * Initialize players with signals and refs.
@@ -92,10 +92,10 @@ const Bombs = () => {
                                 src: `./assets/img/boom.gif`,
                                 style: {
                                     position: "absolute",
-                                    // left: 0,
-                                    // top: 0,
-                                    // width: '30px',
-                                    // height: "30px",
+                                    left: 0,
+                                    top: 0,
+                                    width: '30px',
+                                    height: "30px",
                                     transform: `translate(${signal.pos.x}px, ${signal.pos.y}px)`, // initial render
                                 },
                                 alt: "bomb",
