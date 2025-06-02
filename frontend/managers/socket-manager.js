@@ -26,6 +26,7 @@ export default class SocketHandler {
       case "chat-server":
         // this.gameState.addMessage(message);
         // this.render();
+        console.log('new message apreared ...')
         setMessages(message);
         break;
 

@@ -43,6 +43,7 @@ const renderChat = (ws, isChating) => {
                 class: "chat-messages",
                 onMount: (el) => {
                     effect(() => {
+                        console.log('messages rerendering...')
                         const messages = messagesSignals.get();
                         messages.forEach((message) => {
                             const messageElement = createElement("div", { class: "chat-message" }, [
@@ -65,9 +66,7 @@ const renderChat = (ws, isChating) => {
             [
                 createElement("input", {
                     onclick: () => {
-                        console.log("input clicked, chating:", isChating);
                         isChating.setState(true);
-                        console.log("did it change:", isChating);
                     },
                     type: "text",
                     name: "chat",
