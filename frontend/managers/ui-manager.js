@@ -11,13 +11,14 @@ import renderWelcome from "../components/Welcome.js";
 export default function initUI(container, gameState, socket, isChating) {
     const state = gameState.getState();
     // This effect reruns when `player` changes
-    effect(() => {
+    const stop = effect(() => {
         console.log('the effect works in render the ui but are the variables', container, gameState, socket, isChating)
-        const player = state.player.get();
-       /*  */ console.log('rendering the init ui, the state is :', player)
+        const playerName = state.name.get();
+
+       /*  */ console.log('rendering the init ui, the state is :', playerName)
 
         // Decide what to render based on whether player is set
-        const content = player
+        const content = playerName
             ? createElement("div", { class: "container" }, [
                 renderHeader(state.gameData),
                 createElement("div", { class: "game" }, [
@@ -26,12 +27,14 @@ export default function initUI(container, gameState, socket, isChating) {
                         state.players,
                         isChating
                     ),
-                    renderChat( socket, isChating),
+                    renderChat(socket, isChating),
                 ]),
             ])
             : renderWelcome(socket, gameState); // show name input
 
         render(content, container); // this replaces the DOM content
+        // stop the effect after rendering the main UI once
     });
+    stop();
 }
 

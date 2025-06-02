@@ -22,6 +22,7 @@ export function setPlayers(players) {
  */
 export function setPlayerPosition(id, newPos) {
   const signal = playerSignals[id];
+  console.log('set player position the subscriped things:', signal.subscribers)
   if (signal) {
     signal.set({ x: newPos.x, y: newPos.y });
   } else {

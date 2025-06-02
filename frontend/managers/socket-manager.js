@@ -21,7 +21,7 @@ export default class SocketHandler {
       case "board-server": destroyBox
         this.gameState.getState().board = message.board;
         setBoxes(message.board)
-        this.render();
+        // this.render();
         break;
 
       case "chat-server":

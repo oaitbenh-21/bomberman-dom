@@ -10,7 +10,7 @@ const renderWelcome = (socket, gameState) => {
                   alert("enter valid name");
                   return;
             }
-            gameState.getState().player.set(name);// = name;
+            gameState.getState().name.set(name);// = name;
 
             socket.send(JSON.stringify({
                   type: "join-player",
@@ -27,7 +27,7 @@ const renderWelcome = (socket, gameState) => {
                   createElement("input", {
                         type: "text",
                         placeholder: "Enter your creative name (min 2 chars)",
-                        value:gameState.getState().player.get()
+                        value:gameState.getState().name.get()
                   }),
                   createElement("button", {}, "Start Game")
             ])

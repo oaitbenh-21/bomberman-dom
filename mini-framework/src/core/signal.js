@@ -27,6 +27,10 @@ class Signal {
   set value(newValue) {
     this.set(newValue);
   }
+
+  subscribers(){
+    return this.subscribers
+  }
 }
 
 export default Signal;
