@@ -53,11 +53,8 @@ const Boxes = () => {
                         const state = signal.get();
                         if (state.distroyed) {
                             el.src = "./assets/img/bombed.gif";
-
-                            setTimeout(() => {
-                                el.remove();
-                                stop();
-                            }, 200);
+                            el.remove();
+                            stop();
                         }
                     });
                 }
