@@ -6,12 +6,7 @@ import {
 } from "../../mini-framework/src/mini-framework-z01.js";
 
 
-
 const bombsSignals = createSignal({});
-
-
-
-
 
 /**
  * Initialize players with signals and refs.
@@ -57,7 +52,6 @@ const Bombs = () => {
                 effect(() => {
                     const bombs = bombsSignals.get(); // initial render (not reactive here)
 
-
                     if (bombs && typeof bombs === "object") {
                         for (const [key, value] of Object.entries(bombs)) {
                             let signal = value._value;
@@ -92,7 +86,7 @@ const Bombs = () => {
                                             delete current[state.id]; // Remove from signals map
                                             bombsSignals.set(current); // Trigger reactivity
                                             stop(); // Stop reactivity
-                                        }, 2200);
+                                        }, 1900);
                                     });
                                 }
 

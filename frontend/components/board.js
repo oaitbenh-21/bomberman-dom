@@ -75,22 +75,22 @@ const renderBoard = (
                   Bombs(),
                   Effects(),
 
-                  endGame(status),
-                  ...bombs.map((bomb) =>
-                        createElement("img", {
-                              class: "player",
-                              src: `./assets/img/bomb.gif`,
-                              style: `left: 0px; top: 0px; transform: translate(${bomb.pos?.x}px, ${bomb.pos?.y}px);`,
-                        })
-                  ),
+                  // endGame(status),
+                  // ...bombs.map((bomb) =>
+                  //       createElement("img", {
+                  //             class: "player",
+                  //             src: `./assets/img/bomb.gif`,
+                  //             style: `left: 0px; top: 0px; transform: translate(${bomb.pos?.x}px, ${bomb.pos?.y}px);`,
+                  //       })
+                  // ),
                   // create player image at the end
-                  ...effects.map((effect) =>
-                        createElement("img", {
-                              class: "player",
-                              src: `./assets/img/bombed.gif`,
-                              style: `left: 0px; top: 0px; transform: translate(${effect.pos?.left}px, ${effect.pos?.top}px);`,
-                        })
-                  ),
+                  // ...effects.map((effect) =>
+                  //       createElement("img", {
+                  //             class: "player",
+                  //             src: `./assets/img/bombed.gif`,
+                  //             style: `left: 0px; top: 0px; transform: translate(${effect.pos?.left}px, ${effect.pos?.top}px);`,
+                  //       })
+                  // ),
             ]
       );
 };
