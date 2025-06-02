@@ -1,3 +1,4 @@
+import { state } from "../../mini-framework/src/mini-framework-z01.js";
 import { setBombs } from "../components/bombs.js";
 import { destroyBox, setBoxes } from "../components/box.js";
 import { setEffect } from "../components/effect.js";
@@ -128,6 +129,10 @@ export default class SocketHandler {
 
       case "move-server": {
         setPlayerPosition(message.player.id, message.player.pos);
+        break;
+      }
+      case "waiting":{
+        this.gameState.getState().countDown.timer = message.time;
         break;
       }
 
