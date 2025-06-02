@@ -1,7 +1,7 @@
 import {
     events,
     createStore,
-} from "../../mini-framework/src/mini-framework-z01.js";
+} from "../mini-framework/src/mini-framework-z01.js"
 
 import Socket from "./src/socket.js";
 import GameState from "./managers/state-manager.js";
@@ -27,7 +27,7 @@ class App {
 
         this.sendMove = this.sendMove.bind(this);
         this.dropBomb = this.dropBomb.bind(this);
-        this.render = renderUI.bind(this, this.container, this.gameState, this.socket, this.isChating);
+        this.render = renderUI.bind( this,  this.container, this.gameState, this.socket, this.isChating);
         this.gameLoop = this.gameLoop.bind(this);
         window.addEventListener('socket-ready', () => {
             this.render();

@@ -19,6 +19,7 @@ export function setMessages(message) {
 
 
 const renderChat = (ws, isChating) => {
+    console.log('this is render chat and the isChat is :', isChating)
     function handleSubmit(e) {
         e.preventDefault();
         const input = e.target.elements.chat.value;

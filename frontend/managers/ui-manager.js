@@ -12,6 +12,7 @@ export default function initUI(container, gameState, socket, isChating) {
     const state = gameState.getState();
     // This effect reruns when `player` changes
     effect(() => {
+        console.log('the effect works in render the ui but are the variables', container, gameState, socket, isChating)
         const player = state.player.get();
        /*  */ console.log('rendering the init ui, the state is :', player)
 
@@ -25,7 +26,7 @@ export default function initUI(container, gameState, socket, isChating) {
                         state.players,
                         isChating
                     ),
-                    renderChat(state.messages, socket, isChating),
+                    renderChat( socket, isChating),
                 ]),
             ])
             : renderWelcome(socket, gameState); // show name input
