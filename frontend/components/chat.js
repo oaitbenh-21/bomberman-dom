@@ -1,4 +1,5 @@
-import { createElement, createSignal } from "../../mini-framework/src/mini-framework-z01.js";
+import { createElement , effect} from "../../mini-framework/src/mini-framework-z01.js";
+
 
 
 const messagesSignals = createSignal([]);
@@ -6,13 +7,15 @@ const messagesSignals = createSignal([]);
 /**
  * Append a new message to the signal.
  */
-export function addMessages(message) {
+export function setMessages(message) {
     console.log('adding message:', message);
 
     const currentMessages = [...messagesSignals.get()];
     currentMessages.push(message);
     messagesSignals.set(currentMessages);
 }
+
+
 
 
 const renderChat = (ws, isChating) => {
@@ -81,4 +84,3 @@ const renderChat = (ws, isChating) => {
 };
 
 export default renderChat;
-
