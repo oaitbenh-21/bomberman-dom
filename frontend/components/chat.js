@@ -8,7 +8,6 @@ const messagesSignals = createSignal([]);
  * Append a new message to the signal.
  */
 export function setMessages(message) {
-    console.log('adding message:', message);
 
     const currentMessages = [...messagesSignals.get()];
     currentMessages.push(message);
@@ -19,7 +18,6 @@ export function setMessages(message) {
 
 
 const renderChat = (ws, isChating) => {
-    console.log('this is render chat and the isChat is :', isChating)
     function handleSubmit(e) {
         e.preventDefault();
         const input = e.target.elements.chat.value;
@@ -44,7 +42,6 @@ const renderChat = (ws, isChating) => {
                 class: "chat-messages",
                 onMount: (el) => {
                     effect(() => {
-                        console.log('messages rerendering...')
                         const messages = messagesSignals.get();
                         messages.forEach((message) => {
                             const messageElement = createElement("div", { class: "chat-message" }, [
@@ -68,6 +65,8 @@ const renderChat = (ws, isChating) => {
                 createElement("input", {
                     onclick: () => {
                         isChating.setState(true);
+                        console.log('now in messages set chatting is to true :', isChating);
+                        console.log('try with use getState(),', isChating.getState())
                     },
                     type: "text",
                     name: "chat",

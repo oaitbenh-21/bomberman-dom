@@ -12,6 +12,7 @@ const renderBoard = (
       players = [],
       isChating,
 ) => {
+      console.log('starting the board: is chatting: , ', isChating)
       let board = [
             ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
             ['w', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'w'],
@@ -46,8 +47,12 @@ const renderBoard = (
             "div",
             {
                   onclick: () => {
+                        console.log('set is chatting to false in board but befor:', isChating)
+                        
                         isChating.setState(false);
+                        console.log('now set chatting is :', isChating)
                   },
+
                   class: "board",
             },
             [

@@ -13,6 +13,7 @@ class App {
     constructor() {
         this.event = events;
         this.isChating = createStore(false);
+        console.log('this is the first time initilizing the is chatting:',this.isChating);
         this.container = document.getElementById("app");
 
         // Game loop controls

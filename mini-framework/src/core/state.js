@@ -8,11 +8,11 @@ class StateManager {
   }
 
   getState() {
-    return { ...this.state };
+    return this.state;
   }
 
   setState(newState) {
-    this.state = { ...this.state, ...newState };
+    this.state = newState ;//{ ...this.state, ...newState };
     this.notify();
   }
 
