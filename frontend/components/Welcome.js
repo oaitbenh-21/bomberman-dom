@@ -3,7 +3,7 @@ import { createElement } from "../../mini-framework/src/mini-framework-z01.js"
 const renderWelcome = (socket, gameState) => {
       function handleButtonClick(e) {
             e.preventDefault();
-            const input = e.target.value;
+            const input = e.target.elements[0];
             const name = input ? input.value : "";
             // validate the name 
             if (name.trim().length === 0) {
@@ -16,7 +16,7 @@ const renderWelcome = (socket, gameState) => {
                   type: "join-player",
                   name: name
             }));
-            e.target.value = ""
+            input.value = "";
       }
 
       return createElement("div", { class: "welcome" }, [
