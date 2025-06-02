@@ -60,6 +60,7 @@ const Skills = () => {
             for (const [key, value] of Object.entries(skills)) {
               let signal = value._value;
               let id = signal.id
+              console.log('signal', signal);
 
 
               const img = createElement("img", {
@@ -75,11 +76,13 @@ const Skills = () => {
                 onMount(el) {
                   const stop = effect(() => {
                     const state = value.get();
+                    console.log(state)
                     if (state.destroyed) {
+                      console.log('should be distroyed')
                       el.remove();
+                      stop();
                     }
                   });
-                  stop();
                 }
               });
               setTimeout(() => {
