@@ -162,7 +162,7 @@ body {
     top: 0px;
 }
 
-.skill {
+.skill,.bomb {
     position: "absolute";
     width: 30;
     height: 30px;

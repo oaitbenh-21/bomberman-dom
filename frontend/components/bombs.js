@@ -89,7 +89,7 @@ const Bombs = () => {
 
                             const img = createElement("img", {
                                 class: "bomb",
-                                src: `./assets/img/boom.gif`,
+                                src: `./assets/img/bomb.gif`,
                                 style: {
                                     position: "absolute",
                                     left: 0,
