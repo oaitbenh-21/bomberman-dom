@@ -43,6 +43,7 @@ const renderChat = (ws, isChating) => {
                 class: "chat-messages",
                 onMount: (el) => {
                     effect(() => {
+                        const messages = messagesSignals.get();
                         messages.forEach((message) => {
                             const messageElement = createElement("div", { class: "chat-message" }, [
                                 createElement("span", { class: "chat-user" }, `${message.username}: `),
