@@ -18,6 +18,7 @@ export default class SocketHandler {
       case "board-server": destroyBox
         this.gameState.getState().board = message.board;
         setBoxes(message.board)
+        this.render();
         break;
 
       case "chat-server":
@@ -27,44 +28,25 @@ export default class SocketHandler {
 
       case "data-server": {
         const state = this.gameState.getState();
+        state.gameData.count = message.count;
         state.gameData.lifes = message.lifes;
         state.gameData.bombs = message.bombs;
         state.gameData.time = message.time;
         break;
       }
-
-      case "count-server":
-        this.gameState.getState().gameData.count = message.count;
-        // this.render();
+      case "start-server": {
+        this.gameState.getState().status = {
+          number: 1,
+          title: "Game Started",
+          message: "The game has started!",
+        };
+        this.render();
         break;
-
+      }
       case "join-server": {
         const state = this.gameState.getState();
         state.players = [...state.players, message];
         setPlayers(state.players);
-        state.countDown.timer = 4;
-
-        if (state.players.length >= 2 && !state.countDown.id) {
-          state.countDown.id = setInterval(() => {
-            state.countDown.timer--;
-            if (state.countDown.timer >= 0) {
-              state.status = {
-                title: "Starting...",
-                message: `Waiting ${state.countDown.timer}`,
-                number: 0,
-              };
-            } else {
-              state.status = {
-                title: "Game Started",
-                message: "",
-                number: 1,
-              };
-              clearInterval(state.countDown.id);
-              state.countDown.id = null;
-            }
-            this.render();
-          }, 1000);
-        }
         break;
       }
 
@@ -131,7 +113,7 @@ export default class SocketHandler {
         setPlayerPosition(message.player.id, message.player.pos);
         break;
       }
-      case "waiting":{
+      case "waiting": {
         this.gameState.getState().countDown.timer = message.time;
         break;
       }
