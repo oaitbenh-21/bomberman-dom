@@ -1,9 +1,11 @@
-import { state } from "../../mini-framework/src/mini-framework-z01.js";
 import { setBombs } from "../components/bombs.js";
 import { destroyBox, setBoxes } from "../components/box.js";
 import { setEffect } from "../components/effect.js";
 import { setPlayers, setPlayerPosition } from "../components/players.js";
 import { destroySkill, setSkills } from "../components/skills.js";
+import { addMessages } from "../components/chat.js";
+
+
 
 export default class SocketHandler {
   constructor(socket, gameState, renderCallback) {
@@ -21,8 +23,9 @@ export default class SocketHandler {
         break;
 
       case "chat-server":
-        this.gameState.addMessage(message);
-        this.render();
+        // this.gameState.addMessage(message);
+        // this.render();
+        addMessages(message);
         break;
 
       case "data-server": {

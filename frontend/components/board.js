@@ -10,7 +10,7 @@ import Effects from "./effect.js";
 const renderBoard = (
       boxes = [],
       players = [],
-      isChating
+      isChating,
 ) => {
       let board = [
             ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
