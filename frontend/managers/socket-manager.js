@@ -90,7 +90,7 @@ export default class SocketHandler {
         const index = bombs.length;
         this.gameState.addBomb({ ...message, id: index });
 
-        setBombs(message.id)
+        setBombs(this.gameState.getState().bombs);
 
         setTimeout(() => {
           this.gameState.getState().bombs = this.gameState

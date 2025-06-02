@@ -15,6 +15,7 @@ const skillSignals = createSignal({});
  * Initialize players with signals and refs.
  */
 export function setSkills(skills) {
+  console.log('skill bro:', skills)
   const currentMap = { ...skillSignals.get() }; // clone to trigger signal
   let updated = false;
 
