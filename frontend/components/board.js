@@ -4,14 +4,12 @@ import Players, { setPlayers } from "./players.js";
 import Boxes, { setBoxes } from "./box.js";
 import Skills from "./skills.js";
 import Bombs from "./bombs.js"
+import Effects from "./effect.js";
 
 
 const renderBoard = (
       boxes = [],
       players = [],
-      status = {},
-      bombs = [],
-      effects = [],
       isChating
 ) => {
       let board = [
@@ -28,7 +26,6 @@ const renderBoard = (
             ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
       ];
 
-      bombs = Array.isArray(bombs) ? bombs : [];
 
       setPlayers(players);
       setBoxes(boxes);
@@ -49,9 +46,7 @@ const renderBoard = (
             "div",
             {
                   onclick: () => {
-                        console.log("board clicked, chating:", isChating);
                         isChating.setState(false);
-                        console.log("did it ischating changed", isChating);
                   },
                   class: "board",
             },
@@ -61,8 +56,6 @@ const renderBoard = (
                               ...row.map((cell) => {
                                     if (cell === 'w')
                                           return createElement("div", { class: "wall" });
-                                    // if (cell === 3)
-                                    //       return createElement("div", { class: "box" });
                                     return createElement("div", { class: "empty" });
                               }),
                         ])
@@ -72,23 +65,24 @@ const renderBoard = (
                   Players(),
                   Skills(),
                   Bombs(),
+                  Effects(),
 
-                  endGame(status),
-                  ...bombs.map((bomb) =>
-                        createElement("img", {
-                              class: "player",
-                              src: `./assets/img/bomb.gif`,
-                              style: `left: 0px; top: 0px; transform: translate(${bomb.pos?.x}px, ${bomb.pos?.y}px);`,
-                        })
-                  ),
+                  // endGame(status),
+                  // ...bombs.map((bomb) =>
+                  //       createElement("img", {
+                  //             class: "player",
+                  //             src: `./assets/img/bomb.gif`,
+                  //             style: `left: 0px; top: 0px; transform: translate(${bomb.pos?.x}px, ${bomb.pos?.y}px);`,
+                  //       })
+                  // ),
                   // create player image at the end
-                  ...effects.map((effect) =>
-                        createElement("img", {
-                              class: "player",
-                              src: `./assets/img/bombed.gif`,
-                              style: `left: 0px; top: 0px; transform: translate(${effect.pos?.left}px, ${effect.pos?.top}px);`,
-                        })
-                  ),
+                  // ...effects.map((effect) =>
+                  //       createElement("img", {
+                  //             class: "player",
+                  //             src: `./assets/img/bombed.gif`,
+                  //             style: `left: 0px; top: 0px; transform: translate(${effect.pos?.left}px, ${effect.pos?.top}px);`,
+                  //       })
+                  // ),
             ]
       );
 };

@@ -19,10 +19,6 @@ export default function renderUI(container, state, socket, isChating) {
             renderBoard(
                 boxes,
                 state.players,
-                state.skills,
-                state.status,
-                state.bombs,
-                state.effects,
                 isChating
             ),
             renderChat(state.messages, socket, isChating),

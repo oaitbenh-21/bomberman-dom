@@ -1,5 +1,6 @@
 import { setBombs } from "../components/bombs.js";
 import { destroyBox, setBoxes } from "../components/box.js";
+import { setEffect } from "../components/effect.js";
 import { setPlayers, setPlayerPosition } from "../components/players.js";
 import { destroySkill, setSkills } from "../components/skills.js";
 
@@ -119,6 +120,7 @@ export default class SocketHandler {
             // state.effects = state.effects.filter(e => e.id !== index);
             // this.render();
             destroyBox(id, pos);
+            setEffect(id, pos);
           }, 400);
         }
         break;
