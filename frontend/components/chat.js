@@ -1,6 +1,21 @@
-import { createElement } from "https://cdn.jsdelivr.net/npm/mini-framework-z01@1.0.10/dist/mini-framework-z01.min.js";
+import { createElement, createSignal } from "../../mini-framework/src/mini-framework-z01.js";
 
-const renderChat = (messages = [], ws, isChating) => {
+
+const messagesSignals = createSignal([]);
+
+/**
+ * Append a new message to the signal.
+ */
+export function addMessages(message) {
+    console.log('adding message:', message);
+
+    const currentMessages = [...messagesSignals.get()];
+    currentMessages.push(message);
+    messagesSignals.set(currentMessages);
+}
+
+
+const renderChat = (ws, isChating) => {
     function handleSubmit(e) {
         e.preventDefault();
         const input = e.target.elements.chat.value;
@@ -21,22 +36,22 @@ const renderChat = (messages = [], ws, isChating) => {
     return createElement("div", { class: "chat" }, [
         createElement(
             "div",
-            { class: "chat-messages" },
-            messages.map((message) =>
-                createElement("div", { class: "chat-message" }, [
-                    createElement(
-                        "span",
-                        { class: "chat-user" },
-                        `${message.username}: `
-                    ),
-                    createElement(
-                        "span",
-                        { class: "chat-text" },
-                        message.message
-                    ),
-                ])
-            )
+            {
+                class: "chat-messages",
+                onMount: (el) => {
+                    effect(() => {
+                        messages.forEach((message) => {
+                            const messageElement = createElement("div", { class: "chat-message" }, [
+                                createElement("span", { class: "chat-user" }, `${message.username}: `),
+                                createElement("span", { class: "chat-text" }, message.message),
+                            ]);
+                            el.appendChild(messageElement);
+                        });
+                    })
+                },
+            }
         ),
+
         createElement(
             "form",
             {
@@ -66,3 +81,4 @@ const renderChat = (messages = [], ws, isChating) => {
 };
 
 export default renderChat;
+
