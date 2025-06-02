@@ -32,7 +32,7 @@ export function JoinPlayer(ws) {
       player.color = colors[currentPlayer]
 
       // add the new player to the current room
-      currentRoom.addPlayer(player, ws);
+      // currentRoom.addPlayer(player, ws);
 
       return [player, currentRoom]
 }
