@@ -43,7 +43,7 @@ const Players = () => {
         src: "./assets/img/down-1.png",
         style: {
           position: "absolute",
-          transform: `translate(${signal.get().x * 40}px, ${signal.get().y * 40}px)`, // initial render
+          transform: `translate(${1 * 40}px, ${1 * 40}px)`, // initial render
         },
         alt: "player",
         id,

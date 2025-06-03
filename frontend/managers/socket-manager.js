@@ -67,7 +67,8 @@ export default class SocketHandler {
         console.log("kill-server message:", message);
         // destroySkill(state.skills);
         // setSkills(state.skills);
-        destroySkill(message.id)
+        destroySkill(message.id);
+        destroyPlayer(message.id);
         break;
       }
 

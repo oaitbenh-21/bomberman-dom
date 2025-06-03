@@ -123,7 +123,7 @@ const Effects = () => {
                                         effectSignals.set(current);
 
                                         stopPositionEffect();
-                                    }, 200);
+                                    }, 250);
 
                                     // Store cleanup function
                                     const cleanup = () => {
