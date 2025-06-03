@@ -10,6 +10,7 @@ export class Room {
         this.Waiting = true;
         this.Over = false;
         this.Timer;
+        this.CountDown = 20;
     }
 
     checkWinner() {
@@ -68,10 +69,14 @@ export class Room {
                 this.Joining--;
                 return;
             }
-            case 2: {
+            case 1: {
                 this.broadcast(JSON.stringify({
                     type: "start-counting",
                 }));
+                let inter = setInterval(() => {
+                    this.CountDown--;
+                    if (this.CountDown == 0) clearInterval(inter);
+                }, 1000);
             }
         }
         this.Players.push(player);
@@ -103,14 +108,13 @@ export class Room {
                 }))
             }, FirstTimeDelay)
         }
-        // this.broadcast(JSON.stringify({
-        //     type: "count-server",
-        //     count: this.Players.length,
-        // }))
+        this.broadcast(JSON.stringify({
+            type: "countDown",
+            count: this.CountDown,
+        }))
     }
 
     broadcast(message) {
-
         this.Connections.forEach((ws) => {
             ws.send(message)
         })
