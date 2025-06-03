@@ -65,19 +65,32 @@ export class Room {
     addPlayer(player = new Player()) {
         this.Players.push(player);
         this.Connections.push(player.ws);
-        if (this.Timer) clearTimeout(this.Timer);
-        if (this.Players.length >= 2) this.Timer = setTimeout(() => {
-            setTimeout(() => {
-                this.Waiting = false;
-                this.broadcast(JSON.stringify({
-                    type: "start-server",
-                }))
-            }, 1000);
-            this.broadcast(JSON.stringify({
-                type: "waiting",
-                time: 1,
-            }))
-        }, 1000)
+        if (this.Timer) {
+            if (this.Players.length == 4) {
+                setTimeout(() => {
+                    this.Waiting = false;
+                    this.broadcast(JSON.stringify({
+                        type: "start-server",
+                    }))
+                }, 1000);
+                return;
+            }
+            clearTimeout(this.Timer);
+            if (this.Players.length >= 2) {
+                this.Timer = setTimeout(() => {
+                    setTimeout(() => {
+                        this.Waiting = false;
+                        this.broadcast(JSON.stringify({
+                            type: "start-server",
+                        }))
+                    }, 1000);
+                    this.broadcast(JSON.stringify({
+                        type: "waiting",
+                        time: 1,
+                    }))
+                }, 1000)
+            }
+        }
         // this.broadcast(JSON.stringify({
         //     type: "count-server",
         //     count: this.Players.length,
