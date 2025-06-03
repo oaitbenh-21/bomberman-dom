@@ -149,13 +149,11 @@ export class Player {
             newX + 29 < board[0].length * 40 &&
             newY + 29 < board.length * 40) {
 
-            // Define how many points to check along each edge
-            const checkPoints = 4; // Check 4 points along each edge (including corners)
+            const checkPoints = 4;
             let canMove = true;
 
-            // Check top and bottom edges
             for (let i = 0; i <= checkPoints; i++) {
-                const checkX = newX + (i * 29 / checkPoints); // Points from left to right edge
+                const checkX = newX + (i * 29 / checkPoints);
 
                 // Check top edge
                 if (
@@ -178,10 +176,9 @@ export class Player {
                 }
             }
 
-            // Check left and right edges
             if (canMove) {
                 for (let i = 0; i <= checkPoints; i++) {
-                    const checkY = newY + (i * 29 / checkPoints); // Points from top to bottom edge
+                    const checkY = newY + (i * 29 / checkPoints);
 
                     // Check left edge
                     if (
@@ -215,7 +212,7 @@ export class Player {
                             this.Speed += 5;
                             setTimeout(() => {
                                 this.Speed -= 5;
-                            }, 5000);
+                            }, 10000);
                             break;
                         case "lifes":
                             this.lifes++;
@@ -224,7 +221,7 @@ export class Player {
                             this.Flames++;
                             setTimeout(() => {
                                 this.Flames--;
-                            }, 3000);
+                            }, 10000);
                             break;
                         default:
                             break;
