@@ -1,5 +1,4 @@
 import { createElement } from "../../mini-framework/src/mini-framework-z01.js";
-import { endGame } from "./endGame.js";
 import Players, { setPlayers } from "./players.js";
 import Boxes, { setBoxes } from "./box.js";
 import Skills from "./skills.js";

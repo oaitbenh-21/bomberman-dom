@@ -108,6 +108,7 @@ export default class SocketHandler {
       }
       case "countDown": {
         this.gameState.getState().count = message.count
+        break;
       }
 
       case "move-server": {
