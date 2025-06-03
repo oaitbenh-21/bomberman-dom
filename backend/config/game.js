@@ -67,36 +67,42 @@ export class Room {
         this.Connections.push(player.ws);
         let FirstTimeDelay = 20000;
         let LastTimeDelay = 10000;
-        if (this.Timer) {
-            if (this.Players.length == 4) {
+        if (this.Timer && this.Players.length != 4) {
+            return;
+        }
+        if (this.Players.length == 4) {
+            clearTimeout(this.Timer);
+            setTimeout(() => {
+                this.Waiting = false;
+                this.Players.forEach((p, i) => {
+                    p.pos = p.assignStartPosition(i)
+                });
+                this.broadcast(JSON.stringify({
+                    type: "start-server",
+                }))
+            }, LastTimeDelay);
+            return;
+        } else if (this.Players.length >= 2) {
+            this.Timer = setTimeout(() => {
                 setTimeout(() => {
                     this.Waiting = false;
+                    this.Players.forEach((p, i) => {
+                        p.pos = p.assignStartPosition(i)
+                    });
                     this.broadcast(JSON.stringify({
                         type: "start-server",
                     }))
                 }, LastTimeDelay);
-                return;
-            }
-            clearTimeout(this.Timer);
-            if (this.Players.length >= 2) {
-                this.Timer = setTimeout(() => {
-                    setTimeout(() => {
-                        this.Waiting = false;
-                        this.broadcast(JSON.stringify({
-                            type: "start-server",
-                        }))
-                    }, LastTimeDelay);
-                    this.broadcast(JSON.stringify({
-                        type: "waiting",
-                        time: 1,
-                    }))
-                }, FirstTimeDelay)
-            }
+                this.broadcast(JSON.stringify({
+                    type: "waiting",
+                    time: 1,
+                }))
+            }, FirstTimeDelay)
         }
-        // this.broadcast(JSON.stringify({
-        //     type: "count-server",
-        //     count: this.Players.length,
-        // }))
+        this.broadcast(JSON.stringify({
+            type: "count-server",
+            count: this.Players.length,
+        }))
     }
 
     broadcast(message) {
@@ -112,7 +118,7 @@ export class Player {
         this.id = uuidv4();
         this.name = "";
         this.room = room;
-        this.pos = this.assignStartPosition();
+        this.pos = {};
         this.Bombs = 1;
         this.lifes = 3;
         this.Flames = 1;
@@ -120,9 +126,8 @@ export class Player {
         this.ws = conn;
     }
 
-    assignStartPosition() {
-        const numPlayers = this.room.Joining;
-        switch (numPlayers) {
+    assignStartPosition(playerIndex) {
+        switch (playerIndex) {
             case 0: return { x: 40, y: 40 };
             case 1: return { x: (this.room.Board[0].length - 2) * 40, y: 40 };
             case 2: return { x: 40, y: (this.room.Board.length - 2) * 40 };
