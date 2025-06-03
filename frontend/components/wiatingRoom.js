@@ -6,7 +6,7 @@ function renderWaitingRoom(gameState, container) {
       const name = state.name.get();
       const players = Object.entries(state.gamers.get());
       console.log(players)
-      let timer = 20;
+      let timer = state.count
       const renderCountdown = () => {
             const waiting = createElement("div", { class: "waitingRoom" }, [
                   createElement("h2", {}, `Welcome, ${name}`),

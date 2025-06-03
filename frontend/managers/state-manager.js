@@ -27,6 +27,7 @@ export default class GameState {
             effects: [],
             bombs: [],
             board: [],
+            count:null,
             countDown: {
                 id: undefined,
                 timer: 4,

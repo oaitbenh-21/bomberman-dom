@@ -106,9 +106,12 @@ export default class SocketHandler {
         }
         break;
       }
+      case "countDown": {
+        this.gameState.getState().count = message.count
+      }
 
       case "move-server": {
-        setPlayerPosition(message.player.id, message.player.pos);
+        setPlayerPosition(...message.player);
         break;
       }
       case "waiting": {
