@@ -65,8 +65,8 @@ export class Room {
     addPlayer(player = new Player()) {
         this.Players.push(player);
         this.Connections.push(player.ws);
-        let FirstTimeDelay = 20000;
-        let LastTimeDelay = 10000;
+        let FirstTimeDelay = 100;
+        let LastTimeDelay = 100;
         if (this.Timer && this.Players.length != 4) {
             return;
         }
