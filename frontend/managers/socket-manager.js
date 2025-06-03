@@ -112,7 +112,7 @@ export default class SocketHandler {
       }
 
       case "move-server": {
-        setPlayerPosition(...message.player);
+        setPlayerPosition(...message.players);
         break;
       }
       case "waiting": {
