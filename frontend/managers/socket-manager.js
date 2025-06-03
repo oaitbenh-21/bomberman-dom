@@ -10,12 +10,13 @@ import { compareDatesAndFormat } from "../src/utils.js";
 
 
 export default class SocketHandler {
-  constructor(socket, gameState, board, welcom , waitingList) {
+  constructor(socket, gameState, board, welcom, waitingList,countDown) {
     this.socket = socket;
     this.gameState = gameState;
     this.board = board;
     this.welcom = welcom;
-    this.waitingList = waitingList
+    this.waitingList = waitingList;
+    this.countDown = countDown;
   }
 
   handleMessage(data) {
@@ -50,8 +51,19 @@ export default class SocketHandler {
           title: "Game Started",
           message: "The game has started!",
         };
-        this.board();
-        // this.render();
+        const state = this.gameState.getState();
+        const players = Object.entries(state.players)
+        if (players.length == 4){
+          this.board()
+        }else{
+          setTimeout(() => {
+            this.countDown()
+          setTimeout(()=>{
+            this.board();
+          },10000)
+        }, 20000)
+        }
+
         break;
       }
       case "join-server": {
@@ -61,6 +73,7 @@ export default class SocketHandler {
         state.gamers.set([...currentPlayers, message]);
         setPlayers(state.players);
         this.waitingList();
+
         break;
       }
 
@@ -70,8 +83,6 @@ export default class SocketHandler {
         state.skills = state.skills.filter(s => s.id !== message.id);
         state.effect = message.pos;
         console.log("kill-server message:", message);
-        // destroySkill(state.skills);
-        // setSkills(state.skills);
         destroySkill(message.id);
         destroyPlayer(message.id);
         break;
@@ -85,7 +96,6 @@ export default class SocketHandler {
 
       case "bomb-server": {
         this.gameState.addBomb({ ...message });
-
         setBombs(message);
         break;
       }
@@ -98,15 +108,8 @@ export default class SocketHandler {
           id = message.remove.id
           pos = message.effect.pos
         }
-
-        // const state = this.gameState.getState();
-        // state.board[message.y][message.x] = 0;
         if (id && pos) {
-          // const index = state.effects.length;
-          // state.effects.push({ ...message, id: index });
           setTimeout(() => {
-            // state.effects = state.effects.filter(e => e.id !== index);
-            // this.render();
             destroyBox(id, pos);
             setEffect(id, pos);
           }, 400);
@@ -120,11 +123,8 @@ export default class SocketHandler {
       }
       case "waiting": {
         this.gameState.getState().countDown.timer = message.time;
+        console.log(message.time)
         this.waitingList();
-        break;
-      }
-      case "start-server": {
-        this.welcom();
         break;
       }
       case "gameover-server":

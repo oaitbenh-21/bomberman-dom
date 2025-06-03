@@ -1,33 +1,35 @@
-import { createElement,render} from "../../mini-framework/src/mini-framework-z01.js";
+import { createElement, render } from "../../mini-framework/src/mini-framework-z01.js";
 
+const renderWelcome = (socket, gameState, container) => {
+      const state = gameState.getState();
+      const name = state.name.get();
+      if (!state.error) {
+            state.error = { value: "", set(val) { this.value = val; } };
+      }
+      const error = state.error.value;
 
-
-const renderWelcome = (socket, gameState,container) => {
-            const state = gameState.getState();
-            const name = state.name.get();
       function handleSubmit(e) {
             e.preventDefault();
             const input = e.target.elements[0];
             const name = input ? input.value.trim() : "";
-            if (name.length === 0) {
-                  alert("Enter a valid name");
+            gameState.getState().name.set(name);
+            if (!name || name.length < 3) {
+                  state.error.set("Enter a valid name (min 3 chars)");
+                  renderWelcome(socket, gameState, container); // re-render to show error
                   return;
             }
-
-            gameState.getState().name.set(name);
+            state.error.set("");
             socket.send(JSON.stringify({ type: "join-player", name }));
             input.value = "";
       }
 
       const welcome = createElement("div", {}, [
-            renderWelcomeScreen(name, handleSubmit)
+            renderWelcomeScreen(name, error, handleSubmit)
       ]);
-      render(welcome,container)
+      render(welcome, container)
 };
 
-
-
-function renderWelcomeScreen(name, handleSubmit) {
+function renderWelcomeScreen(name, error, handleSubmit) {
       return createElement("div", { class: "welcome" }, [
             createElement("img", {
                   src: "./assets/img/bomberman-logo.png",
@@ -38,11 +40,12 @@ function renderWelcomeScreen(name, handleSubmit) {
             createElement("form", { class: "form", onSubmit: handleSubmit }, [
                   createElement("input", {
                         type: "text",
-                        placeholder: "Enter your creative name (min 2 chars)",
-                        value: name
-                  }),
-                  createElement("button", {}, "Start Game")
-            ])
+                        placeholder: "Enter your creative name (min 3 chars)",
+                        value: name,
+                  },[]),
+                  createElement("button", {}, "Start Game"),
+            ]),
+            createElement("div", { class: "error" }, error || "")
       ]);
 }
 

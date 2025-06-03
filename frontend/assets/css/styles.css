@@ -379,13 +379,17 @@ form {
 }
 
 .form {
-    width: 500px;
+    width: 50%;
+    min-width: 500px;
     display: flex;
-    flex-direction: column;
-    gap: 10px
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
 }
 
 .welcome input[type="text"] {
+    width: 70%;
     padding: 0.7rem 1.2rem;
     border-radius: 8px;
     border: none;
@@ -404,6 +408,7 @@ form {
 }
 
 .welcome button {
+    width:30% ;
     padding: 0.7rem 2.2rem;
     border-radius: 8px;
     border: none;
@@ -420,6 +425,9 @@ form {
     background: var(--color-accent);
     color: var(--color-bg);
     transform: translateY(-2px) scale(1.04);
+}
+.countDown{
+    color: var(--color-accent);
 }
 
 /* popup */
@@ -647,26 +655,77 @@ form {
                   )
             )
       ]);*/
-.waitingRoom{
-    width: 100%;
+.waitingRoom {
+    width: 100vw;
     height: 100vh;
+    min-height: 400px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: var(--color-bg);
+    background: linear-gradient(135deg, var(--color-bg) 70%, var(--color-card) 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    gap: 2rem;
 }
 
-.waitingRoom h2{
-    font-size: medium;
+.waitingRoom h2 {
+    font-size: 2rem;
+    color: var(--color-accent);
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-.waitingRoom ul{
-    width: 50%;
+.waitingRoom p {
+    color: var(--color-text);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.waitingRoom ul {
+    width: 100%;
+    max-width: 350px;
+    background: var(--color-primary);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px var(--color-shadow);
+    padding: 1rem 0.5rem;
     list-style: none;
-}
-.waitingRoom ul li {
-    padding: 10px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
+.waitingRoom ul li {
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    background: var(--color-primary-light);
+    color: var(--color-bg);
+    font-size: 1.05rem;
+    font-weight: 500;
+    transition: background 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.waitingRoom ul li:nth-child(odd) {
+    background: var(--color-muted);
+    color: var(--color-bg);
+}
+
+@media (max-width: 600px) {
+    .waitingRoom ul {
+        max-width: 95vw;
+        padding: 0.5rem 0.2rem;
+    }
+    .waitingRoom h2 {
+        font-size: 1.3rem;
+    }
+}
+
+.error{
+    color: red;
+}
 

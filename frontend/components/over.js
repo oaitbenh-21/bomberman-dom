@@ -1,17 +1,9 @@
-// {
-//   number: 1,
-//   title: "Game Started",
-//   message: "The game has started!",
-// }
-
-import { createElement } from "../../mini-framework/src/mini-framework-z01.js";
+import { createElement, render } from "../../mini-framework/src/mini-framework-z01.js";
 
 
-export function renderPopup(status) {
-    console.log(status);
-    if (status.number == 0) {
-        return createElement("div", { class: "popup" }, [createElement("span", { class: "title" }, [status.title]), createElement("span", { class: "content" }, [status.message])]);
-    } else {
-        return "";
-    }
+export default function renderPopup(gameState, container) {
+    const state = gameState.getState();
+    const status = state.status
+    const popup =  createElement("div", { class: "popup" }, [createElement("span", { class: "title" }, [status.title]), createElement("span", { class: "content" }, [status.message])]);
+    render(popup, container)
 }

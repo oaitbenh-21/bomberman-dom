@@ -12,6 +12,7 @@ import { compareDatesAndFormat } from "./src/utils.js";
 import { setHeaderData } from "./components/header.js";
 import renderWelcome from "./components/Welcome.js";
 import renderWaitingRoom from "./components/wiatingRoom.js"
+import renderPopup from "./components/over.js"
 
 
 class App {
@@ -35,6 +36,7 @@ class App {
         this.welcom = renderWelcome.bind(this,this.socket,this.gameState,this.container)
         this.board = renderUI.bind(this, this.container, this.gameState, this.socket, this.isChating);
         this.waitingList = renderWaitingRoom.bind(this,this.gameState,this.container)
+        this.countDown = renderPopup.bind(this,this.gameState,this.container)
         this.gameLoop = this.gameLoop.bind(this);
         window.addEventListener('socket-ready', () => {
             this.welcom()
@@ -50,7 +52,7 @@ class App {
     }
 
     init() {
-        this.socketHandler = new SocketHandler(this.socket, this.gameState, this.board, this.welcom , this.waitingList);
+        this.socketHandler = new SocketHandler(this.socket, this.gameState, this.board, this.welcom , this.waitingList,this.countDown);
         this.socketHandler.setup();
 
         this.controlHandler = new ControlHandler(
