@@ -28,12 +28,12 @@ export default function renderPopup(gameState, container) {
 
     renderCountdown();
 
-    // gameState.getState().currentInterval = setInterval(() => {
-    //     countdown--;
-    //     renderCountdown();
+    gameState.getState().currentInterval = setInterval(() => {
+        countdown--;
+        renderCountdown();
 
-    //     if (countdown <= 0) {
-    //         clearInterval(gameState.getState().currentInterval);
-    //     }
-    // }, 1000);
+        if (countdown <= 0) {
+            clearInterval(gameState.getState().currentInterval);
+        }
+    }, 1000);
 }

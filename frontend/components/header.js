@@ -7,6 +7,12 @@ export const setHeaderData = (data) => {
   HeaderSignals.set(data);
 }
 
+// Auto-refresh the current value every second
+setInterval(() => {
+  const current = HeaderSignals.get();
+  HeaderSignals.set({ ...current }); // triggers update even if data is the same
+}, 16);
+
 const renderHeader = (gameData) => {
   return createElement('header', { class: 'header' },
     [
