@@ -10,13 +10,14 @@ import { compareDatesAndFormat } from "../src/utils.js";
 
 
 export default class SocketHandler {
-  constructor(socket, gameState, board, welcom, waitingList, countDown) {
+  constructor(socket, gameState, board, welcom, waitingList, countDown,endGame) {
     this.socket = socket;
     this.gameState = gameState;
     this.board = board;
     this.welcom = welcom;
     this.waitingList = waitingList;
     this.countDown = countDown;
+    this.endGame = endGame;
   }
 
   handleMessage(data) {
@@ -127,7 +128,7 @@ export default class SocketHandler {
           title: "Game Over",
           message: `the Winner is ${message.winner}`,
         };
-        // this.render();
+        this.endGame()
         break;
       default:
         console.warn("Unhandled WebSocket message:", message);

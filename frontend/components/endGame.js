@@ -3,10 +3,12 @@ import { createElement, render, } from "../../mini-framework/src/mini-framework-
 
 function endGame(gameState, container) {
       const state = gameState.getState();
-      const name = state.name.get();
+      const status = state.status;
+      console.log(status)
       const winner = state.winner;
       const endGame = createElement("div", { class: "waitingRoom" }, [
-            createElement("h2", {}, [`Game over the winner is ${winner}`])
+            createElement("h2", {}, [`${status.title}`]),
+            createElement("p",{},[`${status.message}`])
       ]);
       render(endGame, container);
 
