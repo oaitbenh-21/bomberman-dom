@@ -24,7 +24,6 @@ export default class SocketHandler {
     switch (message.type) {
       case "board-server": destroyBox
         this.gameState.getState().board = message.board;
-        this.board();
         setBoxes(message.board)
         // this.render();
         break;
@@ -51,7 +50,7 @@ export default class SocketHandler {
           title: "Game Started",
           message: "The game has started!",
         };
-        const state = this.gameState.getState();
+        // const state = this.gameState.getState();
         // const players = Object.entries(state.players)
         this.board()
         break;
