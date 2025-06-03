@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 import { Player, Room } from '../config/game.js';
 import { BombPositions } from './bomb.js';
 import { MovePlayer } from './move.js';
@@ -77,14 +78,13 @@ export function handlePlayerAction(currentRoom = new Room(), player = new Player
                   player.Bombs--;
                   setTimeout(() => {
                         player.Bombs++;
-                  }, 2000);
+                  }, 2200);
                   const BombPos = { x: Math.floor(player.pos.x / 40) * 40 + 5, y: Math.floor(player.pos.y / 40) * 40 + 5 };
                   currentRoom.broadcast(JSON.stringify({
                         type: "bomb-server",
                         pos: { x: BombPos.x, y: BombPos.y },
-                        id: Date.now()
+                        id: v4(),
                   }));
-
                   BombPositions(BombPos, currentRoom, player.Flames);
                   break;
             // case of moving
