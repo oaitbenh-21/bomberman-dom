@@ -7,7 +7,7 @@ import { setMessages } from "../components/chat.js";
 import { setHeaderData } from "../components/header.js";
 import { compareDatesAndFormat } from "../src/utils.js";
 
-let isStarted = false
+let isPlaying = false
 
 export default class SocketHandler {
   constructor(socket, gameState, board, welcom, waitingList, countDown, endGame) {
@@ -46,7 +46,7 @@ export default class SocketHandler {
         break;
       }
       case "start-server": {
-        isStarted = true;
+        isPlaying = true
         this.gameState.getState().status = {
           number: 1,
           title: "Game Started",
@@ -65,7 +65,8 @@ export default class SocketHandler {
         state.gamers.set([...currentPlayers, message]);
         setPlayers(state.players);
         setPlayerPosition(message.id, message.pos)
-        if (!isStarted) {
+        // Only call waitingList if player count is NOT a multiple of 4
+        if (!isPlaying) {
           this.waitingList();
         }
         break;
@@ -121,11 +122,10 @@ export default class SocketHandler {
         break;
       }
       case "waiting": {
-        isStarted = true
+        isPlaying = true;
         console.log('waiting is happening , go away222')
         this.gameState.getState().countDown.timer = message.time;
         console.log(message.time);
-
         this.countDown()
         break;
       }
