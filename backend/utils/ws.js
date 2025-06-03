@@ -26,7 +26,7 @@ export function handlePlayerAction(currentRoom = new Room(), player = new Player
             case "join-player":
                   console.log(data);
                   // check name is Valid
-                  if (!currentRoom.isValid(data.name)) {
+                  if (!currentRoom.isValid(data.name) || player.name != "") {
                         player.ws.send(JSON.stringify({
                               type: "error",
                               error: "your name is alredy taken or its less then 3 characters"
