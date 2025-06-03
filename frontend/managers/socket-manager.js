@@ -5,6 +5,7 @@ import { setPlayers, setPlayerPosition } from "../components/players.js";
 import { destroySkill, setSkills } from "../components/skills.js";
 import { setMessages } from "../components/chat.js";
 import { setHeaderData } from "../components/header.js";
+import { compareDatesAndFormat } from "../src/utils.js";
 
 
 
@@ -36,8 +37,8 @@ export default class SocketHandler {
         state.gameData.count = message.count;
         state.gameData.lifes = message.lifes;
         state.gameData.bombs = message.bombs;
-        state.gameData.time = message.time;
-        setHeaderData(state.gameData);
+        state.gameData.time = compareDatesAndFormat(this.gameState.getState().startTime, new Date());
+        setHeaderData(message);
         break;
       }
       case "start-server": {

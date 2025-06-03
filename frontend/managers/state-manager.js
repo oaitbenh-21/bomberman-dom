@@ -17,6 +17,7 @@ export default class GameState {
                 "l": false,
                 "r": false,
             },
+            startTime: new Date(),
             moveNumber: 0,
             name: createSignal(""),
             player: "",

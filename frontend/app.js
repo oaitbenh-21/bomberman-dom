@@ -8,12 +8,14 @@ import GameState from "./managers/state-manager.js";
 import SocketHandler from "./managers/socket-manager.js";
 import ControlHandler from "./managers/controle-manager.js";
 import renderUI from "./managers/ui-manager.js";
+import { compareDatesAndFormat } from "./src/utils.js";
+import { setHeaderData } from "./components/header.js";
 
 class App {
     constructor() {
         this.event = events;
         this.isChating = createStore(false);
-        console.log('this is the first time initilizing the is chatting:',this.isChating);
+        console.log('this is the first time initilizing the is chatting:', this.isChating);
         this.container = document.getElementById("app");
 
         // Game loop controls
@@ -28,7 +30,7 @@ class App {
 
         this.sendMove = this.sendMove.bind(this);
         this.dropBomb = this.dropBomb.bind(this);
-        this.render = renderUI.bind( this,  this.container, this.gameState, this.socket, this.isChating);
+        this.render = renderUI.bind(this, this.container, this.gameState, this.socket, this.isChating);
         this.gameLoop = this.gameLoop.bind(this);
         window.addEventListener('socket-ready', () => {
             this.render();
@@ -65,6 +67,8 @@ class App {
     }
 
     gameLoop() {
+        this.gameState.state.gameData.time = compareDatesAndFormat(this.gameState.state.startTime, new Date());
+        setHeaderData(this.gameState.state.gameData);
         if (this.moveNumber == 5) {
             Object.entries(this.gameState.state.Movement).forEach(([key, value]) => {
                 if (value) {

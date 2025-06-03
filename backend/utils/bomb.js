@@ -78,5 +78,14 @@ export function BombPositions(BombPos, currentRoom, flames) {
             type: "gameover-server",
             winner: winner,
         }));
+        currentRoom.Players.forEach(pl => {
+            pl.ws.send(JSON.stringify({
+                type: "data-server",
+                count: currentRoom.Players.length,
+                lifes: player.lifes,
+                bombs: player.Bombs,
+                flames: player.Flames,
+            }));
+        })
     }, 2000);
 }

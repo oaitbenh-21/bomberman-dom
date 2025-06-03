@@ -12,10 +12,10 @@ export default function initUI(container, gameState, socket, isChating) {
     const state = gameState.getState();
     // This effect reruns when `player` changes
     const stop = effect(() => {
-        console.log('the effect works in render the ui but are the variables', container, gameState, socket, isChating)
+        // console.log('the effect works in render the ui but are the variables', container, gameState, socket, isChating)
         const playerName = state.name.get();
 
-       /*  */ console.log('rendering the init ui, the state is :', playerName)
+        //    /*  */ console.log('rendering the init ui, the state is :', playerName)
 
         // Decide what to render based on whether player is set
         const content = playerName

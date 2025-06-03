@@ -12,13 +12,15 @@ wsServer.on('connection', (ws) => {
             const data = JSON.parse(message);
             if (!data) return;
             handlePlayerAction(currentRoom, player, data);
-            currentRoom.broadcast(JSON.stringify({
-                type: "data-server",
-                count: currentRoom.Players.length,
-                lifes: player.lifes,
-                bombs: player.Bombs,
-                flames: player.Flames,
-            }));
+            currentRoom.Players.forEach(pl => {
+                pl.ws.send(JSON.stringify({
+                    type: "data-server",
+                    count: currentRoom.Players.length,
+                    lifes: player.lifes,
+                    bombs: player.Bombs,
+                    flames: player.Flames,
+                }));
+            })
         });
     } catch (err) {
         console.log(err);
