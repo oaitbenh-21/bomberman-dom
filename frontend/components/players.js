@@ -10,7 +10,6 @@ const playerSignals = {};
  * Initialize players with signals and refs.
  */
 export function setPlayers(players) {
-  console.log(players);
   players.forEach(player => {
     if (!playerSignals[player.id]) {
       playerSignals[player.id] = createSignal({ ...player.pos });
@@ -18,11 +17,19 @@ export function setPlayers(players) {
   });
 }
 
+export function destroyPlayer(id) {
+  const signal = playerSignals[id].get();
+  if (signal) {
+    playerSignals[id].set({ ...signal, destroyed: true });
+  }
+}
+
 /**
  * Update the position of a specific player.
  */
 export function setPlayerPosition(id, newPos) {
   const signal = playerSignals[id];
+  console.log('set player position the subscriped things:', signal.subscribers)
   if (signal) {
     signal.set({ x: newPos.x, y: newPos.y });
   } else {
@@ -30,35 +37,6 @@ export function setPlayerPosition(id, newPos) {
   }
 }
 
-
-/**
- * Render players with reactive position effects.
- */
-// const Players = () => {
-//   return createElement(
-//     "div",
-//     { class: "Players" },
-//     Object.entries(playerSignals).map(([id, signal]) => {
-//       return createElement("img", {
-//         class: "player",
-//         src: "./assets/img/down-1.png",
-//         style: {
-//           position: "absolute",
-//           transform: `translate(${signal.get().x * 40}px, ${signal.get().y * 40}px)`, // initial render
-//         },
-//         alt: "player",
-//         id,
-//         key: id,
-//         onMount(el) {
-//           effect(() => {
-//             const { x, y } = signal.get();
-//             el.style.transform = `translate(${x}px, ${y}px)`;
-//           });
-//         }
-//       });
-//     })
-//   );
-// };
 /**
  * Render players with reactive position effects.
  */
@@ -72,15 +50,19 @@ const Players = () => {
         src: "./assets/img/down-1.png",
         style: {
           position: "absolute",
-          transform: `translate(${signal.get().x * 40}px, ${signal.get().y * 40}px)`, // initial render
+          transform: `translate(${signal.get().x}px, ${signal.get().y * 40}px)`, // initial render
         },
         alt: "player",
         id,
         key: id,
         onMount(el) {
           effect(() => {
-            const { x, y } = signal.get();
-            el.style.transform = `translate(${x}px, ${y}px)`;
+            const player = signal.get();
+            console.log(player);
+            el.style.transform = `translate(${player.x}px, ${player.y}px)`;
+            if (player.destroyed && el) {
+              el.remove();
+            }
           });
         }
       });
