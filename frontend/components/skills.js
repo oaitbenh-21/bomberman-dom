@@ -37,8 +37,6 @@ export function destroySkill(id) {
   const signal = skillSignals.get()[id];
   if (signal) {
     signal.set({ ...signal.get(), destroyed: true });
-  } else {
-    console.warn(`No signal found for skill ${id}`);
   }
 }
 

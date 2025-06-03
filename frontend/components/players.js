@@ -17,6 +17,13 @@ export function setPlayers(players) {
   });
 }
 
+export function destroyPlayer(id) {
+  const signal = playerSignals.get()[id];
+  if (signal) {
+    signal.set({ ...signal.get(), destroyed: true });
+  }
+}
+
 /**
  * Update the position of a specific player.
  */
@@ -50,8 +57,12 @@ const Players = () => {
         key: id,
         onMount(el) {
           effect(() => {
-            const { x, y } = signal.get();
+            const { x, y, destroyed } = signal.get();
             el.style.transform = `translate(${x}px, ${y}px)`;
+            if (destroyed) {
+              cnosole.log('should be distroyed')
+              el.remove();
+            }
           });
         }
       });
