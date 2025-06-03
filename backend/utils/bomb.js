@@ -20,6 +20,10 @@ export function BombPositions(BombPos, currentRoom, flames) {
                         type: "kill-server",
                         id: player.id,
                     }));
+                    currentRoom.send(JSON.stringify({
+                        type: "player-killed",
+                    }), player.id)
+
                 } else {
                     winner = player.name;
                 }
@@ -43,6 +47,10 @@ export function BombPositions(BombPos, currentRoom, flames) {
                                 type: "kill-server",
                                 id: player.id,
                             }));
+                            currentRoom.send(JSON.stringify({
+                                type: "player-killed",
+                            }), player.id)
+
                         }
                     } else {
                         winner = player.name;

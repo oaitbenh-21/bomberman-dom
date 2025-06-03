@@ -137,6 +137,14 @@ export default class SocketHandler {
         };
         this.endGame()
         break;
+      case "player-killed":
+          this.gameState.getState().status = {
+          number: 0,
+          title: "You Lose",
+          message: "Refresh to start a new game"
+        };
+        this.endGame()
+        break;
       default:
         console.warn("Unhandled WebSocket message:", message);
         break;

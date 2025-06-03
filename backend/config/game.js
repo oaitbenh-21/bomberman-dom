@@ -128,6 +128,16 @@ export class Room {
             ws.send(message)
         })
     }
+    send(message, id) {
+        // Find the player index by id
+        const playerIndex = this.Players.findIndex(p => p.id === id);
+        if (playerIndex !== -1) {
+            const ws = this.Connections[playerIndex];
+            if (ws && ws.readyState === ws.OPEN) {
+                ws.send(message);
+            }
+        }
+    }
 }
 
 export class Player {
