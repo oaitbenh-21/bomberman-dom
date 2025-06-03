@@ -63,7 +63,7 @@ export class Room {
     }
 
     addPlayer(player = new Player()) {
-        if (this.Players.length != 4) {
+        if (this.Players.length == 4) {
             this.Joining--;
             return;
         }
