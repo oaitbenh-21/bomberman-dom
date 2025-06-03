@@ -3,8 +3,10 @@ import { createElement, render, } from "../../mini-framework/src/mini-framework-
 
 function renderWaitingRoom(gameState, container) {
       // 🧹 Clear any existing interval
-      if (container._waitingRoomInterval) {
-            clearInterval(container._waitingRoomInterval);
+      let currentInterval = gameState.getState().currentInterval;
+      if (currentInterval) {
+            console.log('found interval in waiting room:', currentInterval)
+            clearInterval(currentInterval);
       }
 
       let timer = gameState.getState().count;
@@ -14,8 +16,6 @@ function renderWaitingRoom(gameState, container) {
             const name = state.name.get();
             const playersObj = state.players;
             const players = Object.entries(playersObj);
-
-            console.log("the players in the waiting room", players);
 
             const waiting = createElement("div", { class: "waitingRoom" }, [
                   createElement("h2", {}, `Welcome, ${name}`),
@@ -37,7 +37,8 @@ function renderWaitingRoom(gameState, container) {
 
       // ⏱️ Start new interval and store it on the container
       const currentState = gameState.getState();
-      const interval = setInterval(() => {
+      gameState.getState().currentInterval = setInterval(() => {
+            console.log('im still working ....................................................................')
             const currentPlayers = Object.entries(currentState.players);
 
             if (currentPlayers.length > 1) {
@@ -45,14 +46,11 @@ function renderWaitingRoom(gameState, container) {
                   renderCountdown();
 
                   if (timer <= 0) {
-                        clearInterval(interval);
-                        container._waitingRoomInterval = null;
+                        clearInterval(currentInterval);
+                        currentInterval = null;
                   }
             }
       }, 1000);
-
-      // Store reference to the interval so we can clear it later
-      container._waitingRoomInterval = interval;
 }
 
 

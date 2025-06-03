@@ -78,10 +78,13 @@ export class Room {
             }
         }
         if (this.starting) return;
+
         this.Players.push(player);
         this.Connections.push(player.ws);
+
         let FirstTimeDelay = 20000;
         let LastTimeDelay = 10000;
+
         if (this.Players.length == 4) {
             this.starting = true;
             clearTimeout(this.Timer);
@@ -95,20 +98,23 @@ export class Room {
                 }));
             }, LastTimeDelay);
             return;
-        } else if (this.Players.length >= 2) {
+        }    else if (this.Players.length >= 2 && !this.Timer) {
             this.Timer = setTimeout(() => {
                 this.Timer = setTimeout(() => {
                     this.Waiting = false;
                     this.broadcast(JSON.stringify({
                         type: "start-server",
                     }));
+                    this.Timer = null; // Reset the timer after game starts
                 }, LastTimeDelay);
+
                 this.starting = true;
                 this.broadcast(JSON.stringify({
                     type: "waiting",
                 }));
-            }, FirstTimeDelay)
+            }, FirstTimeDelay);
         }
+
         player.ws.send(JSON.stringify({
             type: "countDown",
             count: this.CountDown,

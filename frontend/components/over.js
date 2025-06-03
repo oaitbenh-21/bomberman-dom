@@ -1,9 +1,17 @@
 import { createElement, render } from "../../mini-framework/src/mini-framework-z01.js";
 
-export default function renderPopup(_, container) {
-    // Clear any existing countdown interval
-    if (container._popupInterval) {
-        clearInterval(container._popupInterval);
+export default function renderPopup(gameState, container) {
+    const state = gameState.getState();
+
+    let currentInterval = state.currentInterval;
+
+    if (currentInterval) {
+        console.log('found interval in pop up room:', currentInterval)
+        clearInterval(currentInterval);
+    }
+    if (state.currentInterval) {
+        clearInterval(state.currentInterval);
+        state.currentInterval = null;
     }
 
     let countdown = 10;
@@ -23,10 +31,9 @@ export default function renderPopup(_, container) {
 
         if (countdown <= 0) {
             clearInterval(interval);
-            container._popupInterval = null;
+            state.currentInterval = null;
         }
     }, 1000);
 
-    // Save interval to container so we can clean it up next time
-    container._popupInterval = interval;
+    state.currentInterval = interval;
 }

@@ -29,8 +29,8 @@ export function destroyPlayer(id) {
  * Update the position of a specific player.
  */
 export function setPlayerPosition(id, newPos) {
+  console.log('setting player position:', id, newPos)
   const signal = playerSignals[id];
-  console.log('set player position the subscriped things:', signal.subscribers)
   if (signal) {
     signal.set({ x: newPos.x, y: newPos.y });
   } else {

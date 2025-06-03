@@ -10,7 +10,7 @@ import { compareDatesAndFormat } from "../src/utils.js";
 
 
 export default class SocketHandler {
-  constructor(socket, gameState, board, welcom, waitingList, countDown,endGame) {
+  constructor(socket, gameState, board, welcom, waitingList, countDown, endGame) {
     this.socket = socket;
     this.gameState = gameState;
     this.board = board;
@@ -113,7 +113,8 @@ export default class SocketHandler {
       }
 
       case "move-server": {
-        setPlayerPosition(...message.players);
+        console.log('move the playher a bro:', message)
+        setPlayerPosition(message.player.id , message.player.pos);
         break;
       }
       case "waiting": {

@@ -17,6 +17,7 @@ export default class GameState {
                 "l": false,
                 "r": false,
             },
+            currentInterval : null , // id 
             startTime: new Date(),
             moveNumber: 0,
             name: createSignal(""),
@@ -27,7 +28,7 @@ export default class GameState {
             effects: [],
             bombs: [],
             board: [],
-            count:null,
+            count: null,
             countDown: {
                 id: undefined,
                 timer: 4,
