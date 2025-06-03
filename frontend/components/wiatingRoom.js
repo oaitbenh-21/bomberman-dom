@@ -2,6 +2,11 @@ import { createElement, render, } from "../../mini-framework/src/mini-framework-
 
 
 function renderWaitingRoom(gameState, container) {
+      // 🧹 Clear any existing interval
+      if (container._waitingRoomInterval) {
+            clearInterval(container._waitingRoomInterval);
+      }
+
       let timer = gameState.getState().count;
 
       const renderCountdown = () => {
@@ -28,10 +33,12 @@ function renderWaitingRoom(gameState, container) {
             render(waiting, container);
       };
 
-      renderCountdown(); // Initial render
+      renderCountdown(); // initial render
 
+      // ⏱️ Start new interval and store it on the container
       const interval = setInterval(() => {
-            const currentPlayers = Object.entries(gameState.getState().players);
+            const currentState = gameState.getState();
+            const currentPlayers = Object.entries(currentState.players);
 
             if (currentPlayers.length > 1) {
                   timer--;
@@ -39,9 +46,13 @@ function renderWaitingRoom(gameState, container) {
 
                   if (timer <= 0) {
                         clearInterval(interval);
+                        container._waitingRoomInterval = null;
                   }
             }
       }, 1000);
+
+      // Store reference to the interval so we can clear it later
+      container._waitingRoomInterval = interval;
 }
 
 
