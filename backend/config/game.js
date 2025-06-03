@@ -63,9 +63,6 @@ export class Room {
     }
 
     addPlayer(player = new Player()) {
-        this.Players.forEach((p, i) => {
-            p.pos = p.assignStartPosition(i)
-        });
         switch (this.Players.length) {
             case 4: {
                 this.Joining--;

@@ -57,11 +57,13 @@ export default class SocketHandler {
         break;
       }
       case "join-server": {
+        console.log('setting the player pos:', message)
         const state = this.gameState.getState();
         state.players = [...state.players, message];
         const currentPlayers = state.gamers.get();
         state.gamers.set([...currentPlayers, message]);
         setPlayers(state.players);
+        setPlayerPosition(message.id, message.pos)
         this.waitingList();
         break;
       }

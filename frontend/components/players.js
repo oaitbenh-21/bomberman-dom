@@ -10,6 +10,7 @@ const playerSignals = {};
  * Initialize players with signals and refs.
  */
 export function setPlayers(players) {
+  console.log('setting the player:', players);
   players.forEach(player => {
     if (!playerSignals[player.id]) {
       playerSignals[player.id] = createSignal({ ...player.pos });
@@ -45,12 +46,12 @@ const Players = () => {
     "div",
     { class: "Players" },
     Object.entries(playerSignals).map(([id, signal]) => {
+      console.log('this is the signal in the player:,', signal.get())
       return createElement("img", {
         class: "player",
         src: "./assets/img/down-1.png",
         style: {
-          position: "absolute",
-          transform: `translate(${signal.get().x}px, ${signal.get().y * 40}px)`, // initial render
+          transform: `translate(${signal.get().x}px, ${signal.get().y}px)`, // initial render
         },
         alt: "player",
         id,

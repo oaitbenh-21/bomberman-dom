@@ -52,15 +52,17 @@ export function handlePlayerAction(currentRoom = new Room(), player = new Player
                   // Sends info about all existing players in the room to the new player
                   currentRoom.Players.forEach((p) => {
                         if (p.id == player.id) return;
+                        p.pos = p.assignStartPosition(i);
                         player.ws.send(JSON.stringify({
                               type: "join-server",
                               name: p.name,
                               id: p.id,
                               pos: p.pos,
-                        }))
+                        }));
                   })
 
                   // Broadcasts info about the new player to everyone else in the room:
+                  player.pos = player.assignStartPosition(i);
                   currentRoom.broadcast(JSON.stringify({
                         type: "join-server",
                         name: player.name,
