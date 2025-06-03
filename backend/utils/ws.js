@@ -7,7 +7,6 @@ import { MovePlayer } from './move.js';
 // BombPositions
 // MovePlayer
 
-let countDown = 20;
 export function handlePlayerAction(currentRoom = new Room(), player = new Player(), data) {
       // handle chats
       if (data.type == "chat-client") {
