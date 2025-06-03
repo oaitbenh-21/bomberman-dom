@@ -63,10 +63,13 @@ export class Room {
     }
 
     addPlayer(player = new Player()) {
+        if (this.Timer && this.Players.length != 4) {
+            return;
+        }
         this.Players.push(player);
         this.Connections.push(player.ws);
-        let FirstTimeDelay = 100;
-        let LastTimeDelay = 100;
+        let FirstTimeDelay = 20000;
+        let LastTimeDelay = 10000;
         if (this.Timer && this.Players.length != 4) {
             return;
         }
@@ -79,7 +82,7 @@ export class Room {
                 });
                 this.broadcast(JSON.stringify({
                     type: "start-server",
-                }))
+                }));
             }, LastTimeDelay);
             return;
         } else if (this.Players.length >= 2) {
@@ -99,10 +102,10 @@ export class Room {
                 }))
             }, FirstTimeDelay)
         }
-        this.broadcast(JSON.stringify({
-            type: "count-server",
-            count: this.Players.length,
-        }))
+        // this.broadcast(JSON.stringify({
+        //     type: "count-server",
+        //     count: this.Players.length,
+        // }))
     }
 
     broadcast(message) {
