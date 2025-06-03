@@ -18,9 +18,9 @@ export function setPlayers(players) {
 }
 
 export function destroyPlayer(id) {
-  const signal = playerSignals.get()[id];
+  const signal = playerSignals[id].get();
   if (signal) {
-    signal.set({ ...signal.get(), destroyed: true });
+    playerSignals[id].set({ ...signal, destroyed: true });
   }
 }
 
@@ -57,10 +57,10 @@ const Players = () => {
         key: id,
         onMount(el) {
           effect(() => {
-            const { x, y, destroyed } = signal.get();
-            el.style.transform = `translate(${x}px, ${y}px)`;
-            if (destroyed) {
-              cnosole.log('should be distroyed')
+            const player = signal.get();
+            console.log(player);
+            el.style.transform = `translate(${player.x}px, ${player.y}px)`;
+            if (player.destroyed && el) {
               el.remove();
             }
           });
