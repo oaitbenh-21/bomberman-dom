@@ -50,7 +50,7 @@ const Players = () => {
         src: "./assets/img/down-1.png",
         style: {
           position: "absolute",
-          transform: `translate(${1 * 40}px, ${1 * 40}px)`, // initial render
+          transform: `translate(${playerSignals[id].get().x}px, ${playerSignals[id].get().y}px)`, // initial render
         },
         alt: "player",
         id,

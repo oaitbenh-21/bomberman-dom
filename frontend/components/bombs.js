@@ -47,20 +47,20 @@ const Bombs = () => {
             onMount(el) {
                 const bombElements = new Map(); // Track DOM elements by bomb ID
                 const cleanupFunctions = new Map(); // Track cleanup functions
-                
+
                 effect(() => {
                     const bombs = bombsSignals.get();
 
                     if (bombs && typeof bombs === "object") {
                         // Get current bomb IDs
                         const currentBombIds = new Set(Object.keys(bombs));
-                        
+
                         // Remove bombs that no longer exist in signals
                         for (const [bombId, element] of bombElements.entries()) {
                             if (!currentBombIds.has(bombId)) {
                                 element.remove();
                                 bombElements.delete(bombId);
-                                
+
                                 // Run cleanup function if it exists
                                 const cleanup = cleanupFunctions.get(bombId);
                                 if (cleanup) {
@@ -73,7 +73,7 @@ const Bombs = () => {
                         // Add new bombs
                         for (const [bombId, bombSignal] of Object.entries(bombs)) {
                             const bombData = bombSignal.get();
-                            
+
                             // Skip if already rendered or destroyed
                             if (bombElements.has(bombId) || bombData.destroyed) {
                                 continue;
@@ -95,7 +95,7 @@ const Bombs = () => {
                                 onMount(imgEl) {
                                     // Store element reference
                                     bombElements.set(bombId, imgEl);
-                                    
+
                                     // Set up position reactivity
                                     const stopPositionEffect = effect(() => {
                                         const currentState = bombSignal.get();
@@ -109,26 +109,24 @@ const Bombs = () => {
                                         if (imgEl.parentNode) {
                                             imgEl.remove();
                                         }
-                                        
+
                                         // Clean up references
                                         bombElements.delete(bombId);
                                         cleanupFunctions.delete(bombId);
-                                        
+
                                         // Clean up the signal
                                         const current = { ...bombsSignals.get() };
                                         delete current[bombId];
                                         bombsSignals.set(current);
-                                        
-                                        stopPositionEffect();
-                                    }, 2000);
 
+                                        stopPositionEffect();
+                                    }, 2200);
                                     // Store cleanup function
                                     const cleanup = () => {
                                         clearTimeout(explosionTimer);
                                         stopPositionEffect();
                                     };
                                     cleanupFunctions.set(bombId, cleanup);
-                                    
                                     return cleanup;
                                 }
                             });
