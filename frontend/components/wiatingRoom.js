@@ -36,8 +36,8 @@ function renderWaitingRoom(gameState, container) {
       renderCountdown(); // initial render
 
       // ⏱️ Start new interval and store it on the container
+      const currentState = gameState.getState();
       const interval = setInterval(() => {
-            const currentState = gameState.getState();
             const currentPlayers = Object.entries(currentState.players);
 
             if (currentPlayers.length > 1) {
