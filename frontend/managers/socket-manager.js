@@ -10,7 +10,7 @@ import { compareDatesAndFormat } from "../src/utils.js";
 
 
 export default class SocketHandler {
-  constructor(socket, gameState, board, welcom, waitingList,countDown) {
+  constructor(socket, gameState, board, welcom, waitingList, countDown) {
     this.socket = socket;
     this.gameState = gameState;
     this.board = board;
@@ -52,18 +52,8 @@ export default class SocketHandler {
           message: "The game has started!",
         };
         const state = this.gameState.getState();
-        const players = Object.entries(state.players)
-        if (players.length == 4){
-          this.board()
-        }else{
-          setTimeout(() => {
-            this.countDown()
-          setTimeout(()=>{
-            this.board();
-          },10000)
-        }, 20000)
-        }
-
+        // const players = Object.entries(state.players)
+        this.board()
         break;
       }
       case "join-server": {
@@ -73,7 +63,6 @@ export default class SocketHandler {
         state.gamers.set([...currentPlayers, message]);
         setPlayers(state.players);
         this.waitingList();
-
         break;
       }
 
@@ -124,7 +113,7 @@ export default class SocketHandler {
       case "waiting": {
         this.gameState.getState().countDown.timer = message.time;
         console.log(message.time)
-        this.waitingList();
+        this.countDown()
         break;
       }
       case "gameover-server":

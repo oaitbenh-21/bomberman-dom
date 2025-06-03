@@ -63,9 +63,16 @@ export class Room {
     }
 
     addPlayer(player = new Player()) {
-        if (this.Players.length == 4) {
-            this.Joining--;
-            return;
+        switch (this.Players.length) {
+            case 4: {
+                this.Joining--;
+                return;
+            }
+            case 2: {
+                this.broadcast(JSON.stringify({
+                    type: "start-counting",
+                }));
+            }
         }
         this.Players.push(player);
         this.Connections.push(player.ws);
@@ -73,6 +80,9 @@ export class Room {
         let LastTimeDelay = 10000;
         if (this.Players.length == 4) {
             clearTimeout(this.Timer);
+            this.broadcast(JSON.stringify({
+                type: "waiting",
+            }));
             this.Timer = setTimeout(() => {
                 this.Waiting = false;
                 this.Players.forEach((p, i) => {
@@ -96,7 +106,6 @@ export class Room {
                 }, LastTimeDelay);
                 this.broadcast(JSON.stringify({
                     type: "waiting",
-                    time: 1,
                 }))
             }, FirstTimeDelay)
         }
