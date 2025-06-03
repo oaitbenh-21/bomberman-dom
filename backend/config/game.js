@@ -10,6 +10,7 @@ export class Room {
         this.Waiting = true;
         this.Over = false;
         this.Timer;
+        this.starting;
         this.CountDown = 20;
     }
 
@@ -79,11 +80,13 @@ export class Room {
                 }, 1000);
             }
         }
+        if (this.starting) return;
         this.Players.push(player);
         this.Connections.push(player.ws);
         let FirstTimeDelay = 20000;
         let LastTimeDelay = 10000;
         if (this.Players.length == 4) {
+            this.starting = true;
             clearTimeout(this.Timer);
             this.broadcast(JSON.stringify({
                 type: "waiting",
@@ -103,9 +106,10 @@ export class Room {
                         type: "start-server",
                     }));
                 }, LastTimeDelay);
+                this.starting = true;
                 this.broadcast(JSON.stringify({
                     type: "waiting",
-                }))
+                }));
             }, FirstTimeDelay)
         }
         this.broadcast(JSON.stringify({
