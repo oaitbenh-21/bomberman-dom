@@ -106,7 +106,7 @@ export class Player {
     }
 
     assignStartPosition() {
-        const numPlayers = this.room.Players.length;
+        const numPlayers = this.room.Joining;
         switch (numPlayers) {
             case 0: return { x: 40, y: 40 };
             case 1: return { x: (this.room.Board[0].length - 2) * 40, y: 40 };
