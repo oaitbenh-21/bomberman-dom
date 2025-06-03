@@ -1,20 +1,10 @@
-import { createElement, effect, createSignal } from "../../mini-framework/src/mini-framework-z01.js";
+import { createElement,render} from "../../mini-framework/src/mini-framework-z01.js";
 
 
 
-const renderWelcome = (socket, gameState) => {
-      const viewSignal = createSignal(null)
-
-
-      effect(() => {
+const renderWelcome = (socket, gameState,container) => {
             const state = gameState.getState();
             const name = state.name.get();
-            const players = Object.entries(state.gamers.get());
-            console.log("players", players, name)
-
-            viewSignal.set(name ? renderWaitingRoom(name, players) : renderWelcomeScreen(name, handleSubmit));
-      })
-
       function handleSubmit(e) {
             e.preventDefault();
             const input = e.target.elements[0];
@@ -29,24 +19,13 @@ const renderWelcome = (socket, gameState) => {
             input.value = "";
       }
 
-      return createElement("div", {}, [
-            viewSignal.get()
+      const welcome = createElement("div", {}, [
+            renderWelcomeScreen(name, handleSubmit)
       ]);
+      render(welcome,container)
 };
 
-function renderWaitingRoom(name, players) {
-      return createElement("div", { class: "waitingRoom" }, [
-            createElement("h2", {}, `Welcome, ${name}`),
-            createElement("p", {}, "Waiting for other players..."),
-            createElement(
-                  "ul",
-                  { class: "listOfPlayers" },
-                  players.map(([id, player], index) =>
-                        createElement("li", {}, [`${index + 1}. ${player.name}`])
-                  )
-            )
-      ]);
-}
+
 
 function renderWelcomeScreen(name, handleSubmit) {
       return createElement("div", { class: "welcome" }, [

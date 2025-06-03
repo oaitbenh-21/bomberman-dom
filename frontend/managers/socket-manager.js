@@ -10,10 +10,12 @@ import { compareDatesAndFormat } from "../src/utils.js";
 
 
 export default class SocketHandler {
-  constructor(socket, gameState, renderCallback) {
+  constructor(socket, gameState, board, welcom , waitingList) {
     this.socket = socket;
     this.gameState = gameState;
-    this.render = renderCallback;
+    this.board = board;
+    this.welcom = welcom;
+    this.waitingList = waitingList
   }
 
   handleMessage(data) {
@@ -21,6 +23,7 @@ export default class SocketHandler {
     switch (message.type) {
       case "board-server": destroyBox
         this.gameState.getState().board = message.board;
+        this.board();
         setBoxes(message.board)
         // this.render();
         break;
@@ -47,7 +50,8 @@ export default class SocketHandler {
           title: "Game Started",
           message: "The game has started!",
         };
-        this.render();
+        this.board();
+        // this.render();
         break;
       }
       case "join-server": {
@@ -56,6 +60,7 @@ export default class SocketHandler {
         const currentPlayers = state.gamers.get();
         state.gamers.set([...currentPlayers, message]);
         setPlayers(state.players);
+        this.waitingList();
         break;
       }
 
@@ -115,9 +120,11 @@ export default class SocketHandler {
       }
       case "waiting": {
         this.gameState.getState().countDown.timer = message.time;
+        this.waitingList();
         break;
       }
       case "start-server": {
+        this.welcom();
         break;
       }
       case "gameover-server":
@@ -126,7 +133,7 @@ export default class SocketHandler {
           title: "Game Over",
           message: `the Winner is ${message.winner}`,
         };
-        this.render();
+        // this.render();
         break;
       default:
         console.warn("Unhandled WebSocket message:", message);

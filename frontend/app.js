@@ -10,6 +10,9 @@ import ControlHandler from "./managers/controle-manager.js";
 import renderUI from "./managers/ui-manager.js";
 import { compareDatesAndFormat } from "./src/utils.js";
 import { setHeaderData } from "./components/header.js";
+import renderWelcome from "./components/Welcome.js";
+import renderWaitingRoom from "./components/wiatingRoom.js"
+
 
 class App {
     constructor() {
@@ -27,13 +30,14 @@ class App {
         this.moveNumber = 0;
         this.gameState = new GameState();
         this.socket = new Socket();
-
         this.sendMove = this.sendMove.bind(this);
         this.dropBomb = this.dropBomb.bind(this);
-        this.render = renderUI.bind(this, this.container, this.gameState, this.socket, this.isChating);
+        this.welcom = renderWelcome.bind(this,this.socket,this.gameState,this.container)
+        this.board = renderUI.bind(this, this.container, this.gameState, this.socket, this.isChating);
+        this.waitingList = renderWaitingRoom.bind(this,this.gameState,this.container)
         this.gameLoop = this.gameLoop.bind(this);
         window.addEventListener('socket-ready', () => {
-            this.render();
+            this.welcom()
         });
     }
 
@@ -46,7 +50,7 @@ class App {
     }
 
     init() {
-        this.socketHandler = new SocketHandler(this.socket, this.gameState, this.render);
+        this.socketHandler = new SocketHandler(this.socket, this.gameState, this.board, this.welcom , this.waitingList);
         this.socketHandler.setup();
 
         this.controlHandler = new ControlHandler(

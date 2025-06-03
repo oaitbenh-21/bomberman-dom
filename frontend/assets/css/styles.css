@@ -634,3 +634,39 @@ form {
         opacity: 1;
     }
 }
+
+
+/*   return createElement("div", { class: "waitingRoom" }, [
+            createElement("h2", {}, `Welcome, ${name}`),
+            createElement("p", {}, "Waiting for other players..."),
+            createElement(
+                  "ul",
+                  { class: "listOfPlayers" },
+                  players.map(([id, player], index) =>
+                        createElement("li", {}, [`${index + 1}. ${player.name}`])
+                  )
+            )
+      ]);*/
+.waitingRoom{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-bg);
+}
+
+.waitingRoom h2{
+    font-size: medium;
+}
+
+.waitingRoom ul{
+    width: 50%;
+    list-style: none;
+}
+.waitingRoom ul li {
+    padding: 10px;
+}
+
+
