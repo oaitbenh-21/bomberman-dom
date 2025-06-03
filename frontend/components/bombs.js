@@ -81,11 +81,11 @@ const Bombs = () => {
                                             // Optional delay to show explosion image
                                             el.remove(); // Remove from DOM
 
-                                            // Clean up the signal
-                                            const current = { ...bombsSignals.get() };
-                                            delete current[state.id]; // Remove from signals map
-                                            bombsSignals.set(current); // Trigger reactivity
                                         }, 2000);
+                                        // Clean up the signal
+                                        const current = { ...bombsSignals.get() };
+                                        delete current[state.id]; // Remove from signals map
+                                        bombsSignals.set(current); // Trigger reactivity
                                     });
                                     stop(); // Stop reactivity
                                 }
