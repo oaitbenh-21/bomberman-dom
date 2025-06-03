@@ -53,6 +53,8 @@ export default class SocketHandler {
       case "join-server": {
         const state = this.gameState.getState();
         state.players = [...state.players, message];
+        const currentPlayers = state.gamers.get();
+        state.gamers.set([...currentPlayers, message]);
         setPlayers(state.players);
         break;
       }
@@ -125,7 +127,6 @@ export default class SocketHandler {
         break;
       }
       case "start-server": {
-        this.render();
         break;
       }
       case "gameover-server":

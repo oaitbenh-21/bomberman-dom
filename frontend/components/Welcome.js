@@ -1,37 +1,70 @@
-import { createElement } from "../../mini-framework/src/mini-framework-z01.js"
+import { createElement, effect, createSignal } from "../../mini-framework/src/mini-framework-z01.js";
+
+
 
 const renderWelcome = (socket, gameState) => {
-      function handleButtonClick(e) {
+      const viewSignal = createSignal(null)
+
+
+      effect(() => {
+            const state = gameState.getState();
+            const name = state.name.get();
+            const players = Object.entries(state.gamers.get());
+            console.log("players", players, name)
+
+            viewSignal.set(name ? renderWaitingRoom(name, players) : renderWelcomeScreen(name, handleSubmit));
+      })
+
+      function handleSubmit(e) {
             e.preventDefault();
             const input = e.target.elements[0];
-            const name = input ? input.value : "";
-            // validate the name 
-            if (name.trim().length === 0) {
-                  alert("enter valid name");
+            const name = input ? input.value.trim() : "";
+            if (name.length === 0) {
+                  alert("Enter a valid name");
                   return;
             }
-            gameState.getState().name.set(name);// = name;
 
-            socket.send(JSON.stringify({
-                  type: "join-player",
-                  name: name
-            }));
+            gameState.getState().name.set(name);
+            socket.send(JSON.stringify({ type: "join-player", name }));
             input.value = "";
       }
 
+      return createElement("div", {}, [
+            viewSignal.get()
+      ]);
+};
+
+function renderWaitingRoom(name, players) {
+      return createElement("div", { class: "waitingRoom" }, [
+            createElement("h2", {}, `Welcome, ${name}`),
+            createElement("p", {}, "Waiting for other players..."),
+            createElement(
+                  "ul",
+                  { class: "listOfPlayers" },
+                  players.map(([id, player], index) =>
+                        createElement("li", {}, [`${index + 1}. ${player.name}`])
+                  )
+            )
+      ]);
+}
+
+function renderWelcomeScreen(name, handleSubmit) {
       return createElement("div", { class: "welcome" }, [
-            createElement("img", { src: "./assets/img/bomberman-logo.png", alt: "Bomberman Logo" }),
+            createElement("img", {
+                  src: "./assets/img/bomberman-logo.png",
+                  alt: "Bomberman Logo"
+            }),
             createElement("h1", {}, "Welcome to BombermanGame"),
             createElement("p", {}, "Get creative and enter your name to start!"),
-            createElement('form', { class: 'form', onSubmit: handleButtonClick }, [
+            createElement("form", { class: "form", onSubmit: handleSubmit }, [
                   createElement("input", {
                         type: "text",
                         placeholder: "Enter your creative name (min 2 chars)",
-                        value:gameState.getState().name.get()
+                        value: name
                   }),
                   createElement("button", {}, "Start Game")
             ])
       ]);
-};
+}
 
 export default renderWelcome;

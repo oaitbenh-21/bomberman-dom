@@ -22,6 +22,7 @@ export default class GameState {
             name: createSignal(""),
             player: "",
             players: [],
+            gamers: createSignal([]),
             skills: [],
             effects: [],
             bombs: [],
