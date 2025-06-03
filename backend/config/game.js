@@ -71,9 +71,6 @@ export class Room {
                 return;
             }
             case 1: {
-                this.broadcast(JSON.stringify({
-                    type: "start-counting",
-                }));
                 let inter = setInterval(() => {
                     this.CountDown--;
                     if (this.CountDown == 0) clearInterval(inter);
@@ -112,10 +109,10 @@ export class Room {
                 }));
             }, FirstTimeDelay)
         }
-        this.broadcast(JSON.stringify({
+        player.ws.send(JSON.stringify({
             type: "countDown",
             count: this.CountDown,
-        }))
+        }));
     }
 
     broadcast(message) {
