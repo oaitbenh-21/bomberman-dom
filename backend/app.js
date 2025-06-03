@@ -16,9 +16,9 @@ wsServer.on('connection', (ws) => {
                 pl.ws.send(JSON.stringify({
                     type: "data-server",
                     count: currentRoom.Players.length,
-                    lifes: player.lifes,
-                    bombs: player.Bombs,
-                    flames: player.Flames,
+                    lifes: pl.lifes,
+                    bombs: pl.Bombs,
+                    flames: pl.Flames,
                 }));
             })
         });
