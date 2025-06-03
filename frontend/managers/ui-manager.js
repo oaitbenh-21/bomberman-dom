@@ -7,6 +7,7 @@ import renderHeader from "../components/header.js";
 import renderChat from "../components/chat.js";
 import renderBoard from "../components/board.js";
 import renderWelcome from "../components/Welcome.js";
+import { renderPopup } from "../components/over.js";
 
 export default function initUI(container, gameState, socket, isChating) {
     const state = gameState.getState();
@@ -28,6 +29,7 @@ export default function initUI(container, gameState, socket, isChating) {
                         isChating
                     ),
                     renderChat(socket, isChating),
+                    renderPopup(state.status),
                 ]),
             ])
             : renderWelcome(socket, gameState); // show name input

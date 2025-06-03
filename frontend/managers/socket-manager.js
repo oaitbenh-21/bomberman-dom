@@ -79,19 +79,9 @@ export default class SocketHandler {
         break;
 
       case "bomb-server": {
-        console.log("bomb-server message:", message);
-        const bombs = this.gameState.getState().bombs;
-        const index = bombs.length;
-        this.gameState.addBomb({ ...message, id: index });
+        this.gameState.addBomb({ ...message });
 
         setBombs(message);
-
-        setTimeout(() => {
-          this.gameState.getState().bombs = this.gameState
-            .getState()
-            .bombs.filter(bomb => bomb.id !== index);
-          // this.render();
-        }, 2000);
         break;
       }
 

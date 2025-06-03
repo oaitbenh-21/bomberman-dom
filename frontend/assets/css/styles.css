@@ -162,7 +162,8 @@ body {
     top: 0px;
 }
 
-.skill,.bomb {
+.skill,
+.bomb {
     position: "absolute";
     width: 30;
     height: 30px;
@@ -340,7 +341,7 @@ form {
 /* welcom stayle */
 
 
-.welcome{
+.welcome {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -368,7 +369,7 @@ form {
     color: var(--color-accent);
     margin-bottom: 1rem;
     letter-spacing: 2px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .welcome p {
@@ -376,11 +377,12 @@ form {
     color: var(--color-text);
     margin-bottom: 1.5rem;
 }
-.form{
+
+.form {
     width: 500px;
     display: flex;
     flex-direction: column;
-    gap:10px
+    gap: 10px
 }
 
 .welcome input[type="text"] {
@@ -398,7 +400,7 @@ form {
 
 .welcome input[type="text"]:focus {
     background: var(--color-primary-light);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 .welcome button {
@@ -410,7 +412,7 @@ form {
     font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
     transition: background 0.2s, transform 0.2s;
 }
 
@@ -418,4 +420,217 @@ form {
     background: var(--color-accent);
     color: var(--color-bg);
     transform: translateY(-2px) scale(1.04);
+}
+
+/* popup */
+
+/* Modern Popup Styles */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    min-width: 320px;
+    max-width: 500px;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 8px 32px rgba(102, 126, 234, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    animation: popupEnter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+}
+
+/* Popup entrance animation */
+@keyframes popupEnter {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.7) rotateX(15deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotateX(0deg);
+    }
+}
+
+/* Title styling */
+.popup .title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.popup .title::before {
+    content: "✨";
+    font-size: 1.2em;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+
+    0%,
+    100% {
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: rotate(180deg) scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+/* Content styling */
+.popup .content {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    font-weight: 400;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover effects */
+.popup:hover {
+    transform: translate(-50%, -50%) scale(1.02);
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.4),
+        0 12px 40px rgba(102, 126, 234, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Alternative color schemes */
+.popup.success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 8px 32px rgba(17, 153, 142, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.popup.success .title::before {
+    content: "✅";
+}
+
+.popup.error {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 8px 32px rgba(255, 107, 107, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.popup.error .title::before {
+    content: "❌";
+}
+
+.popup.warning {
+    background: linear-gradient(135deg, #ffa726 0%, #ff7043 100%);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 8px 32px rgba(255, 167, 38, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.popup.warning .title::before {
+    content: "⚠️";
+}
+
+.popup.info {
+    background: linear-gradient(135deg, #42a5f5 0%, #1e88e5 100%);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 8px 32px rgba(66, 165, 245, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.popup.info .title::before {
+    content: "ℹ️";
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .popup {
+        margin: 1rem;
+        min-width: auto;
+        max-width: calc(100vw - 2rem);
+        padding: 1.5rem;
+    }
+
+    .popup .title {
+        font-size: 1.3rem;
+    }
+
+    .popup .content {
+        font-size: 0.95rem;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .popup {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .popup {
+        animation: popupEnterSimple 0.3s ease-out forwards;
+    }
+
+    @keyframes popupEnterSimple {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .popup .title::before {
+        animation: none;
+    }
+
+    .popup:hover {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Optional backdrop/overlay */
+.popup-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    z-index: 999;
+    animation: backdropFadeIn 0.3s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes backdropFadeIn {
+    to {
+        opacity: 1;
+    }
 }
