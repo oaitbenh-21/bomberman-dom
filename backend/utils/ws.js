@@ -45,7 +45,7 @@ export function handlePlayerAction(currentRoom = new Room(), player = new Player
                   });
 
                   player.ws.send(JSON.stringify({
-                        type: "board-server",                                                        
+                        type: "board-server",
                         board: boxes,
                   }));
 

@@ -63,6 +63,9 @@ export class Room {
     }
 
     addPlayer(player = new Player()) {
+        this.Players.forEach((p, i) => {
+            p.pos = p.assignStartPosition(i)
+        });
         switch (this.Players.length) {
             case 4: {
                 this.Joining--;
@@ -85,9 +88,6 @@ export class Room {
             }));
             this.Timer = setTimeout(() => {
                 this.Waiting = false;
-                this.Players.forEach((p, i) => {
-                    p.pos = p.assignStartPosition(i)
-                });
                 this.broadcast(JSON.stringify({
                     type: "start-server",
                 }));
@@ -97,9 +97,6 @@ export class Room {
             this.Timer = setTimeout(() => {
                 this.Timer = setTimeout(() => {
                     this.Waiting = false;
-                    this.Players.forEach((p, i) => {
-                        p.pos = p.assignStartPosition(i)
-                    });
                     this.broadcast(JSON.stringify({
                         type: "start-server",
                     }));
