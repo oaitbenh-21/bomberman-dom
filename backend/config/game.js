@@ -65,6 +65,8 @@ export class Room {
     addPlayer(player = new Player()) {
         this.Players.push(player);
         this.Connections.push(player.ws);
+        let FirstTimeDelay = 20000;
+        let LastTimeDelay = 10000;
         if (this.Timer) {
             if (this.Players.length == 4) {
                 setTimeout(() => {
@@ -72,7 +74,7 @@ export class Room {
                     this.broadcast(JSON.stringify({
                         type: "start-server",
                     }))
-                }, 1000);
+                }, LastTimeDelay);
                 return;
             }
             clearTimeout(this.Timer);
@@ -83,12 +85,12 @@ export class Room {
                         this.broadcast(JSON.stringify({
                             type: "start-server",
                         }))
-                    }, 1000);
+                    }, LastTimeDelay);
                     this.broadcast(JSON.stringify({
                         type: "waiting",
                         time: 1,
                     }))
-                }, 1000)
+                }, FirstTimeDelay)
             }
         }
         // this.broadcast(JSON.stringify({
