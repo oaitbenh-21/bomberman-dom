@@ -25,15 +25,14 @@ export default function renderPopup(gameState, container) {
 
     renderCountdown();
 
-    const interval = setInterval(() => {
+    gameState.getState().currentInterval = setInterval(() => {
         countdown--;
         renderCountdown();
 
         if (countdown <= 0) {
-            clearInterval(interval);
-            state.currentInterval = null;
+            clearInterval(gameState.getState().currentInterval);
+
         }
     }, 1000);
 
-    state.currentInterval = interval;
 }
