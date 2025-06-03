@@ -86,8 +86,10 @@ export class Room {
         let LastTimeDelay = 10000;
 
         if (this.Players.length == 4) {
+            if (this.Timer) {
+                clearTimeout(this.Timer)
+            }
             this.starting = true;
-            clearTimeout(this.Timer);
             this.broadcast(JSON.stringify({
                 type: "waiting",
             }));
@@ -98,7 +100,7 @@ export class Room {
                 }));
             }, LastTimeDelay);
             return;
-        }    else if (this.Players.length >= 2 && !this.Timer) {
+        } else if (this.Players.length >= 2 && !this.Timer) {
             this.Timer = setTimeout(() => {
                 this.Timer = setTimeout(() => {
                     this.Waiting = false;

@@ -43,7 +43,7 @@ function renderWaitingRoom(gameState, container) {
       renderCountdown(); // initial render
 
       // Start new interval and store it
-      const newInterval = setInterval(() => {
+      gameState.getState().currentInterval = setInterval(() => {
             const currentPlayers = Object.entries(gameState.getState().players);
 
             if (currentPlayers.length > 1) {
@@ -51,14 +51,11 @@ function renderWaitingRoom(gameState, container) {
                   renderCountdown();
 
                   if (timer <= 0) {
-                        clearInterval(newInterval);
-                        gameState.getState().currentInterval = null;
+                        clearInterval(gameState.getState().currentInterval);
                   }
             }
       }, 1000);
 
-      // Save new interval ID in state
-      gameState.getState().currentInterval = newInterval;
 }
 
 
