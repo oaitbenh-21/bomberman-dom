@@ -22,7 +22,6 @@ export function handlePlayerAction(currentRoom = new Room(), player = new Player
 
       // handle player actions
       switch (data.type) {
-            // case of bomming
             case "join-player":
                   if (!currentRoom.isValid(data.name) || player.name != "") {
                         player.ws.send(JSON.stringify({
@@ -46,7 +45,7 @@ export function handlePlayerAction(currentRoom = new Room(), player = new Player
                   });
 
                   player.ws.send(JSON.stringify({
-                        type: "board-server",
+                        type: "board-server",                                                        
                         board: boxes,
                   }));
 

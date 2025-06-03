@@ -63,19 +63,17 @@ export class Room {
     }
 
     addPlayer(player = new Player()) {
-        if (this.Timer && this.Players.length != 4) {
+        if (this.Players.length != 4) {
+            this.Joining--;
             return;
         }
         this.Players.push(player);
         this.Connections.push(player.ws);
         let FirstTimeDelay = 20000;
         let LastTimeDelay = 10000;
-        if (this.Timer && this.Players.length != 4) {
-            return;
-        }
         if (this.Players.length == 4) {
             clearTimeout(this.Timer);
-            setTimeout(() => {
+            this.Timer = setTimeout(() => {
                 this.Waiting = false;
                 this.Players.forEach((p, i) => {
                     p.pos = p.assignStartPosition(i)
@@ -87,14 +85,14 @@ export class Room {
             return;
         } else if (this.Players.length >= 2) {
             this.Timer = setTimeout(() => {
-                setTimeout(() => {
+                this.Timer = setTimeout(() => {
                     this.Waiting = false;
                     this.Players.forEach((p, i) => {
                         p.pos = p.assignStartPosition(i)
                     });
                     this.broadcast(JSON.stringify({
                         type: "start-server",
-                    }))
+                    }));
                 }, LastTimeDelay);
                 this.broadcast(JSON.stringify({
                     type: "waiting",
